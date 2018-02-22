@@ -1,0 +1,4 @@
+第一次发送PDN连接网络端无响应，在计时器的时间范围内(T3482 = 8s)没有收到网络端响应，因此重发了PDN连接请求，第二次PDN连接请求收到响应完成连接建立。
+
+PDN response you have received after 8 sec is for the 2nd attempt. 
+the 1st one was not responded by NW. There is no NAS side issue at UE.

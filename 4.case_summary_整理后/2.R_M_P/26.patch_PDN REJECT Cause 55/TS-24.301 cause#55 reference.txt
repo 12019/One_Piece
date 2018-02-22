@@ -1,0 +1,28 @@
+========================
+========Page 222========
+
+6.5.1.6	Abnormal cases on the network side
+
+The following abnormal cases can be identified:
+a)	UE initiated PDN connectivity request for an already existing PDN connection:
+	If the network receives a PDN CONNECTIVITY REQUEST message with the same combination of APN and PDN type as an already existing PDN connection, 
+	If the information elements in the PDN CONNECTIVITY REQUEST message do not differ from the ones received within the previous PDN CONNECTIVITY REQUEST message, and the MME has not received the ACTIVATE DEFAULT EPS BEARER CONTEXT ACCEPT message from UE, the network shall resend the ACTIVATE DEFAULT EPS BEARER CONTEXT REQUEST message and continue the previous procedure.
+	If one or more information elements in the PDN CONNECTIVITY REQUEST message differ from the ones received within the previous PDN CONNECTIVITY REQUEST message, and multiple PDN connections for a given APN are not allowed, the network may deactivate the existing EPS bearer contexts for the PDN connection locally without notification to the UE and proceed with the requested PDN connectivity procedure or may reject this PDN connectivity procedure including the ESM cause #55 "multiple PDN connections for a given APN not allowed", in the PDN CONNECTIVITY REJECT message.
+	If the network receives a PDN CONNECTIVITY REQUEST message with request type "emergency" and the MME has not received the ACTIVATE DEFAULT EPS BEARER CONTEXT ACCEPT message from UE for the previous PDN connectivity request for emergency bearer services, the network shall resend the ACTIVATE DEFAULT EPS BEARER CONTEXT REQUEST message and continue the previous procedure. If there is already a PDN connection for emergency bearer services existing, the MME shall reject the request with ESM cause #55 "multiple PDN connections for a given APN not allowed" or deactivate the existing EPS bearer contexts for the PDN connection locally without notification to the UE and proceed with the requested PDN connectivity procedure.
+
+========================
+========Page 223========
+
+6.5.1.7	Handling PDN connectivity request for UE configured for dual priority
+
+If a PDN connection exists that was established due to a request including a low priority indicator set to "MS is configured for NAS signalling low priority" and the upper layers of the UE request to establish a PDN connection with the same APN and a low priority indicator set to "MS is not configured for NAS signalling low priority", when initiating the PDN connectivity request procedure, the UE shall:
+-	send a PDN CONNECTIVITY REQUEST message with the same combination of APN and PDN type as the existing PDN connection. If the UE receives a PDN CONNECTIVITY REJECT message with ESM cause #55 "multiple PDN connections for a given APN not allowed", the upper layers are informed of this; or
+-	send a PDN CONNECTIVITY REQUEST message with the same APN after the successful deactivation of the existing PDN connection.
+NOTE:	The above list of options also apply for the case when the existing PDN connection was established due to a request including a low priority indicator set to "MS is not configured for NAS signalling low priority" and the new request to establish a PDN connection with the same APN contains a low priority indicator set to "MS is configured for NAS signalling low priority".
+As an alternative the upper layers of the UE can request to establish a PDN connection with a different APN.
+
+========================
+========Page 381========
+
+Cause #55 – Multiple PDN connections for a given APN not allowed
+	This ESM cause is used by the network to indicate that the PDN connectivity procedure was rejected due to multiple PDN connections for a given APN are not allowed.

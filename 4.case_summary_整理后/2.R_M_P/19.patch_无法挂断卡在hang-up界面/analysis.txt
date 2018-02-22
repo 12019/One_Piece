@@ -1,0 +1,18 @@
+﻿UI界面点击hang-up后无法挂机，出现"冻屏"。
+
+=======
+
+UE发起通话流程后，然后UE自己发出了cancel操作，网络端返回"487"一般对UE端自己挂断操作的响应
+code 487: The request was terminated by a BYE or CANCEL request.  This response is never returned for a CANCEL request itself.
+
+IMS注册之后发起了两次通话，第一次挂断是正常的，第二次挂断之后就重复出现以下4条信息
+Message ID               = IMS_SIP_MESSAGE
+Response Status Code     = Request
+Message ID               = IMS_SIP_MESSAGE
+Response Status Code     = OK
+Message ID               = IMS_SIP_MESSAGE
+Response Status Code     = Request
+Message ID               = IMS_SIP_MESSAGE
+Response Status Code     = Accepted
+
+RTP open failed问题

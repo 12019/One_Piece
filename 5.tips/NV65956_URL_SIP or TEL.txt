@@ -1,0 +1,9 @@
+65956 qipcall_confrd_uri
+0 - SIP
+1 - TEL
+
+CMCC实网测试：
+【1】
+65956 - 1
+73777 - inactive
+结果：

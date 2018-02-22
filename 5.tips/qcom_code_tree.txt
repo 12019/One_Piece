@@ -1,0 +1,13 @@
+高通代码目录结构：
+
+分为开源和私有部分，开源一般是指/LINUX 目录下除去 /vendor的部分，私有的即根目录下的所有(除去 /LINUX)和 /LINUX/vendor 的代码。
+
+Modem仓的代码，大致可以按照名字分为几个大的类别：
+
+adsp
+boot(sbl)
+cpe
+modem
+rpm
+tz
+wcnss

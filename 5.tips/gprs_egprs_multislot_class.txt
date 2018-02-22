@@ -1,0 +1,43 @@
+00911 GPRS Multi Slot Class multislot_cla GPRS
+02509 EDGE Multislot Class edge_multislot_class GPRS
+
+在修改NV911&2509时，当按照需求修改class为33后，发现NV更新读取都没有问题，但OTALOG中的对应bit却依然是12。
+	gmactask.c 670] gs1:GPRS multislot class 33
+	gmactask.c 884] gs1:EGPRS multislot class 33
+
+检查后发现代码中对class超过30的有特殊映射处理(/.../gmmmsg.c #  gmm_set_multislot_class(...))，在OTALOG中会用high_multislot_capability_present来标识，后面High Multislot Capability(2 bits)对应映射表。
+	high_multislot_capability_present = 1 (0x1)
+	High Multislot Capability = 0 (0x0) 	//可能取值0,1,2,3
+根据High Multislot Capability的值去Table 10.5.146/3GPP TS 24.008中查询/或者直接参考代码(/.../gmmmsg.c # /* High Multislot Capability */)可以看到如下映射关系：
+
+===
+
+High Multislot Capability (2 bit field)
+The High Multislot Capability is individually combined with each multislot class field sent by the MS (the possible multislot class fields are: GPRS multislot class, EGPRS multislot class) to extend the related multislot class to multislot classes 30 to 45, see 3GPP TS 45.002 [32]. The same capability is applicable also to EGPRS2 if supported. The same capability is applicable also to Downlink Multi Carrier configuration if supported.
+For each multislot class, the following mapping is done:
+Bits
+2 1		coded multislot class field			actual multislot class
+0 0				8										30
+0 0				10, 23, 28, 29							39
+0 0				11, 20, 25								32
+0 0				12, 21, 22, 26, 27						33
+0 0				Any other								Multislot Class field value
+0 1				8										35
+0 1				10, 19, 24								36
+0 1				11, 23, 28, 29							45
+0 1				12, 21, 22, 26, 27						38
+0 1				Any other								Multislot Class field value
+1 0				 8										40
+1 0				10, 19, 24								41
+1 0				11, 20, 25								42
+1 0				12, 23, 28, 29                                   44
+1 0				Any other								Multislot Class field value
+1 1				12, 21, 22, 26, 27						43
+1 1				11, 20, 25								37
+1 1				10, 19, 24								31
+1 1				 9, 23, 28, 29							34
+1 1				Any other								Multislot Class field value
+
+===
+
+即当high_multislot_capability_present = 1 (0x1)并且High Multislot Capability有取值时，表明当前OTALOG中的GPRS/EGPRS class是被映射后的结果，根据映射关系即可查询到实际的class信息，如果high_multislot_capability_present=0，则当前上报值即为真实值。

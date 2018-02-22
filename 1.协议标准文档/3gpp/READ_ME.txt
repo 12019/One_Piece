@@ -1,0 +1,1 @@
+http://www.3gpp.org/ftp/Specs/

@@ -1,0 +1,13 @@
+【qmi_nas.c】
+qmi_nas_init() --> 初始化网络接入服务QMUX - QMI links
+
+QMI_NAS_PROCESS_CMSS_MSIM_EVT() --> 处理CM SS事件的数据
+
+qmi_modem_info_change_event_for_chr( p_info ); --> modem信息变化的chr
+
+【qmi_modem_info.c】
+qmi_modem_info_change_event_for_chr() --> 向AP上报网络状态，掉网事件chr记录，stat ratio info
+
+qmi_modem_info_update_for_network_lost_chr() --> 掉网事件chr记录
+
+qmi_modem_info_set() --> 保存有效的modem信息，网络模式，lac，cell-id

@@ -1,0 +1,64 @@
+[user]
+	name = zwx429758
+	email = zwx429758@notesmail.huawei.com
+[color]
+	ui = true
+[core]
+	editor = vim
+[url "ssh://zwx429758@rnd-pdu2.huawei.com:29418"]
+        insteadOf = ssh://rnd-pdu2.huawei.com
+[url "ssh://zwx429758@rnd-pdu.huawei.com:29418"]
+        insteadOf = ssh://rnd-pdu.huawei.com
+		
+[url "http://zwx429758@rnd-hap.huawei.com:8080"]
+    insteadOf = ssh://rnd-hap.huawei.com
+    insteadOf = ssh://10.107.123.195
+    insteadOf = http://rnd-hap.huawei.com
+    insteadOf = http://10.107.123.195
+
+[url "http://zwx429758@rnd-bj-handset.huawei.com:8080"]
+    insteadOf = ssh://10.107.123.187
+    insteadOf = ssh://rnd-bj-handset.huawei.com
+    insteadOf = http://10.107.123.187
+    insteadOf = http://rnd-bj-handset.huawei.com
+	 
+[url "http://zwx429758@rnd-wh.huawei.com"] 
+     insteadOf = ssh://10.176.110.150 
+     insteadOf = http://10.176.110.150 
+     insteadOf = ssh://rnd-wh.huawei.com 
+     insteadOf = http://rnd-wh.huawei.com 
+     insteadOf = ssh://zwx429758@10.176.110.150:29418 
+    insteadOf = ssh://zwx429758@rnd-wh.huawei.com:29418 
+[url "http://zwx429758@rnd-bj-handset.huawei.com:8080"] 
+     insteadOf = ssh://10.107.123.187 
+     insteadOf = http://10.107.123.187 
+     insteadOf = ssh://rnd-bj-handset.huawei.com 
+     insteadOf = http://rnd-bj-handset.huawei.com 
+[url "ssh://zwx429758@androidxian.huawei.com:29418"]
+        insteadOf = ssh://androidxian.huawei.com
+[url "http://zwx429758@rnd-sh.huawei.com"] 
+     insteadof = http://10.140.130.49 
+     insteadof = ssh://10.140.130.49 
+     insteadof = ssh://rnd-sh.huawei.com 
+     insteadof = http://rnd-sh.huawei.com 
+     insteadOf = ssh://zwx429758@10.140.130.49:29418 
+     insteadOf = ssh://zwx429758@rnd-sh.huawei.com:29418 
+[url "http://zwx429758@rnd-hap.huawei.com:8080"] 
+     insteadof = ssh://rnd-hap.huawei.com 
+     insteadof = ssh://10.107.123.195 
+     insteadof = http://rnd-hap.huawei.com 
+     insteadof = http://10.107.123.195 
+[url "ssh://zwx429758@android.huawei.com:29418"]
+	insteadOf = ssh://android.huawei.com
+[url "ssh://zwx429758@10.112.128.40:29418"]
+	insteadOf = ssh://10.112.128.40
+[url "ssh://zwx429758@10.72.16.172:29418"]
+	insteadOf = ssh://10.72.16.172
+[url "ssh://zwx429758@10.107.123.195:29418"]
+	insteadOf = ssh://10.107.123.195
+[commit]
+	template = /home/zwx429758/.gitmsg_sh
+[url "ssh://zwx429758@rnd-hap.huawei.com:29418"]
+	insteadOf = ssh://rnd-hap.huawei.com
+[url "ssh://zwx429758@10.107.123.187:29418"]
+	insteadOf = ssh://10.107.123.187

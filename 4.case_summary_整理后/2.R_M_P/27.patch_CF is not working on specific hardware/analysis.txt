@@ -1,0 +1,68 @@
+rely on 1062300
+
+UT config issue
+Change Description：A bool variable getting incorrectly set causing profile creation failure has now been fixed.
+
+===========
+LOG     [0x1390]    QMI Link 2 RX PDU     11:21:26.575     Length: 0021
+MsgType = QMI_VOICE_GET_CALL_FORWARDING
+         Reason = FWDREASON_UNCONDITIONAL
+         ServiceCalss = CLASS_VOICE
+LOG     [0x1391]    QMI Link 2 TX PDU     11:21:26.580     Length: 0033
+MsgType = QMI_VOICE_SUPS_IND
+         IsModifiedByCallControl = FALSE
+         Service Class Ext = VOICE
+         ServiceClass = 1
+         Reason = FWD_UNCONDITIONAL
+LOG     [0x1391]    QMI Link 2 TX PDU     11:21:26.588     Length: 0025
+MsgType = QMI_VOICE_GET_CALL_FORWARDING
+         QmiResult = QMI_RESULT_FAILURE
+         FailureCause = QMI_FAILURE_CAUSE_ACCESS_CLASS_BLOCKED
+
+		 
+LOG     [0x1390]    QMI Link 2 RX PDU     11:21:26.741     Length: 0021
+MsgType = QMI_VOICE_GET_CALL_FORWARDING
+         Reason = FWDREASON_MOBILEBUSY
+         ServiceCalss = CLASS_VOICE
+LOG     [0x1391]    QMI Link 2 TX PDU     11:21:26.742     Length: 0033
+MsgType = QMI_VOICE_SUPS_IND
+         IsModifiedByCallControl = FALSE
+         Service Class Ext = VOICE
+         ServiceClass = 1
+         Reason = FWD_MOBILEBUSY
+LOG     [0x1391]    QMI Link 2 TX PDU     11:21:26.744     Length: 0025
+MsgType = QMI_VOICE_GET_CALL_FORWARDING
+         QmiResult = QMI_RESULT_FAILURE
+         FailureCause = QMI_FAILURE_CAUSE_ACCESS_CLASS_BLOCKED
+
+
+LOG     [0x1390]    QMI Link 2 RX PDU     11:21:26.777     Length: 0021
+MsgType = QMI_VOICE_GET_CALL_FORWARDING
+         Reason = FWDREASON_NOREPLY
+         ServiceCalss = CLASS_VOICE
+LOG     [0x1391]    QMI Link 2 TX PDU     11:21:26.778     Length: 0033
+MsgType = QMI_VOICE_SUPS_IND
+         IsModifiedByCallControl = FALSE
+         Service Class Ext = VOICE
+         ServiceClass = 1
+         Reason = FWD_NOREPLY
+LOG     [0x1391]    QMI Link 2 TX PDU     11:21:26.779     Length: 0025
+MsgType = QMI_VOICE_GET_CALL_FORWARDING
+         QmiResult = QMI_RESULT_FAILURE
+         FailureCause = QMI_FAILURE_CAUSE_ACCESS_CLASS_BLOCKED
+
+
+LOG     [0x1390]    QMI Link 2 RX PDU     11:21:26.791     Length: 0021
+MsgType = QMI_VOICE_GET_CALL_FORWARDING
+         Reason = FWDREASON_UNREACHABLE
+         ServiceCalss = CLASS_VOICE
+LOG     [0x1391]    QMI Link 2 TX PDU     11:21:26.792     Length: 0033
+MsgType = QMI_VOICE_SUPS_IND
+         IsModifiedByCallControl = FALSE
+         Service Class Ext = VOICE
+         ServiceClass = 1
+         Reason = FWD_UNREACHABLE
+LOG     [0x1391]    QMI Link 2 TX PDU     11:21:26.794     Length: 0025
+MsgType = QMI_VOICE_GET_CALL_FORWARDING
+         QmiResult = QMI_RESULT_FAILURE
+         FailureCause = QMI_FAILURE_CAUSE_ACCESS_CLASS_BLOCKED

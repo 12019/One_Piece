@@ -1,0 +1,122 @@
+意思是本来volte可以注册，但是激活vowifi后，vowifi不能注册然后又关掉vowifi的优先级，但volte也不能注册了。
+
+1.用的是什么sim卡，是不是支持vowifi的？当时网络会不会有问题？
+2.使用了一般的LTE jio卡，只支持LTE和volte，不能在wifi情况下注册IMS，这种sim卡会不会导致IMS状态变化不及时？
+3.开关飞行模式/重启机器后，VOLTE注册恢复正常。
+
+(没有设置vowifi的默认优先级，log中rat-value一直在LTE和iwlan之间跳转变化，只有没激活vowifi时一直保持为3，3即是LTE网络)用vowifi时，IMS消息只有register消息发送，说明可能只是一张普通支持volte的jio-sim卡，取消vowifi激活后，没有volte图标重新显示，客户判断volte没有注册，但实际上log中IMS已经注册成功，和描述不符。
+
+确认是支持vowifi的sim卡，因此为什么不能注册vowifi也是一个问题？
+
+一直在出现iwlan is lost，wifi信号很弱？ 有register消息发出但没有响应，网络端问题？
+
+//第一次飞行模式切换出现在Log一开始，意义不明，这里IMS是未注册状态
+MSG   [00051/02] IMS/High             07:02:07.135   RegisterManager.cpp  03263  RegisterManager ===== Start
+MSG   [00063/02] Android QCRIL/High   07:02:07.490      qcril_qmi_nas.c  15849  RIL[0][cmd-23(808)] qcril_qmi_nas_log_radio_power_process_state: telephony ONLINE | ril NONE | card UP | modem LPM
+MSG   [00063/02] Android QCRIL/High   07:02:07.490      qcril_qmi_nas.c  15849  RIL[0][cmd-23(808)] qcril_qmi_nas_log_radio_power_process_state: telephony ONLINE | ril INITIALIZED | card UP | modem LPM
+MSG   [00063/02] Android QCRIL/High   07:02:07.495      qcril_qmi_nas.c  15849  RIL[0][cmd-23(808)] qcril_qmi_nas_log_radio_power_process_state: telephony ONLINE | ril SETTING_OP_MODE | card UP | modem LPM
+MSG   [00051/02] IMS/High             07:02:07.792       qimfif_cbs.cpp  05593  Qimfif_RegisterServiceMonitor::ServiceUnAvailable() : Start. Reason = 9
+MSG   [00051/03] IMS/Error            07:02:07.792       qimfif_cbs.cpp  06687  Qimfif_RegisterServiceMonitor::QueryPM(): get config failed!
+MSG   [00051/03] IMS/Error            07:02:07.792       qimfif_cbs.cpp  05615  Qimfif_RegisterServiceMonitor::ServiceUnAvailable(): Failure Reason=9
+MSG   [00051/01] IMS/Medium           07:02:07.792       qimfif_cbs.cpp  05635  Qimfif_RegisterServiceMonitor::ServiceUnAvailable() : End.
+MSG   [00063/02] Android QCRIL/High   07:02:07.518      qcril_qmi_nas.c  15849  RIL[0][cmd-23(808)] qcril_qmi_nas_log_radio_power_process_state: telephony ONLINE | ril OP_MODE_SET | card UP | modem ONLINE
+MSG   [00063/02] Android QCRIL/High   07:02:07.518      qcril_qmi_nas.c  15849  RIL[0][cmd-23(808)] qcril_qmi_nas_log_radio_power_process_state: telephony ONLINE | ril DONE | card UP | modem ONLINE
+MSG   [00063/02] Android QCRIL/High   07:02:07.520      qcril_qmi_nas.c  15849  RIL[0][cmd-23(808)] qcril_qmi_nas_log_radio_power_process_state: telephony ONLINE | ril INITIATING_MULTIPLE_RILD_SYNC | card UP | modem ONLINE
+MSG   [00063/02] Android QCRIL/High   07:02:07.520      qcril_qmi_nas.c  15849  RIL[0][cmd-23(808)] qcril_qmi_nas_log_radio_power_process_state: telephony ONLINE | ril MULTIPLE_RILD_SYNC_DONE | card UP | modem ONLINE
+
+
+//Log一开始，设定iwlan为高优先级的无线接入网，这样就可以让vowifi的优先级更高 --> PrefRAT = 6 (6对应wlan，10对应LTE) / rat_value = 5/c9 (5和c9都对应wlan网络，3对应LTE)
+MSG   [00051/02] IMS/High             07:02:18.240       PDPManager.cpp  02967  IsServiceAllowed query is for IWLAN , return true
+MSG   [00051/02] IMS/High             07:02:20.447   PDPRATHandlerVoLTE.cpp  01416  IWLANBringupCriteriaMet Reg type 0 wifiMsrmnt state 2 activated RAT 6
+MSG   [00051/03] IMS/Error            07:02:20.448      qpDplHandOver.c  03393  qpDplHOLogicReEvaluate: IWLAN  available
+MSG   [00051/02] IMS/High             07:02:25.463   PDPRATHandlerVoLTE.cpp  00887  HandleWifiMeasurement triggering PDP activate on IWLAN
+MSG   [00051/02] IMS/High             07:02:25.463   PDPRATHandlerVoLTE.cpp  01469  PdpActivate set pref iwlan  RegType[0]
+MSG   [00051/02] IMS/High             07:02:25.463   PDPRATHandlerVoLTE.cpp  01416  IWLANBringupCriteriaMet Reg type 0 wifiMsrmnt state 3 activated RAT 6
+MSG   [00051/02] IMS/High             07:02:25.993       PDPManager.cpp  00567  HandleRatNotification - new RAT:IWLAN PDP not active
+MSG   [00051/02] IMS/High             07:02:30.592       qipcalliface.c  07158  qipcalliface_is_wwan_iwlan_measurement_params_changed: HO params changed SRAT 6, TRAT 10, PrefRAT = 6
+MSG   [00051/02] IMS/High             07:29:45.134              qpDcm.c  07643  qpDcmGetServingSystem: Iterating DS Sys Info, rat_value = 5, so_mask = 400
+
+//第二次飞行模式切换-->关闭飞行模式，高优先级无线接入网已变为LTE网络 --> rat_value = 3 / PrefRAT = 10
+MSG   [00063/02] Android QCRIL/High   07:31:06.810      qcril_qmi_nas.c  15849  RIL[0][cmd-23(136)] qcril_qmi_nas_log_radio_power_process_state: telephony LPM | ril NONE | card UP | modem ONLINE
+MSG   [00063/02] Android QCRIL/High   07:31:06.810      qcril_qmi_nas.c  15849  RIL[0][cmd-23(136)] qcril_qmi_nas_log_radio_power_process_state: telephony LPM | ril INITIALIZED | card UP | modem ONLINE
+MSG   [00063/02] Android QCRIL/High   07:31:06.815      qcril_qmi_nas.c  15849  RIL[0][cmd-23(136)] qcril_qmi_nas_log_radio_power_process_state: telephony LPM | ril SETTING_OP_MODE | card UP | modem ONLINE
+MSG   [00063/02] Android QCRIL/High   07:31:07.250      qcril_qmi_nas.c  15849  RIL[0][cmd-23(136)] qcril_qmi_nas_log_radio_power_process_state: telephony LPM | ril OP_MODE_SET | card UP | modem LPM
+MSG   [00063/02] Android QCRIL/High   07:31:07.251      qcril_qmi_nas.c  15849  RIL[0][cmd-23(136)] qcril_qmi_nas_log_radio_power_process_state: telephony LPM | ril DONE | card UP | modem LPM
+MSG   [00063/02] Android QCRIL/High   07:31:07.252      qcril_qmi_nas.c  15849  RIL[0][cmd-23(136)] qcril_qmi_nas_log_radio_power_process_state: telephony LPM | ril INITIATING_MULTIPLE_RILD_SYNC | card UP | modem LPM
+MSG   [00063/02] Android QCRIL/High   07:31:07.252      qcril_qmi_nas.c  15849  RIL[0][cmd-23(136)] qcril_qmi_nas_log_radio_power_process_state: telephony LPM | ril MULTIPLE_RILD_SYNC_DONE | card UP | modem LPM
+MSG   [00063/02] Android QCRIL/High   07:31:08.472      qcril_qmi_nas.c  15849  RIL[0][cmd-23(136)] qcril_qmi_nas_log_radio_power_process_state: telephony ONLINE | ril NONE | card UP | modem LPM
+MSG   [00063/02] Android QCRIL/High   07:31:08.472      qcril_qmi_nas.c  15849  RIL[0][cmd-23(136)] qcril_qmi_nas_log_radio_power_process_state: telephony ONLINE | ril INITIALIZED | card UP | modem LPM
+MSG   [00063/02] Android QCRIL/High   07:31:08.495      qcril_qmi_nas.c  15849  RIL[0][cmd-23(136)] qcril_qmi_nas_log_radio_power_process_state: telephony ONLINE | ril OP_MODE_SET | card UP | modem ONLINE
+MSG   [00063/02] Android QCRIL/High   07:31:08.495      qcril_qmi_nas.c  15849  RIL[0][cmd-23(136)] qcril_qmi_nas_log_radio_power_process_state: telephony ONLINE | ril DONE | card UP | modem ONLINE
+MSG   [00063/02] Android QCRIL/High   07:31:08.495      qcril_qmi_nas.c  15849  RIL[0][cmd-23(136)] qcril_qmi_nas_log_radio_power_process_state: telephony ONLINE | ril INITIATING_MULTIPLE_RILD_SYNC | card UP | modem ONLINE
+MSG   [00063/02] Android QCRIL/High   07:31:08.495      qcril_qmi_nas.c  15849  RIL[0][cmd-23(136)] qcril_qmi_nas_log_radio_power_process_state: telephony ONLINE | ril WAITING_FOR_MULTIPLE_RILD_SYNC | card UP | modem ONLINE
+MSG   [00063/02] Android QCRIL/High   07:31:08.500      qcril_qmi_nas.c  15849  RIL[0][cmd-23(136)] qcril_qmi_nas_log_radio_power_process_state: telephony ONLINE | ril MULTIPLE_RILD_SYNC_DONE | card UP | modem ONLINE
+MSG   [00051/02] IMS/High             07:31:10.018              qpDcm.c  08035  qpDplProcessDSSysEvent: Iterating DS Sys Info, rat_value = 3, so_mask = 2000
+MSG   [00051/01] IMS/Medium           07:31:10.051              qpDcm.c  08143  qpDplProcessDSSysEvent: IWLAN info is NOT RECIEVED on the current sub
+MSG   [00051/02] IMS/High             07:31:11.916       qipcalliface.c  07158  qipcalliface_is_wwan_iwlan_measurement_params_changed: HO params changed SRAT 10, TRAT 10, PrefRAT = 10
+MSG   [00051/03] IMS/Error            07:31:11.916      qpDplHandOver.c  03397  qpDplHOLogicReEvaluate: IWLAN  NOT available. stop wlan module
+
+//IMS此时注册成功 --> “ims_registered: 2”，且此时无线接入网是LTE，和问题描述中不能注册上IMS/VoLTE情况不符
+MSG   [00051/02] IMS/High             07:31:12.407   qpRegisterService.cpp  05897  RegisterService state is 3
+MSG   [00051/01] IMS/Medium           07:31:13.080   IMSPresenceEnabler.cpp  02712  Enabler already in registered state =  1
+MSG   [00051/03] IMS/Error            07:31:13.080   IMSPresenceRequestResponseListener.cpp  00193  RegistrationStatus : REGISTERED
+MSG   [00063/01] Android QCRIL/Medium 07:31:12.928     qcril_qmi_imsa.c  00279  RIL[0][event] qcril_qmi_imsa_reg_status_ind_hdlr: ims_registered: 2
+MSG   [00063/01] Android QCRIL/Medium 07:31:12.928     qcril_qmi_imsa.c  00204  RIL[0][event] qcril_qmi_imsa_get_ims_registration_info: ims_registered: 2
+MSG   [00063/01] Android QCRIL/Medium 07:31:12.930     qcril_qmi_imsa.c  00279  RIL[1][event] qcril_qmi_imsa_reg_status_ind_hdlr: ims_registered: 2
+MSG   [00063/01] Android QCRIL/Medium 07:31:12.930     qcril_qmi_imsa.c  00204  RIL[1][event] qcril_qmi_imsa_get_ims_registration_info: ims_registered: 2
+MSG   [00051/03] IMS/Error            07:31:13.150   qpRegisterService.cpp  03745  RegisterService::NotifyResponse | successfully subscribed to REG Event
+
+//第二次iwlan被设置为默认无线接入网，然后在07:33:06左右时刻又被设置回LTE，第二次IMS注册同样成功，并且这里没有切换飞行模式的操作
+MSG   [00051/01] IMS/Medium           07:31:45.678              qpDcm.c  08138  qpDplProcessDSSysEvent: IWLAN info is RECIEVED on the current sub
+MSG   [00051/02] IMS/High             07:31:45.740       qipcalliface.c  07158  qipcalliface_is_wwan_iwlan_measurement_params_changed: HO params changed SRAT 10, TRAT 6, PrefRAT = 6
+MSG   [00051/03] IMS/Error            07:31:45.740      qpDplHandOver.c  03393  qpDplHOLogicReEvaluate: IWLAN  available
+MSG   [00051/02] IMS/High             07:31:45.741            qipcall.c  00807  [qipcall_process_capability_change] [re-reg/handover should happen,	services_enabled: 15, services_enabled_iwlan: 15]
+MSG   [00051/01] IMS/Medium           07:31:51.276       qipcalliface.c  07873  qipcalliface_is_quality_param_met_for_wwan_iwlan_handover: SRAT 10, TRAT 6, HO possible 1
+MSG   [00051/02] IMS/High             07:31:54.021       qipcalliface.c  07158  qipcalliface_is_wwan_iwlan_measurement_params_changed: HO params changed SRAT 6, TRAT 10, PrefRAT = 6
+MSG   [00051/02] IMS/High             07:31:54.029       PDPManager.cpp  02967  IsServiceAllowed query is for IWLAN , return true
+...
+MSG   [00051/02] IMS/High             07:33:06.738              qpDcm.c  07643  qpDcmGetServingSystem: Iterating DS Sys Info, rat_value = 3, so_mask = 2000
+MSG   [00063/01] Android QCRIL/Medium 07:33:11.046     qcril_qmi_imsa.c  00279  RIL[0][event] qcril_qmi_imsa_reg_status_ind_hdlr: ims_registered: 1
+MSG   [00063/01] Android QCRIL/Medium 07:33:11.046     qcril_qmi_imsa.c  00204  RIL[0][event] qcril_qmi_imsa_get_ims_registration_info: ims_registered: 1
+MSG   [00051/01] IMS/Medium           07:33:12.075   IMSPresenceEnabler.cpp  02712  Enabler already in registered state =  1
+MSG   [00051/03] IMS/Error            07:33:12.075   IMSPresenceRequestResponseListener.cpp  00193  RegistrationStatus : REGISTERED
+MSG   [00063/01] Android QCRIL/Medium 07:33:11.925     qcril_qmi_imsa.c  00279  RIL[0][event] qcril_qmi_imsa_reg_status_ind_hdlr: ims_registered: 2
+MSG   [00063/01] Android QCRIL/Medium 07:33:11.925     qcril_qmi_imsa.c  00204  RIL[0][event] qcril_qmi_imsa_get_ims_registration_info: ims_registered: 2
+
+---------
++add
+
+多次vowifi注册失败以后，IMS的注册状态会变为暂时不可用，这里volte不能注册属于正常现象，实际上这一段时间默认无线接入网一直都是iwlan而不是LTE。
+网络端一直在返回408/504的错误代码（请求超时），多次注册失败以后，会暂时置未不可用状态，在log后半段，通过volte的IMS是可以正常的注册上的。
+通过修改NV67264调整注册重试次数可以作为一个优化方案。
+
+//vowifi不能注册的问题，发现log中有“408”的错误代码返回，408/504一般是请求超时网络端发回的错误代码，推测vowifi注册失败是网络端或无线链路问题引起。(305 --> use proxy)
+LOG   [0x138F]   QMI Link 1 TX PDU   07:03:10.365   Length: 0050
+   MsgType = QMI_IMS_SETTINGS_GET_CLIENT_PROVISIONING_CONFIG
+               enable_volte = false
+               enable_vt = false
+               enable_presence = false
+               wifi_call = IMS_SETTINGS_WFC_STATUS_ON
+               wifi_call_preference = IMS_SETTINGS_WFC_WLAN_PREFERRED
+			   
+LOG   [0x138F]   QMI Link 1 TX PDU   07:03:19.739   Length: 0031
+   MsgType = QMI_IMSA_REGISTRATION_STATUS_IND
+               IMS Registered = false
+               Ims Reg Status = REGISTERING
+               Registration Network = WLAN
+			   
+LOG   [0x156E]   IMS Message         07:03:19.773   Length: 1728
+Direction                = UE To Network
+Message ID               = IMS_SIP_REGISTER
+Response Status Code     = Request
+
+LOG   [0x138F]   QMI Link 1 TX PDU   07:03:49.780   Length: 0036
+   MsgType = QMI_IMSA_REGISTRATION_STATUS_IND
+               IMS Registered = false
+               Ims Registration Failure Error Code = 408
+               Ims Reg Status = NOT_REGISTERED
+               Registration Network = WLAN
+			   
+MSG   [00051/01] IMS/Medium          07:03:49.780   qpRegistrationMonitor.cpp  01567  RegisterServiceMonitor::handleMessage status code Failure Reason 9
+MSG   [00051/01] IMS/Medium          07:03:49.780   qpRegistrationMonitor.cpp  01591  RegisterServiceMonitor::handleMessage status code:: 408
+

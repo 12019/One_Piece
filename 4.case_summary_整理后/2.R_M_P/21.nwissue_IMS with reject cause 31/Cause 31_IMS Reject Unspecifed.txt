@@ -1,0 +1,58 @@
+CAUSE#31出现的原因，根据协议规范来看，只有两种情况会出现这种响应，一个是UE发起了额外的请求类型为emergency的PDN连接请求，第二种情况则是UE当前正在释放所有的承载，这种状态下网络断会拒绝所有请求并返回CAUSE#31消息，根据log来看应该是因为第一次的IMS注册失败正在deactive所有的承载，因此不会接受PDN连接请求，后续释放所有的承载结束后，再次发起IMS注册过程，新建PDN连接成功，IMS正常注册。属于正常现象。
+具体返回CAUSE#31的原因需要去确认网络的情况。
+
+//UE received LTE 
+MSG [00051/02] IMS/High 06:00:11.023 qpDcm.c 08638 qpDplProcessDSSysEvent: Iterating DS Sys Info, rat_value = 3, so_mask = 1000 
+
+//Establish PDN 
+MSG [00051/02] IMS/High 06:00:11.023 qpDcm.c 08638 qpDplProcessDSSysEvent: Iterating DS Sys Info, rat_value = 3, so_mask = 1000 
+MSG [00051/02] IMS/High 06:00:11.028 qpDcm.c 07912 qpDcmEstablishPDPConnection | pDcmProfile=8b293ba0 dsAppID=186 
+MSG [00051/02] IMS/High 06:00:11.028 qpDcm.c 07937 qpDcmEstablishPDPConnection - 3GPP ProfileNumber --> 2 | 3GPP2 ProfileNumber --> -1 | IPType --> 2 
+MSG [06052/02] IMS DPL/High 06:00:11.045 qpDcm.c 07935 qpDcmEstablishPDPConnection - APNName --> ims, Resolved APN --> 
+MSG [00051/02] IMS/High 06:00:11.045 qpDcm.c 07937 qpDcmEstablishPDPConnection - 3GPP ProfileNumber --> 2 | 3GPP2 ProfileNumber --> -1 | IPType --> 1 
+
+//But PDN establishment failed due to reject from network. 
+2016 Aug 9 06:00:11.162 [80] 0xB0E2 LTE NAS ESM Plain OTA Incoming Message -- Deactivate EPS bearer context request Msg 
+prot_disc = 2 (0x2) (EPS session management messages) 
+msg_type = 205 (0xcd) (Deactivate EPS bearer context request) 
+deact_eps_bearer_req 
+esm_cause = 31 (0x1f) (Request rejected, unspecified) 
+
+//UE tried PDN Establishment again and it got success. 
+
+MSG [00051/02] IMS/High 06:01:11.904 qpDcm.c 07912 qpDcmEstablishPDPConnection | pDcmProfile=8b151e20 dsAppID=212 
+
+
+MSG [00051/02] IMS/High 06:01:12.571 qpDcm.c 04199 qpDcmProcessNetEvent - [200] event occurred for AppId [212] iFaceid [0x4200d400] 
+MSG [00051/01] IMS/Medium 06:01:12.571 qpDcm.c 04359 qpDcmProcessNetEvent - HYBRID DS_ENETISCONN event occurred : IoctlCBRegistered is FALSE 
+
+//Sent REGSITER 
+
+2016 Aug 9 06:01:14.395 [86] 0x156E IMS SIP Message -- IMS_SIP_REGISTER/INFORMAL_RESPONSE 
+Direction = UE_TO_NETWORK 
+Message ID = IMS_SIP_REGISTER 
+CSeq: 485213254 REGISTER 
+
+//REceived 200 OK 
+2016 Aug 9 06:01:14.928 [35] 0x156E IMS SIP Message -- IMS_SIP_REGISTER/OK 
+Direction = NETWORK_TO_UE 
+Message ID = IMS_SIP_REGISTER 
+Response Code = OK (200) 
+Sip Message = SIP/2.0 200 OK 
+CSeq:485213254 REGISTER 
+
+=============================================
+协议规范：
+Additional UE initiated PDN connectivity request received from a UE that is attached for emergency bearer services.
+when the UE has initiated the procedure to release all traffic flows for the bearer，The MME shall reject the request with ESM cause #31 "request rejected, unspecified".
+
+Cause #98 – Message type not compatible with protocol state
+This ESM cause indicates that the equipment sending this ESM cause has received a message not compatible with the protocol state.
+
+Cause value #98 – Message type not compatible with protocol state.
+See 3GPP TS 24.008 [13], annex H, subclause H.6.3.
+
+//LTE网络正常，PDN连接第一次建立失败返回CAUSE#31和CAUSE#98，一分钟之后发起第二次PDN连接成功，IMS正常注册。
+//CAUSE#98表明的是收到了一条不应该出现在当前终端/网络状态下的消息，情况很多协议规范中没有列举。
+
+persist.radio.plmn_disable_data

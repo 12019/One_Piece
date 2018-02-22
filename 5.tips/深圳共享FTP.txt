@@ -1,0 +1,13 @@
+与深圳进行数据交变换可以使用ftp, 地址：ftp.ck-telecom.com 
+
+此账号，具备读写删权限，仅限成都使用，可上传数据。 
+
+账号：cdsoft 
+
+密码：chengdousyt 
+
+此账号，只有只读权限，可以开发给CKT深圳同事，下载数据使用，但切勿开放给CKT之外的任何第三方。 
+
+账号：cdsoft_read 
+
+密码：cd20eesoft

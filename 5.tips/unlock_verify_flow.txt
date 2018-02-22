@@ -1,0 +1,70 @@
+//Wdata.c ???
+MOD_FT --> pcore_middleWare_task_config.h
+MOD_NVRAM --> pcore_srv_task_config.h
+MOD_SMU --> pcore_modem_2g3g_task_config.h
+
+1.ftc_alloc_msg
+
+ilm_struct* --> kal_public_defs.h
+kal_uint8 / kal_uint16 --> kal_generate_types.h
+construct_local_para() /construct_peer_buff() --> kal_public_api.h(原型和衍生都在这里)
+assert() --> kal_release.h
+
+2.ftc_send_msg
+
+"Custom_parse_db.c"
+msg_send6() --> kal_public_api.h
+
+3.ftc_sml_verify
+ common.h
+ sha1-pdkdf2.h
+ 
+4.ftc_readfrom_nvram
+
+*req --> ftc_private.h
+ilm_struct* --> kal_public_defs.h
+nvram_read_req_struct* --> nvram_struct.h
+kal_prompt_trace() --> rmmi_msgbased_at.c
+PS_nvram_sap --> svc_sap.h
+MSG_ID_NVRAM_READ_REQ --> nvram_msgid.h
+
+5.ftc_writeto_nvram
+
+*req --> ftc_private.h
+peer_buff_struct* --> kal_public_defs.h
+基本同4
+
+6.ftc_readfrom_nvram_cnf
+
+ftc_basic_cnf_struct* --> ftc_msg.h
+get_peer_buff_pdu() --> kal_public_api.h
+kal_mem_cpy --> fsal.h -->string.h
+
+7.FTC_ReadFrom_NVRAM_For_Verify_CNF
+
+--> FTC_SML_Verify()
+
+
+
+
+[00063/01] MSG        06:07:20.837     Android QCRIL/Medium        qcril_qmi_nas.c  35388  RIL[1][event] qcril_qmi_nas_assess_emergency_number_list_handler: custom emergency numbers enabled 1
+[00063/01] MSG        06:07:20.838     Android QCRIL/Medium        qcril_qmi_nas.c  35546  RIL[1][event] qcril_check_mcc_part_of_emergency_numbers_table_with_service_state: source = 8, is matched with no service limit 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

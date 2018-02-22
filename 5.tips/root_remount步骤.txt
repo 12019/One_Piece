@@ -1,0 +1,6 @@
+adb root
+adb remount
+adb shell mount -o remount,rw /system
+adb shell mount -o remount rw /system
+adb shell mount -o rw,remount /path
+chmod xxx

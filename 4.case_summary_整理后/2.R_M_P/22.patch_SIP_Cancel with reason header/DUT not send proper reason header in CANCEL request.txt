@@ -1,0 +1,25 @@
+UE shall send reason header in CANCEL requests, as applicable. Format of Reason header should be as follows.
+Reason: SIP; text=<REASON STRING>
+
+REASON STRING可能取值：
+USER DISCONNECTED -  User terminated the call
+DRB LOST -  Dedicated bearer is lost
+INTERNAL ERROR - Call is terminated due to device’s internal issues like memory corruption, memory overshoot etc
+NETWORK COVERAGE LOST - Call is terminated due to device losing network coverage (Airplane mode ON, for example)
+LOW BATTERY - Call is terminated due to low battery
+
+MSG        [06054/02] IMS SIP/High           06:51:15.804      sipConnection.cpp  04666  qpSipAddValTail: CANCEL
+MSG        [06054/02] IMS SIP/High           06:51:15.807      sipConnection.cpp  04952  qpSipAddValHead: CANCEL
+MSG        [06054/02] IMS SIP/High           06:51:27.808      sipConnection.cpp  04952  qpSipAddValHead: SIP; text="USER DISCONNECTED"
+MSG        [06053/02] IMS FW/High            06:51:27.809        singoConfig.cpp  02141  SingoConfig::IsOutGoingRequestHeaderValid method=CANCEL valid=1 header=Route
+MSG        [06053/02] IMS FW/High            06:51:27.809        singoConfig.cpp  02141  SingoConfig::IsOutGoingRequestHeaderValid method=CANCEL valid=1 header=User-Agent
+MSG        [06053/02] IMS FW/High            06:51:27.809        singoConfig.cpp  02141  SingoConfig::IsOutGoingRequestHeaderValid method=CANCEL valid=1 header=Reason
+MSG        [06054/02] IMS SIP/High           06:51:27.814      sipConnection.cpp  03860  EVENT_SIP_REQUEST_SEND: CANCEL tel:7021772712;phone-context=ims.mnc874.mcc405.3gppnetwork.org SIP/2.0
+MSG        [06054/02] IMS SIP/High           06:51:27.814      sipConnection.cpp  03860  69_2335820072@2405:204:801:3f1e:29f9:1702:a9f4:598a
+Max-Forwards: 70
+CSeq: 661013297 CANCEL
+v: SIP/
+MSG        [06054/02] IMS SIP/High           06:51:27.814      sipConnection.cpp  03860  _LS-5201_LYF_LS-5201_00_200_02
+Reason: SIP; text="USER DISCONNECTED"
+
+rely on 998690.

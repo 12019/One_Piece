@@ -1,0 +1,7 @@
+[1]the smart forward feature can't working in single sim case.
+[2/3]enable the smart-forward after removing/inserting SIMcards, everythings goes well.
+
+smart foward是面向双卡设备的智能转接的增强功能，可以将两张SIM卡互相设置为通话转接对象。
+
+smart-forward的问题FW同事确定是代码问题，Xdivert的代码设定就是单卡是会disable掉call-unreachable这个属性值，同时插拔双卡则不会出现此问题，可以改成单卡是不修改此属性值，因此要根据具体需求来判断需要哪种设置，本来单卡时就算设置了enable属性，互转的功能也是不可用的，因此当前的设置是在单卡时会主动将该值修改为disable，并且再次插入双卡后，必须要手动的再去设置一次smart-forward功能才能使用。
+

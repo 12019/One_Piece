@@ -1,0 +1,150 @@
+customized DTMF event:
+
+1.添加dtmf registration for qcril
+qcril_qmi_voice.c
+qcril_qmi_voice_ind_registrations()
+...
+/*add dtmf event -- begin*/
+  memset(&indication_req, 0, sizeof(indication_req));
+  memset(&indication_resp_msg, 0, sizeof(indication_resp_msg));
+  indication_req.reg_dtmf_events_valid = TRUE;
+  indication_req.reg_dtmf_events = 0x01;
+  if ( qcril_qmi_client_send_msg_sync( QCRIL_QMI_CLIENT_VOICE,
+                                       QMI_VOICE_INDICATION_REGISTER_REQ_V02,
+                                       &indication_req,
+                                       sizeof(indication_req),
+                                       &indication_resp_msg,
+                                       sizeof(indication_resp_msg)
+                                     ) !=E_SUCCESS )
+  {
+     QCRIL_LOG_INFO("DTMF events indication register failed!");
+  }
+  else
+  {
+     QCRIL_LOG_INFO("DTMF events registration error code: %d",
+	                indication_resp_msg.resp.error);
+  }
+/*add dtmf event -- end  */ 
+
+
+2.添加volte DTMF对应的event定义
+dtmf_event_enum_v02
+  DTMF_EVENT_IP_INCOMING_DTMF_START_V02 = 0x08, /**<  Received an IP-start continuous DTMF message \n  */
+  DTMF_EVENT_IP_INCOMING_DTMF_STOP_V02 = 0x09, /**<  Received an IP-stop continuous DTMF message  */
+
+示例：
+typedef enum {
+  DTMF_EVENT_ENUM_MIN_ENUM_VAL_V02 = -2147483647, /**< To force a 32 bit signed enum.  Do not change or use*/
+  DTMF_EVENT_REV_BURST_V02 = 0x00, /**<  Sends a CDMA-burst DTMF \n  */
+  DTMF_EVENT_REV_START_CONT_V02 = 0x01, /**<  Starts a continuous DTMF tone \n  */
+  DTMF_EVENT_REV_STOP_CONT_V02 = 0x03, /**<  Stops a continuous DTMF tone \n  */
+  DTMF_EVENT_FWD_BURST_V02 = 0x05, /**<  Received a CDMA-burst DTMF message \n  */
+  DTMF_EVENT_FWD_START_CONT_V02 = 0x06, /**<  Received a start-continuous DTMF tone order \n  */
+  DTMF_EVENT_FWD_STOP_CONT_V02 = 0x07, /**<  Received a stop-continuous DTMF tone order \n  */
+  DTMF_EVENT_IP_INCOMING_DTMF_START_V02 = 0x08, /**<  Received an IP-start continuous DTMF message \n  */
+  DTMF_EVENT_IP_INCOMING_DTMF_STOP_V02 = 0x09, /**<  Received an IP-stop continuous DTMF message  */
+  DTMF_EVENT_ENUM_MAX_ENUM_VAL_V02 = 2147483647 /**< To force a 32 bit signed enum.  Do not change or use*/
+}dtmf_event_enum_v02;
+
+3.在ind handler添加处理操作
+qcril_qmi_voice.c
+qcril_qmi_voice_dtmf_ind_hdlr()
+...
+
+示例：
+case DTMF_EVENT_IP_INCOMING_DTMF_START_V02:
+	...
+	break;
+case DTMF_EVENT_IP_INCOMING_DTMF_STOP_V02:
+	...
+	break;
+
+4.dtmf消息结构体 //读取dtmf事件携带的ASCII信息判断是哪一个按键，dtmf_info.digit_buffer
+typedef struct {
+
+  uint8_t call_id;
+  /**<   Call identifier for the current call.
+  */
+
+  dtmf_event_enum_v02 dtmf_event;
+  /**<   DTMF event. Values: \n
+      - DTMF_EVENT_REV_BURST (0x00) --  Sends a CDMA-burst DTMF \n
+      - DTMF_EVENT_REV_START_CONT (0x01) --  Starts a continuous DTMF tone \n
+      - DTMF_EVENT_REV_STOP_CONT (0x03) --  Stops a continuous DTMF tone \n
+      - DTMF_EVENT_FWD_BURST (0x05) --  Received a CDMA-burst DTMF message \n
+      - DTMF_EVENT_FWD_START_CONT (0x06) --  Received a start-continuous DTMF tone order \n
+      - DTMF_EVENT_FWD_STOP_CONT (0x07) --  Received a stop-continuous DTMF tone order \n
+      - DTMF_EVENT_IP_INCOMING_DTMF_START (0x08) --  Received an IP-start continuous DTMF message \n
+      - DTMF_EVENT_IP_INCOMING_DTMF_STOP (0x09) --  Received an IP-stop continuous DTMF message
+ */
+
+  uint32_t digit_buffer_len;  /**< Must be set to # of elements in digit_buffer */
+  char digit_buffer[QMI_VOICE_DIALED_DIGIT_BUFFER_MAX_V02];
+  /**<   DTMF digit buffer in ASCII string.
+  */
+}voice_dtmf_info_type_v02;  /* Type */
+
+==============
+==============
+
+添加OEM hook request id
+/vendor/qcom/proprietary/qcril/qcril_qmi/qcrili.h
+
+/* OEM Hook events */
+  QCRIL_EVT_HOOK_BASE                          = 0x80000,
+  QCRIL_EVT_HOOK_NV_READ                       = QCRIL_EVT_HOOK_BASE + 1,
+  QCRIL_EVT_HOOK_NV_WRITE                      = QCRIL_EVT_HOOK_BASE + 2,
+  QCRIL_EVT_HOOK_DATA_GO_DORMANT               = QCRIL_EVT_HOOK_BASE + 3,
+  QCRIL_EVT_HOOK_ME_DEPERSONALIZATION          = QCRIL_EVT_HOOK_BASE + 4,
+  QCRIL_EVT_HOOK_SET_TUNE_AWAY                 = QCRIL_EVT_HOOK_BASE + 5,
+  QCRIL_EVT_HOOK_GET_TUNE_AWAY                 = QCRIL_EVT_HOOK_BASE + 6,
+  QCRIL_EVT_HOOK_SET_PAGING_PRIORITY           = QCRIL_EVT_HOOK_BASE + 7,
+  QCRIL_EVT_HOOK_GET_PAGING_PRIORITY           = QCRIL_EVT_HOOK_BASE + 8,
+  QCRIL_EVT_HOOK_GET_NEIGHBORING_CELLS_INFO    = QCRIL_EVT_HOOK_BASE + 9,
+  QCRIL_EVT_HOOK_SET_CDMA_SUB_SRC_WITH_SPC     = QCRIL_EVT_HOOK_BASE + 11,
+  ...
+  
+=================
+audio DTMF driver
+=================
+http://10.120.10.103:8080/source/xref/KaiOS/LINUX/android/kernel/arch/arm/boot/dts/qcom/msmzirc.dtsi#1206
+pcm_dtmf: qcom,msm-pcm-dtmf {
+		compatible = "qcom,msm-pcm-dtmf";
+	};
+
+//dtmf探测回调
+dtmf_rx_detected_cb()
+//dtmf高低频
+dtmf_buf_node.dtmf_det_pkt.high_freq / dtmf_buf_node.dtmf_det_pkt.low_freq
+struct vss_istream_evt_rx_dtmf_detected {
+	uint16_t low_freq;
+	/*
+	 * Detected low frequency. Possible values:
+	 * 697 Hz
+	 * 770 Hz
+	 * 852 Hz
+	 * 941 Hz
+	 */
+	uint16_t high_freq;
+	/*
+	 * Detected high frequency. Possible values:
+	 * 1209 Hz
+	 * 1336 Hz
+	 * 1477 Hz
+	 * 1633 Hz
+	 */
+};
+
+msm_pcm_prepare() ==> voc_register_dtmf_rx_detection_cb() ==> dtmf_rx_detected_cb()
+
+
+//为dtmf rx cb注册
+//common是common_data类型的一个audio全局数组，不是qmi里的的事件定义类型
+voc_register_dtmf_rx_detection_cb(dtmf_rx_det_cb_fn dtmf_rx_ul_cb,
+				       void *private_data){	
+	common.dtmf_info.dtmf_rx_ul_cb = dtmf_rx_ul_cb;
+	common.dtmf_info.private_data = private_data;
+}
+
+
+

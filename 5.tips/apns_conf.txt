@@ -1,0 +1,2 @@
+/KaiOS/LINUX/android/gaia/shared/resources/apn/apns_full_conf.xml
+/KaiOS/LINUX/android/gaia/shared/resources/apn.json

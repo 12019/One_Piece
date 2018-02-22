@@ -1,0 +1,7 @@
+[问题]视频通话时，选择call waiting，无法听到CW的语音提示。
+
+[分析]
+L版本里VT-call的相关设置没有被使能，使其不能听到call-waiting的notify.
+audio的那些功能应该是正常的，没有看到有disable或者0的项，问题应该还是在L的VT-call上。
+
+AMB-NB和AMB-WB的选择问题

@@ -1,0 +1,13 @@
+./build.sh 8909.gen.prod -k
+
+/msm8909-la-3-0_amss_DORO_8035/common/tools/sectools$ ./sectool_sign_image.sh "modem_proc/build/ms/bin/8909.gen.prod/qdsp6sw.mbn modem_proc/build/ms/bin/8909.gen.prod/mba.mbn wcnss_proc/build/ms/bin/SCAQMAZ/reloc/wcnss.mbn trustzone_images/build/ms/bin/MAZAANAA/sampleapp.mbn trustzone_images/build/ms/bin/MAZAANAA/widevine.mbn trustzone_images/build/ms/bin/MAZAANAA/cmnlib.mbn trustzone_images/build/ms/bin/MAZAANAA/keymaster.mbn modem_proc/mcfg/configs/mcfg_sw/generic/common/ROW/Commercial/mcfg_sw.mbn" 
+
+如果签名报括号的语法错误，把首行修改为 #!/bin/bash
+
+msm8909-la-3-0_amss_DORO_8035/common/build$ python update_common_info.py --nonhlos
+
+
+python sectools.py secimage -s -g mcfg_sw -i <unsigned_mbn_path> -o <signed_mbn_path>
+python sectools.py secimage -s -g mcfg_sw -i  -o
+
+./sectool_sign_image.sh "modem_proc/mcfg/configs/mcfg_sw/generic/common/ROW/Commercial/mcfg_sw.mbn" 

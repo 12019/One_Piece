@@ -1,0 +1,19 @@
+Channel bandwidth就是我们通常说的LTE小区的带宽，Transmission bandwidth是以RB计数的实际使用资源。
+
+Channel bandwidth BWChannel [MHz] 			1.4	3	5	10	15	20
+Transmission bandwidth configuration NRB	6	15	25	50	75	100
+
+==奈奎斯特==
+f >= 2f.s
+
+==shannon==
+Rate(max) = B(bandwidth) * log ( 1+ S/N )
+
+*<math.c> / <cmath>
+*log A //底为e的求对数
+*log(A/B) = log A - log B
+*log_a(B) = log B / log A
+
+
+
+

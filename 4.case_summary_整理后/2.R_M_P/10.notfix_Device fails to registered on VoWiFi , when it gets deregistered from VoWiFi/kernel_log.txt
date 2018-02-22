@@ -1,0 +1,83 @@
+<3>[ 1491.503850] enable_hp_ext_switch: Disable HP switch 
+<3>[ 1491.555415] msm8x16_wcd_codec_enable_spk_ext_pa: enable external speaker PA,ext_spk_pa_mode=2
+<3>[ 1494.116248] enable_hp_ext_switch: Enable HP switch 
+<4>[ 1494.550578] migrate_irqs: 216 callbacks suppressed
+<4>[ 1494.550582] IRQ32 no longer affine to CPU4
+<4>[ 1494.550586] IRQ33 no longer affine to CPU4
+<4>[ 1494.550589] IRQ34 no longer affine to CPU4
+<4>[ 1494.550593] IRQ36 no longer affine to CPU4
+<4>[ 1494.550597] IRQ37 no longer affine to CPU4
+<4>[ 1494.550601] IRQ38 no longer affine to CPU4
+<4>[ 1494.550605] IRQ40 no longer affine to CPU4
+<4>[ 1494.550608] IRQ41 no longer affine to CPU4
+<4>[ 1494.550612] IRQ42 no longer affine to CPU4
+<4>[ 1494.550615] IRQ43 no longer affine to CPU4
+<6>[ 1494.552648] psci: CPU4 killed.
+<3>[ 1510.913480] [11:59:57.369181] [00000006C5682929] [VosMC]  wlan: [E :PE ] limProcessDeauthFrame: 144: Received Deauth frame for Addr: 00:0a:f5:c7:fa:84 (mlm state = eLIM_MLM_LINK_ESTABLISHED_STATE, sme state = 12 systemrole  = 3) with reason code 3 from b8:64:91:f0:a7:84
+<6>[ 1510.970537] wlan: disconnected
+<4>[ 1512.560144] migrate_irqs: 442 callbacks suppressed
+<4>[ 1512.560147] IRQ32 no longer affine to CPU6
+<4>[ 1512.560151] IRQ33 no longer affine to CPU6
+<4>[ 1512.560155] IRQ34 no longer affine to CPU6
+<4>[ 1512.560158] IRQ36 no longer affine to CPU6
+<4>[ 1512.560162] IRQ37 no longer affine to CPU6
+<4>[ 1512.560165] IRQ38 no longer affine to CPU6
+<4>[ 1512.560169] IRQ40 no longer affine to CPU6
+<4>[ 1512.560173] IRQ41 no longer affine to CPU6
+<4>[ 1512.560176] IRQ42 no longer affine to CPU6
+<4>[ 1512.560179] IRQ43 no longer affine to CPU6
+<6>[ 1512.561407] psci: CPU6 killed.
+<4>[ 1515.493645] HTB: quantum of class 10080 is small. Consider r2q change.
+<6>[ 1510.970561] wlan(0) 00:00:00:00:00:00 Standalone
+<3>[ 1515.885512] [12:00:02.341221] [00000006CB18D029] [VosMC]  wlan: [E :HDP] hdd_tx_rx_pkt_cnt_stat_timer_handler: Disable split scan
+<4>[ 1516.699301] HTB: quantum of class 10090 is small. Consider r2q change.
+<3>[ 1518.022958] ipa-wan rmnet_ipa_set_data_quota:2399 iface name rmnet_data6, quota 9223372036854775807
+<4>[ 1520.756751] HTB: quantum of class 10001 is big. Consider r2q change.
+<4>[ 1520.791311] HTB: quantum of class 10010 is big. Consider r2q change.
+<3>[ 1522.561411] ipa-wan rmnet_ipa_set_data_quota:2399 iface name rmnet_data0, quota 9223372036854775807
+<3>[ 1523.133074] ipa-wan rmnet_ipa_set_data_quota:2399 iface name rmnet_data6, quota 9223372036854775807
+<6>[ 1553.967704] wlan: 00:0a:f5:c7:fa:84 connected to b8:64:91:f0:a7:84
+<6>[ 1553.968644] IPv6: ADDRCONF(NETDEV_CHANGE): wlan0: link becomes ready
+<3>[ 1554.942946] ipa-wan rmnet_ipa_set_data_quota:2399 iface name rmnet_data0, quota 9223372036854775807
+<3>[ 1555.501217] ipa-wan rmnet_ipa_set_data_quota:2399 iface name rmnet_data6, quota 9223372036854775807
+<3>[ 1555.867153] ipa-wan rmnet_ipa_set_data_quota:2399 iface name wlan0, quota 9223372036854775807
+<3>[ 1555.874645] ipa-wan rmnet_ipa_set_data_quota:2403 wlan0 is an invalid iface name
+<6>[ 1553.968240] wlan(6) b8:64:91:f0:a7:84 Standalone
+<3>[ 1555.906820] [12:00:42.362531] [00000006F8E5CE68] [VosMC]  wlan: [E :PE ] limProcessAddBaInd: 5719: BA setup for staId = 3, TID: 0, SSN: 12
+<3>[ 1556.428990] ipa-wan rmnet_ipa_set_data_quota:2399 iface name rmnet_data0, quota 9223372036854775807
+<3>[ 1567.946004] ipa-wan rmnet_ipa_set_data_quota:2399 iface name wlan0, quota 9223372036854775807
+<3>[ 1567.954130] ipa-wan rmnet_ipa_set_data_quota:2403 wlan0 is an invalid iface name
+<3>[ 1567.961377] ipa-wan wan_ioctl:187 WAN_IOC_SET_DATA_QUOTA failed
+<3>[ 1568.533549] ipa-wan rmnet_ipa_set_data_quota:2399 iface name rmnet_data0, quota 9223372036854775807
+<3>[ 1569.082840] ipa-wan rmnet_ipa_set_data_quota:2399 iface name rmnet_data6, quota 9223372036854775807
+<3>[ 1569.671386] ipa-wan rmnet_ipa_set_data_quota:2399 iface name wlan0, quota 9223372036854775807
+<3>[ 1569.679075] ipa-wan rmnet_ipa_set_data_quota:2403 wlan0 is an invalid iface name
+<3>[ 1605.353054] wcd_imped_config, invalid imped, greater than 48 Ohm
+<3>[ 1605.353054]  = 48
+<3>[ 1608.543240] wcd_imped_config, invalid imped, greater than 48 Ohm
+<3>[ 1608.543240]  = 48
+<3>[ 1656.405547] [12:02:22.260038] [000000076BE8CA51] [VosWD]  wlan: [E :VOS] VosWDThread: Waiting for active entry points to exit
+<3>[ 1656.525505] [12:02:22.380004] [000000076C0BEFB6] [VosWD]  wlan: [E :VOS] VosWDThread: Waiting for active entry points to exit
+<3>[ 1656.765801] [12:02:22.620288] [000000076C525527] [cnd]  wlan: [E :HDD] __iw_get_statistics: SME timeout while retrieving statistics
+<3>[ 1656.766230] [12:02:22.620726] [000000076C5275E6] [VosWD]  wlan: [E :VOS] VosWDThread: Waiting for active entry points to exit
+<6>[ 1656.823881] CPU: 2 PID: 613 Comm: cnd Tainted: P        W  O 3.10.84 #1
+<6>[ 1656.823906] [<ffffffc000206b60>] dump_backtrace+0x0/0x270
+<6>[ 1656.823915] [<ffffffc000206de0>] show_stack+0x10/0x1c
+<6>[ 1656.823936] [<ffffffc00021cc78>] warn_slowpath_common+0x74/0x9c
+<6>[ 1656.824201] [<ffffffbffc1b4fcc>] vos_timer_stop+0xe8/0x18c [wlan]
+<6>[ 1656.824446] [<ffffffbffc1381c0>] csrGetStatistics+0x178/0x56c [wlan]
+<6>[ 1656.824666] [<ffffffbffc11df0c>] sme_GetStatistics+0x84/0xb0 [wlan]
+<6>[ 1656.824821] [<ffffffbffc083448>] iw_get_statistics+0x150/0x36c [wlan]
+<6>[ 1656.824833] [<ffffffc000d2f354>] ioctl_private_iw_point+0xa0/0x1a0
+<6>[ 1656.824840] [<ffffffc000d2f5e8>] ioctl_private_call+0x70/0x94
+<6>[ 1656.824849] [<ffffffc000d2e834>] wireless_process_ioctl+0x118/0x130
+<6>[ 1656.824856] [<ffffffc000d2eb48>] wext_handle_ioctl+0x98/0xfc
+<6>[ 1656.824865] [<ffffffc000bb14dc>] dev_ioctl+0x648/0x68c
+<6>[ 1656.824875] [<ffffffc000b881d8>] sock_ioctl+0x48/0x2a4
+<6>[ 1656.824885] [<ffffffc0003150e4>] do_vfs_ioctl+0x4c4/0x598
+<6>[ 1656.824891] [<ffffffc000315214>] SyS_ioctl+0x5c/0x88
+<4>[ 1656.824898] ---[ end trace da227214a82491e2 ]---
+<3>[ 1656.828621] [12:02:22.683118] [000000076C64BD66] [cnd]  wlan: [E :VOS] vos_timer_destroy: Cannot destroy uninitialized timer
+<3>[ 1656.875448] [12:02:22.729944] [000000076C727549] [VosWD]  wlan: [E :VOS] VosWDThread: Waiting for active entry points to exit
+<3>[ 1656.996100] [12:02:22.850594] [000000076C95CDFB] [VosWD]  wlan: [E :VOS] VosWDThread: Waiting for active entry points to exit
+<3>[ 1657.115243] [12:02:22.969732] [000000076CB8B559] [VosWD]  wlan: [E :VOS] VosWDThread: Waiting for active entry points to exit

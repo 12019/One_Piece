@@ -1,0 +1,90 @@
+related files:
+qcril_qmi/pdc_utils.h
+qcril_qmi/qcril_qmi_client.c
+qcril_qmi/mbn_utils.h
+qcril_qmi/pdc_utils.c
+qcril_qmi/qcril_qmi_ota_daemon.c
+qcril_qmi/mbn_utils.c
+qcril_qmi/qcril_qmi.mk
+
+
+【1】LINUX/android/device/qcom/mobee01a_msm8916_64/system.prop
+#enable modem ssr
+persist.sys.ssr.restart_level=modem
+
+#enable start_ota_daemon
+persist.radio.start_ota_daemon=1
+
+【2】LINUX/android/device/qcom/common/rootdir/etc/init.qcom.sh
+rm -rf /data/misc/radio/modem_config
+mkdir /data/misc/radio/modem_config
+chmod 770 /data/misc/radio/modem_config
+#cp -r /firmware/image/modem_pr/mbn_ota/* /data/misc/radio/modem_config
+cp -r /firmware/image/modem_pr/mcfg/configs/* /data/misc/radio/modem_config
+chown -hR radio.radio /data/misc/radio/modem_config
+#cp /firmware/image/modem_pr/mbn_ota.txt /data/misc/radio/modem_config
+cp /system/etc/mbn_ota/mbn_ota.txt /data/misc/radio/modem_config
+chown radio.radio /data/misc/radio/modem_config/mbn_ota.txt
+echo 1 > /data/misc/radio/copy_complete
+
+【3】LINUX/android/vendor/qcom/proprietary/qcril/qcril_qmi/qcril_qmi_mbn_ota_daemon.c
+#344
+	/* disable MBN auto selection */
+    /* if (!is_all_in_local_matched) {
+        ret_val = pdc_enable_auto_selection(0, 0);
+        ret_val = pdc_enable_auto_selection(0, 1);
+    }*/
+#371	
+	/* if (!is_all_in_local_matched) {
+        ret_val = pdc_enable_auto_selection(1, 0);
+        ret_val = pdc_enable_auto_selection(1, 1);
+    }*/
+	
+【4】LINUX/android/device/qcom/mobee01a_msm8916_64/AndroidBoard.mk
+#163
+#----------------------------------------------------------------------
+# MBN ota info
+#----------------------------------------------------------------------
+include $(CLEAR_VARS)
+LOCAL_MODULE       := mbn_ota.txt
+LOCAL_MODULE_TAGS  := optional
+LOCAL_MODULE_CLASS := ETC
+LOCAL_MODULE_PATH  := $(TARGET_OUT_ETC)/mbn_ota
+LOCAL_SRC_FILES    := mbn_ota.txt
+include $(BUILD_PREBUILT)
+
+LINUX/android/device/qcom/mobee01a_msm8916_64/mbn_ota.txt
+
+LINUX/android/device/qcom/mobee01a_msm8916_64/mobee01a_msm8916_64.mk
+# MBN OTA
+PRODUCT_PACKAGES += mbn_ota.txt
+
+【5】modem_proc/mcfg/mcfg_sel/src/mcfg_uim.c
+
+【6】新的8939 M上的MBN-OTA高通重新用回了L的方案，因此AP端需要提交对应的MBN文件
+
+L：
+cp -r /system/etc/mbn_ota/* /data/misc/radio/modem_config
+chown -hR radio.radio /data/misc/radio/modem_config
+echo 1 > /data/misc/radio/copy_complete
+
+M：
+cp -r /firmware/image/modem_pr/mcfg/configs/* /data/misc/radio/modem_config
+chown -hR radio.radio /data/misc/radio/modem_config
+echo 1 > /data/misc/radio/copy_complete
+
+2150204后MBN-OTA的修改验证：
+init.qcom.sh：
+cp -r /firmware/image/modem_pr/mcfg/configs/mcfg_sw/generic/mbn_ota/* /data/misc/radio/modem_config  --> OK
+cp -r /firmware/image/modem_pr/mcfg/configs/mcfg_sw/generic/mbn_ota /data/misc/radio/modem_config
+
+
+
+
+
+
+
+
+
+
+

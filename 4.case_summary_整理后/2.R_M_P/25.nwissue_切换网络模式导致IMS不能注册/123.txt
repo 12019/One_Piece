@@ -1,0 +1,2 @@
+From DPL logs i can see that when call is tigred over wifi NW is not responded for the IKE AUTH msg£¬due to that IKE timeout and call got ended. 
+This might be temporary NW issue.

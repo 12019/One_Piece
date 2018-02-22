@@ -1,0 +1,8 @@
+属于正常现象。
+卡1-JIO卡只能基于LTE网络发起/接受呼叫，卡2-airtel作为非主卡情况下只能进行CS域的呼叫。
+当手机使用卡2进行CS域的呼叫时，DSDS会将当前手机的RAT设置为0，IMS无法接收到LTE网络的信号，因此卡1的IMS会自动终止相关服务，在卡2的通话结束之后，卡1的IMS应该会再次注册上。
+
+Official reply:
+Discussed internally and the behavior is expected. 
+If the CS call tried over SIM2, then the VoLTE service will be lost as the DS will report RAT as 0 to IMS. 
+this is because as this DSDS design and one CS call on one SIM card, the user will not be able to use other SIM for the Voice call.

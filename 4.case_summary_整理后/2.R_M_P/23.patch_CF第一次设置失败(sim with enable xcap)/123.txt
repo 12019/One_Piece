@@ -1,0 +1,13 @@
+﻿第一次设置呼叫转接会出现失败，后续正常。
+
+rely on 1041097
+
+Title: UT over iWLAN is failing for first/initial attempt.
+Subsystem: Data Modem
+Problem Description: If DNS query for preferred IP has resulted some result and later IP FB is happening then the incorrect IP address is getting set.
+Change Description: While performing IP FB, older cache needs to be cleaned and new DNS resolution should be made on the new IP type
+
+===
+219 --> QMI_FAILURE_CAUSE_ACCESS_CLASS_BLOCKED_V02 = 0xDB
+error --> ims_Error_E_GENERIC_FAILURE = 2
+confirmation type = 16 --> CC_CAUSE_INFO (cm_ss_conf_e_type)

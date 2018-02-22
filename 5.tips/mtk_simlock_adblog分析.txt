@@ -1,0 +1,31 @@
+//表示wms已经退出开机动画
+06-03 16:15:33.601163 734 951 I WindowManager: setEventDispatching true 
+
+//在SIM卡初始化过程中，CPIN返回SIM PIN
+06-03 16:15:36.461279 700 704 D use-Rlog/RLOG-AT: AT> AT+CPIN?
+06-03 16:15:36.463494 700 718 D use-Rlog/RLOG-AT: AT< +CPIN: SIM PIN
+//该状态经由Framework层广播出去
+06-03 16:15:37.820647 949 949 D IccCardProxy: [IccCard][SIM1] Broadcasting intent ACTION_SIM_STATE_CHANGED LOCKED reason PIN sim id 0
+06-03 16:15:37.823179 949 949 D IccCardProxy: [IccCard][SIM1] Broadcasting intent ACTION_SIM_STATE_CHANGED_EXTEND LOCKED reason PIN sim id 0
+//Keyguard监听到该广播，显示解锁界面
+06-03 16:15:37.973356 805 805 D KeyguardUpdateMonitor: received broadcast android.intent.action.SIM_STATE_CHANGED
+06-03 16:15:37.973475 805 805 D KeyguardUpdateMonitor: INTENT_VALUE_ICC_LOCKED, lockedReason=PIN
+06-03 16:15:38.037685 805 805 D KeyguardUpdateMonitor: handleSimStateChange: intentValue = PIN_REQUIRED state resolved to PIN_REQUIRED, oldssimtate=NOT_READY
+06-03 16:15:38.038546 805 805 D KeyguardViewMediator: INTENT_VALUE_ICC_LOCKED and keygaurd isn't showing, we need to show the keyguard so the user can enter their sim pin
+06-03 16:15:38.044326 805 805 D KeyguardViewMediator: doKeyguard: showing the lock screen
+
+//实际的log
+01-01 00:15:38.253  1044  1063 I AT      : AT> AT+CPIN? (RIL_CMD_READER_3, tid:520654984272)
+01-01 00:15:38.257  1044  1079 I AT      : AT< +CPIN: PH-NET PIN (RIL_CMD_READER_3, tid:520654984272)
+
+01-01 00:14:55.759  3035  8159 D SubscriptionInfoUpdater: Broadcasting intent ACTION_SIM_STATE_CHANGED LOCKED reason NETWORK for mCardIndex: 001-01 00:14:55.773  1105  1105 D WifiService: onReceive ACTION_SIM_STATE_CHANGED iccState: LOCKED, simSlot: 0
+01-01 00:14:55.777  1105  1105 D NetworkPolicy: receive ACTION_SIM_STATE_CHANGED
+
+
+锁网类型对应AT+CPIN显示的名称如下，当他们的锁网剩余的retry count为0的时候会显示PUK。
+SML_CAT_N	-->"PH-NET PIN/PUK"
+SML_CAT_NS	-->"PH-SUBNET PIN/PUK"
+SML_CAT_SP	-->"PH-SP PIN/PUK"
+SML_CAT_C	-->"PH-CORP PIN/PUK"
+SML_CAT_SIM	-->"PH-FSIM PIN/PUK"
+

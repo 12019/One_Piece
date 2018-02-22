@@ -1,0 +1,8 @@
+【1】nitz(Network Identity and Time Zone)
+鉴权过程中，2/3G网络的下发MM information信令中包含网络时间，用于终端进行时间同步。
+
+这条MM-information的log是2G网络下发的，LTE和部分3G网络下无法看到，估计包含在其他加密的空口log里，可以直接搜这个关键词"ril_nitz_time_msg"，这个不管是4g还是2g网络，同步时间之后都会打印的。
+
+更新网络标识和时区NITZ（Network Identity and Time Zone）特性是指由MSC Server根据用户接入的IMSI和位置区，通过MM INFORMATION（对应RIL_UNSOL_NITZ_TIME_RECEIVED）消息携带运营商标识和用户所在地的时间信息，下发给用户移动台设备。具体功能如下：
+1.刷新移动台设备显示的运营商标识，包括运营商的完整名称和简要名称。
+2.刷新移动台设备的时间信息，包括时间、时区和夏令时信息。

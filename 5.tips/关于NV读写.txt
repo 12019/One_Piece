@@ -1,0 +1,9 @@
+1. REG代码中对相关NV有缓存机制，如
+reg_nv_rplmnact
+reg_nv_rplmn
+reg_nv_extended_equivalent_plmn_list
+在开关机或飞行模式时才通过reg_nv_write_cache写入
+
+2. NV文件读写机制也有缓存机制，每90s（实测需要10分钟）进行一次sync up。用QXDM读取的值实际是缓存的NV值，并不是真正写入文件的NV值
+
+3. 用QXDM写入的NV值，实时写入文件

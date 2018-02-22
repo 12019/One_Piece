@@ -1,0 +1,2 @@
+adb shell dd if=/dev/zero of=/mnt/sdcard/bigfile
+adb shell ps | findstr /i xxx (e.g. dd)

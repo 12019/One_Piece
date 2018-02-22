@@ -1,0 +1,28 @@
+Yes, USSD CSFB is also supported similar to voice CSFB on LTE RAT.
+USSD CSFB is applicable only for GWL and not to 1x CSFB.
+
+You can refer to File: EMM_CNM_HANDLER.C
+
+Function: emm_process_cnm_command( )
+
+#ifdef FEATURE_3GPP_CSFB 
+else if((emm_ctrl_data_ptr->plmn_service_state->reg_service_domain == 
+SYS_SRV_DOMAIN_CS_PS) 
+&& 
+(cnm_msg_ptr->cmd.mmcnm_est_req.CNM_service_type 
+== MO_CALL_ESTABLISHMENT || 
+cnm_msg_ptr->cmd.mmcnm_est_req.CNM_service_type 
+== MO_CALL_ESTABLISHMENT_HALF_SPEECH || 
+cnm_msg_ptr->cmd.mmcnm_est_req.CNM_service_type 
+== MO_CALL_ESTABLISHMENT_FULL_SPEECH || 
+cnm_msg_ptr->cmd.mmcnm_est_req.CNM_service_type 
+== EMERGENCY_CALL_ESTABLISHMENT || 
+cnm_msg_ptr->cmd.mmcnm_est_req.CNM_service_type 
+== SUPPLEMENTARY_SERVICE_ACTIVATION || 
+cnm_msg_ptr->cmd.mmcnm_est_req.CNM_service_type 
+== MO_CALL_ESTABLISHMENT_DATA_9600 || 
+cnm_msg_ptr->cmd.mmcnm_est_req.CNM_service_type 
+== MO_CALL_ESTABLISHMENT_DATA_4800)) 
+{ 
+mm_csfb_start_mo_call_orig(cnm_msg_ptr); 
+} 

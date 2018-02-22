@@ -1,0 +1,4 @@
+load SW MBN: *#*#6266344#*#*
+load HW MBN: *#*#3266344#*#*
+active SW MBN: *#*#76266344#*#*
+deactive SW MBN: *#*#33266344#*#*

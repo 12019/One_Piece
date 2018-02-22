@@ -1,0 +1,17 @@
+log-snipeshot:
+//在发起VT-call的流程的一开始就出现了RTP failure，随即结束了通话过程，即推测是RTP问题
+MSG   [06067/02]   IMS QIPCALL/High        13:14:34.455  qipcallh.c  05302  before conversion reason_text = Fail to open RTP
+LOG   [0x1391]     QMI Link 2 TX PDU       13:14:34.460  CallEndReason = CALL_END_CAUSE_RTP_FAILURE
+MSG   [00063/01]   Android QCRIL/Medium    13:14:35.845      qcril_qmi_voice.c  13641  RIL[1][event] qcril_qmi_voice_gather_current_call_information: end_reason_text (UTF-8): Fail to open RTP
+
+Patch available: CR 1023572 and 1034485 is applicable for this issue.
+
+确认此问题复现步骤如下：
+1.卡1 jio-sim，卡2 airtel-sim，卡1作为主卡
+2.进入settings --> sim cards --> cellular data，进行DDS切换后(卡1卡2来回切换多次)，此时尝试打vt-call依旧正常。
+3.卡1卡2进行hotswap后，再进行第二步的操作。
+4.测试打vt-call会出现直接终止的现象，和客户所报的现象一致。
+
+ROOT_CAUSE:
+1.QMI RTP notifier handles leak引发的RTP open failed
+2.VT-call自动降级

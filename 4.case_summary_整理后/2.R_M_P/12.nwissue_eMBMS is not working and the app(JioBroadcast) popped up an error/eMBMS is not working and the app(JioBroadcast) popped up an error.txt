@@ -1,0 +1,13 @@
+1.经检查，embms.apk在LS-5201-S10A_LYF_L13EN_200_160623213532已包含
+2.embms.apk中的EmbmsService正常运行，见log
+Line 8025: 07-01 16:33:36.616 I/eMBMS  Service(11382): Message received: what = 7
+Line 8027: 07-01 16:33:36.616 I/eMBMS  Service(11382): Message  EVENT_SIG_STRENGTH_RESPONSE received: status= 0
+
+3.发现有modem上报的错误和
+
+Line 12131: 07-01 16:34:04.571 D/mobitv-dash(12351): Error getting NTP: Unable to resolve host "embms.jio.com": No address associated with hostname
+
+07-01 16:34:04.645 D/RilRequest( 4288): [6465]< RIL_REQUEST_GSM_BROADCAST_ACTIVATION error: com.android.internal.telephony.CommandException: GENERIC_FAILURE ret=
+
+//AP端分析是modem上报异常
+//后续测试不复现，应该是网络临时异常导致

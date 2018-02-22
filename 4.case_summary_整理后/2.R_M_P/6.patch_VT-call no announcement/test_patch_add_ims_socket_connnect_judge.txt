@@ -1,0 +1,106 @@
+Change-Id: Ifc4ecefb8384859a024b50eedc4b5582301141fe
+---
+ qcril_qmi/ims_socket/qcril_qmi_ims_socket.cc | 13 ++++++++++++-
+ qcril_qmi/ims_socket/qcril_qmi_ims_socket.h  |  1 +
+ qcril_qmi/qcril_qmi_voice.c                  | 17 +++++++++--------
+ 3 files changed, 22 insertions(+), 9 deletions(-)
+
+diff --git a/qcril_qmi/ims_socket/qcril_qmi_ims_socket.cc b/qcril_qmi/ims_socket/qcril_qmi_ims_socket.cc
+index e602141..0aa7b1c 100644
+--- a/qcril_qmi/ims_socket/qcril_qmi_ims_socket.cc
++++ b/qcril_qmi/ims_socket/qcril_qmi_ims_socket.cc
+@@ -91,7 +91,7 @@ private: // data member
+ qcril_qmi_ims_socket_agent::qcril_qmi_ims_socket_agent() :
+    qcril_qmi_singleton_agent<qcril_qmi_ims_socket_agent>(QMI_RIL_IMS_SOCKET_THREAD_NAME),
+    listen_sid(0),
+-   conn_sid(0),
++   conn_sid(-1),
+    recvd_byte_num(0)
+ {} // qcril_qmi_ims_socket_agent::qcril_qmi_ims_socket_agent
+ 
+@@ -389,6 +389,7 @@ void qcril_qmi_ims_socket_agent::recv_thread_handler()
+                 {
+                     QCRIL_LOG_ERROR("recv failed. recv_byte_num: %d. closing the socket.", recvd_byte_num);
+                     close(conn_sid);
++                    conn_sid = -1;
+                     break;
+                 }
+                 else
+@@ -515,4 +516,14 @@ void qcril_qmi_ims_socket_send_empty_payload_unsol_resp(ims_MsgId msg_id)
+     qcril_qmi_ims_socket_send(0, ims_MsgType_UNSOL_RESPONSE, msg_id, ims_Error_E_SUCCESS, NULL, 0);
+ } // qcril_qmi_ims_socket_send_empty_payload_unsol_resp
+ 
++//===========================================================================
++// qcril_qmi_ims_socket_is_connected
++//===========================================================================
++boolean qcril_qmi_ims_socket_is_connected()
++{
++    boolean ret = qcril_qmi_ims_socket_agent::get_instance()->is_socket_connected();
++    QCRIL_LOG_INFO("is_socket_connected  = %d", ret);
++    return ret;
++} // qcril_qmi_ims_socket_is_connected
++
+ } // end of extern "C"
+diff --git a/qcril_qmi/ims_socket/qcril_qmi_ims_socket.h b/qcril_qmi/ims_socket/qcril_qmi_ims_socket.h
+index 455e54a..8af1d3f 100644
+--- a/qcril_qmi/ims_socket/qcril_qmi_ims_socket.h
++++ b/qcril_qmi/ims_socket/qcril_qmi_ims_socket.h
+@@ -49,6 +49,7 @@ void qcril_qmi_ims_socket_send_flow_control(RIL_Token token, ims_MsgType type,
+                                             ims_MsgId message_id,
+                                             ims_Error error,
+                                             const void* msg, int msg_len);
++boolean qcril_qmi_ims_socket_is_connected();
+ 
+ #ifdef  __cplusplus
+ }
+diff --git a/qcril_qmi/qcril_qmi_voice.c b/qcril_qmi/qcril_qmi_voice.c
+index e0d0d17..37ad8ff 100644
+--- a/qcril_qmi/qcril_qmi_voice.c
++++ b/qcril_qmi/qcril_qmi_voice.c
+@@ -3487,11 +3487,11 @@ void qcril_qmi_voice_set_ps_cs_call_elab_vcl(const voice_call_info2_type_v02* it
+          call_mode = call_info_entry->voice_scv_info.mode;
+       }
+ 
+-      if ( CALL_TYPE_VOICE_IP_V02 == call_type ||
++      if ((CALL_TYPE_VOICE_IP_V02 == call_type ||
+            CALL_TYPE_VT_V02 == call_type ||
+            CALL_TYPE_EMERGENCY_IP_V02 == call_type ||
+-           CALL_TYPE_EMERGENCY_VT_V02 == call_type
+-         )
++           CALL_TYPE_EMERGENCY_VT_V02 == call_type) &&
++              qcril_qmi_ims_socket_is_connected())
+       {
+          if ( !(call_info_entry->elaboration & QCRIL_QMI_VOICE_VOIP_CALLINFO_ELA_AUTO_DOMAIN) ||
+               CALL_MODE_NO_SRV_V02 != call_mode
+@@ -3521,11 +3521,11 @@ void qcril_qmi_voice_set_domain_elab_from_call_type
+   qcril_qmi_voice_voip_call_info_entry_type *call_info_entry
+ )
+ {
+-    if ( CALL_TYPE_VOICE_IP_V02 == call_type ||
++    if ((CALL_TYPE_VOICE_IP_V02 == call_type ||
+          CALL_TYPE_VT_V02 == call_type ||
+          CALL_TYPE_EMERGENCY_IP_V02 == call_type ||
+-         CALL_TYPE_EMERGENCY_VT_V02 == call_type
+-       )
++         CALL_TYPE_EMERGENCY_VT_V02 == call_type) &&
++            qcril_qmi_ims_socket_is_connected())
+     {
+         QCRIL_LOG_INFO("set the call as a PS call");
+         call_info_entry->elaboration &= ~QCRIL_QMI_VOICE_VOIP_CALLINFO_ELA_CS_DOMAIN;
+@@ -5054,11 +5054,12 @@ void qcril_qmi_voice_all_call_status_ind_hdlr
+               {
+                 call_info_entry->elaboration |= QCRIL_QMI_VOICE_VOIP_CALLINFO_ELA_PHANTOM_CALL;
+ 
+-                if( CALL_MODE_LTE_V02 == iter_call_info->mode ||
++                if((CALL_MODE_LTE_V02 == iter_call_info->mode ||
+                     CALL_TYPE_VOICE_IP_V02 == iter_call_info->call_type ||
+                     CALL_TYPE_VT_V02 == iter_call_info->call_type ||
+                     CALL_TYPE_EMERGENCY_IP_V02 == iter_call_info->call_type ||
+-                    CALL_TYPE_EMERGENCY_VT_V02 == iter_call_info->call_type)
++                    CALL_TYPE_EMERGENCY_VT_V02 == iter_call_info->call_type) &&
++                        qcril_qmi_ims_socket_is_connected())
+                 {
+                     //Even though call mode is LTE, there may be a chance call gets connected on
+                     //CS domain. So better to declare elab as AUTO to handle transition scenario.
+-- 
+1.8.2.1

@@ -1,0 +1,4 @@
+/init.qcom.usb.rc
+
+原USB接口：getprop sys.usb.config
+使能ATcmd接口(diag接口)设置：setprop  sys.usb.config diag,serial_tty,serial_smd,adb

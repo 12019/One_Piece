@@ -1,0 +1,19 @@
+During GCF Test, especially reject test, we sometimes need to reset EF_FPLMN for restarting TC after being rejected into FPLMN list.
+
+Here is the simple way how to reset EF_FPLMN in (U)SIM using QPST/QXDM (without SIM writer).
+
+1.Create a file named "EF_FPLMN" in your desktop and make raw(hex) data according to TS31.102 coding scheme.
+
+ex1) Empty FPLMN list
+FF FF FF FF FF FF FF FF FF FF FF FF
+
+ex2) 3 FPLMN lists to avoid attach live network : 450-05 , 450-08, 450-06
+54 F0 50 54 F0 80 54 F0 60 FF FF FF
+
+2. Put this file "EF_FPLMN" to EFS root(/) using QPST EFS Explorer
+
+3. Send below command to QXDM Command window
+SendRawRequest 0x4b 0x21 0x01 0x00 0x01 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x10 0x05 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0xff 0x00 0x45 0x46 0x5f 0x46 0x50 0x4c 0x4d 0x4e 0x00
+
+4. Then, you can see the below log in QXDM and Power cycle to reload FPLMN list.
+EVENT      EVENT_GSDI_SIM_WRITE                                    00:04:55.905  Command Status: 0, Transaction ID: 1

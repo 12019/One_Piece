@@ -1,0 +1,34 @@
+[Precondition]
+1.Device was flashed to latest build.
+2.Insert Jio SIM in slot1.
+ 
+[Steps to Reproduce]
+1.Power up the device and wait till it latches to the network.
+2.Now turn on Flight mode of the device.
+3.Observe the device.
+ 
+[Expected Result]
+Device shouldn‘t show “Jio Service is unavailable”  msg when Flight mode was turned on.
+[Actual Result]
+DUT show “Jio Service is unavailable” msg and redirect to manual scan on tapped when Flight mode is on.
+
+Reproducibility:100%
+------------
+/msm8976_panda01a_s00a_driver_only_1.1_r00228.1/modem_proc/datamodem/api/public/ps_iface_embms.h
+331   IFACE_EMBMS_TMGI_ACTIVATION_FAILURE_MULTICAST_OOS =
+332    EMBMS_TYPE_REASON_VAL(PS_IFACE_EMBMS_CAUSE_CATEGORY_1, 8),
+333  /**< TMGI activation failure, multicast OOS (sib13 missing).
+334    Client can retry later */
+
+/msm8976_panda01a_s00a_driver_only_1.1_r00228.1/modem_proc/lte/api/lte_rrc_ext_api.h
+316/* API will return eMBMS coverage status
+317  0 - implies is not camped on an LTE cell or
+318      implies both SIB13 and SIB15 are not scheduled in SIB1 of current cell,
+319  1 - implies SIB13 and optionally SIB15 scheduled in SIB1 of current cell,
+320  2 - implies SIB15 alone scheduled in SIB1 of current cell. */
+321extern uint8 lte_rrc_cmapi_get_embms_coverage_status
+322(
+323  void
+324);
+
+//log中出现大量卡2换卡操作，客户提供log与实际描述不符，且客户那边当前此问题未复现，置为monitor状态。

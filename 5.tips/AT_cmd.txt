@@ -1,0 +1,128 @@
+【1】
+//检查串口是否打开，modem能否接收到AT命令
+at
+
+【2】
+//查询当前驻网情况
+at+cgreg?
+0,0 – not registered, MT is not currently searching a new operator to register to
+0,1 – Registered, home network
+0,2 – Searching
+0,3 – Registration denied
+0,5 – Registered, non-home network
+
+【3】
+//查询天线能接收到的信号强度，范围：10-31
+at+csq
+
+【4】
+//查询当前modem版本号/modem build
+at+cgmr
+
+【5】
+//读取/修改sim卡参数
+at+crsm?
+at+crsm=< cmd > < File id > <p1><p2><p3> <data>
+
+【6】
+//修改apn设置
+at+cgdcont?
+at+cgdcont=1,"ipv4v6","test"
+
+【7】
+//激活modem侧功能，不同设备数字含义可能有差别
+at+func=0 //minimum functions
+at+func=1 //full functions
+...
+
+【8】
+TC_9.2.1.2.9, 当MMI提示选择"00102"网络时，同时快速发送以下的AT命令：at+cops=1,2,"00102"
+//手动选择特定001-02 PLMN驻网
+at+cops=1,2,"00102"
+
+【9】
+//注网时通过PCO 发P-CSCF 请求获取P-CSCF 地址
+//RegPCOEnable = 1, RegPreConfigEnabled = 0
+AT$QCPDPIMSCFGE=1,1,0,0
+AT$QCPDPIMSCFGE=<profile number>,<request_pcscf_server_address>,0,0
+
+【10】
+//服务质量请求
++CGQREQ=[<cid> [,<precedence > [,<delay>[,<reliability.> [,<peak>[,<mean>]]]]]]
+
++CGQREQ?
++CGQREQ: <cid>, <precedence >, <delay>, <reliability>, <peak>, <mean>[<CR><LF> +CGQREQ: <cid>, <precedence >,<delay>, <reliability.>, <peak>, <mean>[…]]
+
++CGQREQ=?
++CGQREQ: <PDP_type>, (list of supported <precedence>s),(list of supported <delay>s), (list of supported <reliability>s) , (list of supported <peak>s), (list of supported <mean>s) [<CR><LF>+CGQREQ: <PDP_type>, (list of supported <precedence>s), (list of supported <delay>s), (list of supported <reliability>s) , (list of supported <peak>s), (list of supported <mean>s)[…]]
+
+<cid>：一个规定特定PDP上下文定义的数字参数。
+<precedence>：一个规定优先级类别的数字参数。
+<delay>：一个规定延时类别的数字参数。
+<reliability>：一个规定可靠性类别的数字参数。
+<peak>：一个规定峰值吞吐量类别的数字参数。
+<mean>：一个规定平均吞吐量类别的数字参数。
+
+【11】
+//可接受的最小服务质量
++CGQMIN 格式和cgqreq基本一致
+
+【12】
+//修改QoS参数
++CGEQREQ=[<cid>[,<Trafficclass>[,<MaximumbitrateUL>[,<MaximumbitrateDL>[,<GuaranteedbitrateUL>[,<GuaranteedbitrateDL>[,<Deliveryorder>[,<MaximumSDUsize>[,<SDUerrorratio>[,<Residualbiterrorratio>[,<DeliveryoferroneousSDUs>[,<Transferdelay>[,<Traffichandlingpriority>[,<Source	statisticsdescriptor>[,<Signallingindication>]]]]]]]]]]]]]]]
+
+at+cgeqreq=2,2,128,128,0,0,0,1500,"1e3","4e3",1,0,0
+
+<cid>：PDP上下文标识符，数字型参数，指定特点的环境定义。
+<Traffic class>：UMTS负载优化的类型。
+取 值	含 义
+0	会话
+1	流输出
+2	交互
+3	后台
+4	协商值
+
+<mean>：一个规定平均吞吐量类别的数字参数。
+<MaximumbitrateUL>：最大上行位速率，单位为Kbps。
+<Maximumbitrate DL>：最大下行位速率，单位为Kbps。
+<Guaranteed bitrateUL>：确保的上行位速率，单位为Kbps。
+<Guaranteedbitrate DL>：确保的下行位速率，单位为Kbps。
+<Deliveryorder>：UMTS负载是否顺序的SDU发送。
+取 值	含 义
+0	否
+1	是
+2	协商值
+注：其他值保留。
+
+<MaximumSDUsize>：最大SDU大小。
+<SDUerrorratio>：误码率目标。
+<Residualbiterrorratio>：未被检测出的误码率目标。
+<Deliveryof erroneousSDUs>：检测出的错误SDU是否被发送。
+取 值	含 义
+0	否
+1	是
+2	不检测
+3	协商值
+　　注：其他值保留。
+
+<Transferdelay>：发送SDU请求到SDU发送的目标时间。
+<Traffic handling priority>：UMTS负载优先级；0表示采用缺省值。
+<Source statistics descriptor>：标识了为了PDP上下文提交的SDU的来源特征。
+取 值	含 义
+0	SDU的特征未知
+1	SDU的特征和对话来源相关
+
+<Signallingindication>：用来标识为了PDP上下文提交的SDU的信号上下文。
+取 值	含 义
+0	PDP上下文类型没有做限制
+1	根据<PDP_ type>对PDP上下文类型做了限制
+
+<PDP_type>：分组数据协议类型，字符串型，指定分组数据的协议。
+取 值	含 义
+X.25	ITU-T/CCITTX.25layer3（Obsolete）
+IP	InternetProtocol（IETFSTD 5）
+IPv6	InternetProtocol,version6（IETF RFC 2460）
+OSPIH	InternetHostedOctectStreamProtocol（Obsolete）
+PPP	Point toPointProtocol（IETFSTD 51）
+
+【13】

@@ -1,0 +1,87 @@
+Bug 12296 [TA][VIT_LS-5201_VoWLAN]: Device does not send 486 busy response of invite when another sub is on call
+<RJL:228483>
+
+Log Snippets:
+//唯一一次出现MT-call的部分在最开始，出现了一次MT-call，但是是disconnect的指令，此时MO-call处于Hold状态，MT-call是被终端自己结束掉的
+//MT-call msg only appear at the beginning, but it's just for terminal the MT-call, and there are no MT-call be initialized after 	MO-call process, the actually situation is not match with the description of this issue.
+	LOG     [0x1391]     QMI Link 2 TX PDU      10:42:45.158 Length: 0110
+         Instance[0] {
+            CallState = DISCONNECTING
+            Direction = MT: Mobile Terminated Call
+         Instance[1] {
+            CallState = HOLD
+            Direction = MO: Mobile Originated Call
+         Instance[0] Number = +917021080412
+         Instance[1] Number = 7021983494
+            CallEndReason = CALL_END_CAUSE_CLIENT_END
+//之后UE通过call_resume重启MO-call，MO-call从HOLD变为conversation状态
+//After that, UE resume the MO-call, the status of MO-call from HOLD change to conversation
+	LOG     [0x1390]     QMI Link 2 RX PDU      10:42:45.412 Length: 0021
+	MsgType = QMI_VOICE_MANAGE_IP_CALLS
+         sups_type = CALL_RESUME
+
+	LOG     [0x1391]     QMI Link 2 TX PDU      10:42:45.880 Length: 0119
+         Instance[0] {
+            CallState = CONVERSATION
+            Direction = MO: Mobile Originated Call
+            Number = 7021983494
+//当前MO-call再次被置位Hold状态，UE发起了第二个MO-call流程
+//MO-call be set to HOLD status again, UE launch the second MO-call process
+	LOG     [0x1391]     QMI Link 2 TX PDU      10:42:58.552 Length: 0061
+            CallState = HOLD
+            Direction = MO: Mobile Originated Call
+            Number = 7021983494
+	LOG     [0x1391]     QMI Link 2 TX PDU      10:42:58.626 Length: 0109
+         Instance[0] {
+            CallState = CC_IN_PROGRESS
+            Direction = MO: Mobile Originated Call
+			Number = +917021080412
+         Instance[1] {
+            CallState = HOLD
+            Direction = MO: Mobile Originated Call
+            Number = 7021983494
+
+//第二个MO-call被置为Hold状态，然后又将第一个MO-call重新置为conversation状态，在这之后发起了一个conference-call流程
+//the second MO-call be set to HOLD status, and the first MO-call process back to conversation status again...(this should be the precondition of call-conference process), and finally UE originate a call-conference process.
+
+	LOG     [0x1390]     QMI Link 2 RX PDU      10:43:06.926 Length: 0021
+	MsgType = QMI_VOICE_MANAGE_IP_CALLS
+         sups_type = CALL_HOLD
+	...
+	...
+	LOG     [0x1390]     QMI Link 2 RX PDU      10:43:13.506 Length: 0017
+	MsgType = QMI_VOICE_MANAGE_IP_CALLS
+         sups_type = MAKE_CONFERENCE_CALL
+
+conclusion:
+As we can see above, there is no MT-call initialized after MO-call process, of course there shouldn't appear "486(busy here)" msg here.
+At the beginning, there is a msg about MT-call, but that's for terminal the MT-call, only we could see are some MO-call and a call-conference process in logs.
+
+Maybe there are something wrong in it, plz check the reproduce steps and logs again, if you still have same issue, feedback with correct logs ASAP.
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 

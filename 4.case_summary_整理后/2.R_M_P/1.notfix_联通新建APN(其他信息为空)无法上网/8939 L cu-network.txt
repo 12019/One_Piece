@@ -1,0 +1,131 @@
+8939 L版本插入CU卡:
+一开始卡attach-request的时候，用的是3gnet的apn，没有DNS地址分配，当attach-response时，有分配的DNS和ip的地址返回给UE
+LOG        [0xB0E2]   LTE NAS ESM Plain OTA Incoming Message          03:23:56.811     Length: 0134
+      msg_type = 193 (0xc1) (Activate default EPS bearer context request)
+            acc_pt_name_val[1] = 51 (0x33) (3)
+            acc_pt_name_val[2] = 103 (0x67) (g)
+            acc_pt_name_val[3] = 110 (0x6e) (n)
+            acc_pt_name_val[4] = 101 (0x65) (e)
+            acc_pt_name_val[5] = 116 (0x74) (t)
+          pdn_addr
+            ipv4_addr = 181862160 (0xad6ff10) (10.214.255.16)
+            sm_prot[1]
+                    rfc1877_primary_dns_server_add
+                      ip_addr = 1996883462 (0x77060606) (119.6.6.6)
+
+detach出现，此时应该是新建apn后正在切换至新apn的过程，然后再次发起了attach-request，request中依旧没有DNS地址
+LOG        [0xB0ED]   LTE NAS EMM Plain OTA Outgoing Message          03:24:38.877     Length: 0025
+prot_disc = 7 (0x7) (EPS mobility management messages)
+msg_type = 69 (0x45) (Detach request)
+    detach_type = 3 (0x3) (combined EPS/IMSI detach)
+
+第二次的attach-accept依旧正常分配了DNS和ip地址
+LOG        [0xB0EC]   LTE NAS EMM Plain OTA Incoming Message          03:24:39.585     Length: 0143
+msg_type = 66 (0x42) (Attach accept)
+  emm_attach_accept
+    attach_result = 2 (0x2) (comb EPS/IMSI attach)
+      msg_type = 193 (0xc1) (Activate default EPS bearer context request)
+            acc_pt_name_val[1] = 117 (0x75) (u)
+            acc_pt_name_val[2] = 110 (0x6e) (n)
+            acc_pt_name_val[3] = 105 (0x69) (i)
+            acc_pt_name_val[4] = 119 (0x77) (w)
+            acc_pt_name_val[5] = 97 (0x61) (a)
+            acc_pt_name_val[6] = 112 (0x70) (p)
+          pdn_addr
+            ipv4_addr = 173315303 (0xa5494e7) (10.84.148.231)
+                    rfc1877_primary_dns_server_add
+                      ip_addr = 1996883462 (0x77060606) (119.6.6.6)
+                    rfc1877_sec_dns_server_add
+                      ip_addr = 3395715140 (0xca668044) (202.102.128.68)
+
+8976 M 版本插入CU卡:
+！！！
+M版本的log里比L里多了这一条"LTE NAS ESM Security Protected OTA Outgoing Message"，或许是M里面加了某种鉴权机制使得没有设置完全信息的apn无法通过鉴权？
+！！！
+使用3gnet的apn，正常得到分配的DNS和ip地址
+LOG        [0xB0EC]   LTE NAS EMM Plain OTA Incoming Message                02:33:34.158     Length: 0142
+msg_type = 66 (0x42) (Attach accept)
+      msg_type = 193 (0xc1) (Activate default EPS bearer context request)
+            acc_pt_name_val[1] = 51 (0x33) (3)
+            acc_pt_name_val[2] = 103 (0x67) (g)
+            acc_pt_name_val[3] = 110 (0x6e) (n)
+            acc_pt_name_val[4] = 101 (0x65) (e)
+            acc_pt_name_val[5] = 116 (0x74) (t)
+            ipv4_addr = 180075170 (0xabbbaa2) (10.187.186.162)
+                    rfc1877_primary_dns_server_add
+                      ip_addr = 1996883462 (0x77060606) (119.6.6.6)
+                    rfc1877_sec_dns_server_add
+                      ip_addr = 3395715140 (0xca668044) (202.102.128.68)
+
+出现了一个wonet名字的apn，实际中并不存在这个名字的apn，我新建apn-name是uniwap(网络自动返回默认apn名字?)
+LOG        [0xB0E2]   LTE NAS ESM Plain OTA Incoming Message                02:33:35.125     Length: 0109
+msg_type = 193 (0xc1) (Activate default EPS bearer context request)
+      acc_pt_name_val[1] = 119 (0x77) (w)
+      acc_pt_name_val[2] = 111 (0x6f) (o)
+      acc_pt_name_val[3] = 110 (0x6e) (n)
+      acc_pt_name_val[4] = 101 (0x65) (e)
+      acc_pt_name_val[5] = 116 (0x74) (t)
+    pdn_addr
+      ipv4_addr = 179706975 (0xab61c5f) (10.182.28.95)
+              rfc1877_primary_dns_server_add
+                ip_addr = 1996883462 (0x77060606) (119.6.6.6)
+              rfc1877_sec_dns_server_add
+                ip_addr = 3395715140 (0xca668044) (202.102.128.68)
+
+出现detach信息，切换apn时的正常现象
+LOG        [0xB0ED]   LTE NAS EMM Plain OTA Outgoing Message                02:34:18.387     Length: 0025
+msg_type = 69 (0x45) (Detach request)
+    switch_off = 0 (0x0) (normal detach)
+
+第二次的attach-request出现
+LOG        [0xB0ED]   LTE NAS EMM Plain OTA Outgoing Message                02:34:18.749     Length: 0126
+msg_type = 65 (0x41) (Attach request)
+                    rfc1877_primary_dns_server_add
+                      ip_addr = 0 (0x0) (0.0.0.0)
+                    rfc1877_sec_dns_server_add
+                      ip_addr = 0 (0x0) (0.0.0.0)
+					  
+第二次的attac-accept，只有ip地址，DNS地址没有被分配(对比8976 M 插入移动卡时候是可以分配到DNS的)
+LOG        [0xB0EC]   LTE NAS EMM Plain OTA Incoming Message                02:34:19.056     Length: 0132
+msg_type = 66 (0x42) (Attach accept)
+      msg_type = 193 (0xc1) (Activate default EPS bearer context request)
+            acc_pt_name_val[1] = 117 (0x75) (u)
+            acc_pt_name_val[2] = 110 (0x6e) (n)
+            acc_pt_name_val[3] = 105 (0x69) (i)
+            acc_pt_name_val[4] = 119 (0x77) (w)
+            acc_pt_name_val[5] = 97 (0x61) (a)
+            acc_pt_name_val[6] = 112 (0x70) (p)
+          pdn_addr
+            ipv4_addr = 168034321 (0xa040011) (10.4.0.17)
+                    rfc1877_primary_dns_server_add
+                      ip_addr = 0 (0x0) (0.0.0.0)
+                    rfc1877_sec_dns_server_add
+                      ip_addr = 0 (0x0) (0.0.0.0)
+
+再次出现wonet这个apn的信息，这里被分配到了ip/DNS地址
+LOG        [0xB0E2]   LTE NAS ESM Plain OTA Incoming Message                02:34:19.251     Length: 0114
+msg_type = 193 (0xc1) (Activate default EPS bearer context request)
+      acc_pt_name_val[1] = 119 (0x77) (w)
+      acc_pt_name_val[2] = 111 (0x6f) (o)
+      acc_pt_name_val[3] = 110 (0x6e) (n)
+      acc_pt_name_val[4] = 101 (0x65) (e)
+      acc_pt_name_val[5] = 116 (0x74) (t)
+    pdn_addr
+      ipv4_addr = 177383294 (0xa92a77e) (10.146.167.126)
+              rfc1877_sec_dns_server_add
+                ip_addr = 0 (0x0) (0.0.0.0)
+              rfc1877_primary_dns_server_add
+                ip_addr = 1996883462 (0x77060606) (119.6.6.6)
+
+
+
+当前问题原因推测：
+M版本新增了某些鉴权机制，会使APN信息不完全的不能通过网络端获取DNS。--> 不怎么对
+
+
+solution#00023620：Source for PBM to get list of emergency numbers
+
+
+
+
+

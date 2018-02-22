@@ -1,0 +1,88 @@
+问题分割：
+1.google patch引起的问题.
+2.Vt-call出现CSFB.
+
+MSG     [03007/02/03/04]     NAS MM/High/Error/Fatal                  09:18:52.000               mmsend.c  04368  DS: SUB 1 =MM= Sending RRC_CSFB_CALL_STATUS_IND
+MSG     [03007/02/03/04]     NAS MM/High/Error/Fatal                  09:18:52.000            mmrrcconn.c  00978  DS: SUB 1 =MM= MM sent RRC_CSFB_CALL_STATUS_IND to RRC
+MSG     [03007/02/03/04]     NAS MM/High/Error/Fatal                  09:18:52.000     mm_multimode_handler.c  05683  DS: SUB 1 CSFB State set to 1
+MSG     [09501/02/24]        LTE RRC/High/IRAT                        09:18:52.001     lte_rrc_irat_to_w_mgr.c  03643  IRAT_LTE_TO_W : LTE_RRC_CSFB_CALL_STATUS_IND received from NAS, call status = (0), controller state = (4)
+MSG     [09501/02/28]        LTE RRC/High/MISC                        09:18:52.001         lte_rrc_misc.c  00701  RRC_MISC: Received LTE_RRC_CSFB_CALL_STATUS_IND from NAS
+MSG     [03005/02]           WCDMA RRC/High                           09:18:52.002        rrcdispatcher.c  05159  CSFB: RRC_CSFB_CALL_STATUS_IND Recvd
+
+LOG     [0xB0ED]             LTE NAS EMM Plain OTA Outgoing Message   09:18:52.003     Length: 0023
+	prot_disc = 7 (0x7) (EPS mobility management messages)
+	msg_type = 76 (0x4c) (Extended service request)
+	...
+		service_type = 0 (0x0) (mobile originating CS fallback)
+OTA LOG [0xB0C0/012/013/006] DL_DCCH/RRCConnectionRelease             09:18:52.034     Radio Bearer ID: 1, Freq: 38950, SFN: 797
+              releaseCause other,
+              redirectedCarrierInfo geran :
+
+========================
+
+typedef enum
+{
+	MM_CSFB_STATE_NULL,
+	MM_CSFB_STATE_MO_CALL_ORIG,
+	MM_CSFB_STATE_MT_CALL_ORIG,
+	MM_CSFB_STATE_LU_PENDING,
+	MM_CSFB_STATE_MT_CALL_CCO,
+	MM_CSFB_STATE_MAX
+}mm_csfb_state_type;
+
+1543typedef enum {
+1544
+1545  SD_SS_ORIG_MODE_NONE      = 0,/**< Not in call origination mode */
+1546
+1547  SD_SS_ORIG_MODE_NORMAL    = 1,/**< Normal call origination (i.e., call other
+1548                                ** than OTASP or emergency */
+1549
+1550  SD_SS_ORIG_MODE_COLLOC    = 2,/**< Collocated system origination (i.e., try
+1551                                ** originating on a collocated system */
+1552
+1553  SD_SS_ORIG_MODE_OTASP     = 3,/**< OTASP call origination */
+1554
+1555  SD_SS_ORIG_MODE_EMERG_ORIG= 4,/**< Emergency call origination */
+1556
+1557  SD_SS_ORIG_MODE_EMERG_CB  = 5,/**< Emergency callback mode.
+1558                                **
+1559                                ** NOTE! This mode is automatically assigned
+1560                                ** by SD when the right conditions apply
+1561                                ** during an emergency call origination */
+1562
+1563  SD_SS_ORIG_MODE_MANUAL_IDLE = 6,/**< Manual system selection bypassing the
+1564                                ** System Determination algorithms to select
+1565                                ** a system */
+1566
+1567  SD_SS_ORIG_MODE_MANUAL_ORIG = 7,
+1568                                /**< Manual system selection in call
+1569                                ** origination */
+1570
+1571  SD_SS_ORIG_MODE_PPCSFB_NORMAL_ORIG = 8,
+1572                                /**< Normal 3GPP CSFB call
+1573                                ** origination */
+1574
+1575  SD_SS_ORIG_MODE_PPCSFB_EMERG_ORIG = 9,
+1576                                /**< Emergency 3GPP CSFB call
+1577                                ** origination */
+1578
+1579  SD_SS_ORIG_MODE_1XCSFB_NORMAL_ORIG = 10,
+1580                                /**< Normal 1XCSFB call
+1581                                ** origination */
+1582
+1583  SD_SS_ORIG_MODE_1XCSFB_EMERG_ORIG = 11,
+1584                                /**< Emergency 1XCSFB call
+1585                                ** origination */
+1586
+1587  SD_SS_ORIG_MODE_VOLTE = 12,
+1588                                /**< VOLTE call
+1589                                ** origination */
+1590  SD_SS_ORIG_MODE_VOLTE_MANUAL = 13,
+1591                                /**< VOLTE call
+1592                                ** origination in manual mode */
+1593
+1594  SD_SS_ORIG_MODE_MAX
+1595} sd_ss_orig_mode_e_type;
+
+回落2G是NV-70287(如果需要支持Vowifi和VT，此项必须置1)未配置引起，修改后可解决。
+

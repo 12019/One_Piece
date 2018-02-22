@@ -1,0 +1,90 @@
+2016-6-16:
+
+SIP请求超时导致终端直接发送BYE终止通话过程，NV71597取值异常，导致终端在"183 session"信令前发送了"180 ringing"，网络对此没有对应的判断，因此长时间无响应。后续重发请求网络也没有响应，也属于网络问题。
+
+[问题点]
+//When call was connected，MT-side retransmit "IMS-SIP-invite" msg to NW many times，and after about 2 minutes UE directly send "BYE" to NW，from our FW-team analysis，they thought call-termination was caused by this msg "call fail cause= 2006[SUB0]"，it means "CALL_FAIL_SIP_REQUEST_TIMEOUT"，but we already in a conversation state，why there comes this "SIP_REQUEST_TIMEOUT" issue? Why DUT send "BYE" msg to NW-side automatically?
+
+Line 12784: 06-13 19:34:06.098  5419  6176 D ImsSenderRxr: Call fail cause= 2006[SUB0]
+
+LOG        [0x138F]      QMI Link 1 TX PDU    14:01:54.762  Length: 0079
+	SduCtlFlags = IND
+	MsgType = QMI_VOICE_ALL_CALL_STATUS_IND
+            CallState = INCOMING
+            Direction = MT: Mobile Terminated Call
+
+LOG        [0x138F]      QMI Link 1 TX PDU    14:01:57.430  Length: 0125
+	SduCtlFlags = IND
+	MsgType = QMI_VOICE_ALL_CALL_STATUS_IND
+            CallState = CONVERSATION
+            Direction = MT: Mobile Terminated Call
+
+LOG        [0x156E]           IMS Message               14:01:59.917  Length: 1316
+LOG        [0x156E]           IMS Message               14:02:03.916  Length: 1316
+LOG        [0x156E]           IMS Message               14:02:11.927  Length: 1316
+LOG        [0x156E]           IMS Message               14:02:27.933  Length: 1316
+LOG        [0x156E]           IMS Message               14:02:43.963  Length: 1316
+LOG        [0x156E]           IMS Message               14:02:59.989  Length: 1316
+	Direction                = UE To Network
+	Message ID               = IMS_SIP_INVITE
+	Response Status Code     = OK
+
+LOG        [0x156E]      IMS Message          14:04:06.122  Length: 1425
+	Direction                = UE To Network
+	Message ID               = IMS_SIP_BYE
+	Response Status Code     = Request
+
+LOG        [0x138F]      QMI Link 1 TX PDU    14:04:06.158  Length: 0074
+	SduCtlFlags = IND
+	MsgType = QMI_VOICE_ALL_CALL_STATUS_IND
+            CallState = END
+            Direction = MT: Mobile Terminated Call
+
+LOG        [0x156E]      IMS Message          14:04:06.239  Length: 0512
+	Direction                = Network To UE
+	Message ID               = IMS_SIP_BYE
+	Response Status Code     = OK
+
+--------
+2016-6-27：
+CR-1000826 需要这个CR，否则会使nv-71597的值有变化（21534和2161分支都有打上）
+CR-913208 的改动将nv-71597的属性值改动了，从单卡变为双卡(0x09-->0x19)，这一个CR依赖于上一个CR对MBN Framework的一些改动（6月10号 打在了2150的分支上）
+
+通话断掉的原因，是2min9s的时间内，网络端没有对UE的200 ok消息做出响应，因此会有大量的200 ok消息重发出现，最终掉话。
+
+
+[问题概述] 
+VoLTE call drop observed when calling from iPhone to CKT (Earth1) device.
+
+[分析]
+Through CR913208, the format of NV71597 item (QOS aware) changed from SingleSIM to DualSIM. There was no value changed. But this CR needed a change in our MBN Framework (CR1000826), which is not present in Earth1 baseline (M8939AAAAANLYD2156.1). This caused the NV item value to change from 1 to 0. 
+
+Due to this NV change, device sends 180 ringing before 183 session. Although this is a valid device behavior and spec compliant, VoLTE call gets dropped after 2 mins due to lack of ACK response from N/w to a 200OK sent from the device in response to re-invite message initiated by N/W. This N/w behavior also needs to be corrected. 
+
+Note: 
+
+*CR1000826 is already added to the same branch post CR913208 and is present also in the recent mainline releases from M8939AAAAANLYD2161.1 onwards. Hence this issue won’t be seen in the recent releases/build. 
+*This issue will not be seen in all 8909 based products where both the required CRs are present. 
+*The required CRs are also present in Android M releases M8939AAAAANLYD21534.1 onwards. 
+
+[典型log]
+*AMR-WB is negotiated - During call connect and also with re-INVITE and 200OK 
+*Once UE sends 200OK, it is waiting for ACK from N/w. 
+*Since ACK is not received, UE retransmits 200OK in intervals of 2, 4, 8, 16, 16, 16.… seconds until it reaches 129s. This is as per RFC-3261 Section: 13.3.1.4 
+*During this 129s (2minutes 9s), RTP packets are getting exchanged and voice is heard. Then call is getting disconnected. 
+
+//Call established here 
+[4A] 0x156E IMS SIP Message -- IMS_SIP_INVITE/OK 
+[37] 0x156E IMS SIP Message -- IMS_SIP_INVITE/INFORMAL_RESPONSE 
+
+//200OK sent for re-INVITE. 
+[4A] 0x156E IMS SIP Message -- IMS_SIP_INVITE/OK 
+
+//Timeout here 
+MSG [00051/02] IMS/High qipcall.c 01059 qipcall_process_messages_from_qimfif: Rxed Timeout - Outgoing call Terminated (timeout)/Incoming call Terminated. No response for 2xx (timeout) 
+
+MSG [00051/02] IMS/High qipcallh.c 19985 Reinvite timeout . Close Reinvite RH 
+MSG [00051/02] IMS/High qipcallh.c 20005 Timeout In State 13, Callid=2, status code=0 
+
+//200 retransmissions 
+MSG [00051/01] IMS/Medium qpSipRequestHandler.cpp 00830 SipRequestHandler::QpSendMessage | Start timer for retransmitting 2xx 

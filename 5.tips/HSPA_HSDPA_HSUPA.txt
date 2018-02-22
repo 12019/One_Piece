@@ -1,0 +1,63 @@
+HSDPA/HSUPA/HSPA+ Category Support 
+For Rel. 6, with the current AMSS available, the TD8200 supports HSUPA up to 5.76 Mbps (category 6) and HSDPA up to 14.4 Mbps (category 10).  
+
+Future AMSS releases are planned to support data rates of up to 28 Mbps on the downlink as well as up to 11 Mbps on the uplink.
+
+The TD8200 does support category 14 HSPA+ (64-QAM). 16QAM is not currently supported in Phase 1; it is a feature that will be available in phase 3
+
+MIMO will be supported with this hardware in future software releases.  
+
+For Release 7 the following categories will be supported:
+
+CAT 14 only for 64 QAM
+CAT 16 only for MIMO
+CAT 18 only for MIMO & 64 QAM but with the assumption that only one of them is exercised at a particular instant
+
+CAT 13, 15, 17 are not supported.
+
+
+How to configure active HSDPA  category
+NV Item 4118: HSDPA_CAT (Symbolic name) controls category support on the UE.  For NV Item 4118, the following VALUES have these behaviors...
+5  = HSDPA Category 5
+6  = HSDPA Category 6
+7  = HSDPA Category 7
+8  = HSDPA Category 8
+9  = HSDPA Category 9
+10 = HSDPA Category 10
+11 = HSDPA Category 11
+12 = HSDPA Category 12
+Any Other Value = Default, which is HSDPA Category 6
+NV Item Not Set = Default, which is HSDPA Category 6
+Error Reading   = Default, which is HSDPA Category 6
+Default behavior in Access Stratum is set to HSDPA Category 6. Dynamic change of NV item does not take effect. The UE has to reset for the changes to take effect.
+
+
+DC (Dual Cell) HSPA+ support
+The MDM8200 hardware is not capable of supporting DC HSPA+ at 42Mbps.  For that you need MDM8220-based FFAs.
+
+
+What are the HSDPA Categories?
+The table below is taken from the 3GPP standards. Here are the column definitions...
+
+HS-DSCH category    
+Maximum number of HS-DSCH codes received
+Minimum inter-TTI interval
+Maximum number of bits of an HS-DSCH transport block received within an HS-DSCH TTI
+Total number of soft channel bits
+Modulation
+Speed
+
+And here is the table....
+
+Category 1     5     3     7298     19200   QPSK/16QAM   1.2Mbps
+Category 2     5     3     7298     28800   QPSK/16QAM   1.2Mbps
+Category 3     5     2     7298     28800   QPSK/16QAM   1.8Mbps
+Category 4     5     2     7298     38400   QPSK/16QAM   1.8Mbps
+Category 5     5     1     7298     57600   QPSK/16QAM   3.6Mbps
+Category 6     5     1     7298     67200   QPSK/16QAM   3.6Mbps
+Category 7     10    1     14411    115200  QPSK/16QAM   7.2Mbps    
+Category 8     10    1     14411    134400  QPSK/16QAM   7.2Mbps    
+Category 9     15    1     20251    172800  QPSK/16QAM  10.2Mbps    
+Category 10    15    1     27952    172800  QPSK/16QAM  14.4Mbps    
+Category 11    5     2     3630     14400   QPSK         0.9Mbps
+Category 12    5     1     3630     28800   QPSK         1.8Mbps

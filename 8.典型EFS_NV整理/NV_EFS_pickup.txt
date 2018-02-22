@@ -1,0 +1,12 @@
+【1】NV-73499 - /nv/item_files/wcdma/rrc/wcdma_rrc_dormancy_support
+
+FEATURE_UE_INITIATED_DORMANCY
+
+= UE does not wait for RRC connection release from the network but release RRC connection on its own.
+= UE sends SCRI without any release cause and wait for L2 ACK As soon as UE receives L2 ack for SCRI , the UE release locally the signaling connection  and traffic channel without waiting for RRC connection release from the network One problem is that if N/W is yet to send some date in downlink, it can’t Bcoz  Signalling connection is released, so it had to initiate another RRC connection to send the data to UE which is an overhead to N/W Defined in custdataumts.h or custdata.h . For Windows Mobile product, FEATURE_UE_INITATED_DORMANCY should be defined in custwinmob.h on APPS side as well.
+
+FEATURE_3GPP_FAST_DORMANCY
+
+= UE sends a message called RRC Signaling Connection Release Indication (SCRI) message by including cause value "UE request PS data session end", UE shall not close the PS domain after SCRI message is complete.
+= The network on receiving SCRI, decides what to be done for this signaling connection. Network may decide to release the signaling connection, in which case it may then decide to release the RRC connection and let the UE go to idle. Alternatively it could keep the UE in CELL_PCH or URA_PCH state in order to get some similar battery savings while ensuring a quicker reconfiguration for data transfer in the more distant future.
+= When UE receives L2ACK it starts T323, At expiry of timer T323 the UE sees if it has receives any command from NW otherwise will send again Signaling connection release indication

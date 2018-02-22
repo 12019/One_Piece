@@ -1,0 +1,143 @@
+Root Cause：NV-70202值由3改为了2。
+
+保持此NV为当前值2，三方通话时界面显示是conference-call而不是用户名。
+
+===================
+Log-snipeshot：
+
+[1]MO-log(Panda)
+主叫拨出第一个VT-call，接通后置为HOLD状态，此时conference-call状态为0
+LOG        [0x1390]   QMI Link 2 RX PDU        15:58:33.038     Length: 0021
+MsgType = QMI_VOICE_MANAGE_IP_CALLS
+         sups_type = CALL_HOLD
+MSG        [00051/03] IMS/Error                15:58:34.087     qipcall_conf_and_transfer_call.c  00589  Get Conference Call State 0
+LOG        [0x1391]   QMI Link 2 TX PDU        15:58:34.094     Length: 0102
+MsgType = QMI_VOICE_ALL_CALL_STATUS_IND
+            CallState = HOLD
+            CallType = VT
+            Direction = MO: Mobile Originated Call
+            Mode = LTE
+            Num = 7021095967
+
+拨出第二个电话，当其为通话状态后，发起conference-call流程
+LOG        [0x1391]   QMI Link 2 TX PDU        15:58:39.156     Length: 0221
+MsgType = QMI_VOICE_ALL_CALL_STATUS_IND
+         Instance[0] {
+            CallState = CONVERSATION
+            CallType = VT
+            Direction = MO: Mobile Originated Call
+            Mode = LTE
+         Instance[1] {
+            CallState = HOLD
+            CallType = VT
+            Direction = MO: Mobile Originated Call
+            Mode = LTE
+         Instance[0] {
+            Number = 7021083750
+         Instance[1] {
+            Number = 7021095967
+LOG        [0x1390]   QMI Link 2 RX PDU        15:58:42.579     Length: 0017
+MsgType = QMI_VOICE_MANAGE_IP_CALLS
+         sups_type = MAKE_CONFERENCE_CALL
+MSG        [00051/02] IMS/High                 15:58:42.582     qipcall_conf_and_transfer_call.c  06006  Received Conference Call Cmd
+MSG        [00051/03] IMS/Error                15:58:42.582     qipcall_conf_and_transfer_call.c  00589  Get Conference Call State 0
+MSG        [00051/03] IMS/Error                15:58:42.582     qipcall_conf_and_transfer_call.c  00560  Setting Conference Call State 1
+MSG        [00051/03] IMS/Error                15:58:42.583     qipcall_conf_and_transfer_call.c  00589  Get Conference Call State 1
+
+主叫端出现一个号码是mmtel的新建呼叫，即新建的conference-call，其他两个呼叫都被置为了HOLD状态
+LOG        [0x1391]   QMI Link 2 TX PDU        15:58:43.596     Length: 0226
+MsgType = QMI_VOICE_ALL_CALL_STATUS_IND
+            CallId = 3
+            CallState = ORIGINATION
+            CallType = VT
+            Direction = MO: Mobile Originated Call
+            Mode = LTE
+            Num = sip:mmtel
+MSG        [00051/02] IMS/High                 15:58:44.300             qipcallh.c  18286  conference server Call Id 16 state from 12 to CONNECTED
+EVENT      [02158]    EVENT_IMS_QIPCALL_SIP_SESSION_EVENT15:58:44.300     CM Call ID = 16, Event Message ID = SIP_SESSION_OUTGOING_ESTABLISHED_EV, Cause ID = CALL_TYPE_CONFERENCE
+MSG        [00051/02] IMS/High                 15:58:44.302     qipcall_conf_and_transfer_call.c  03486  qipcall_conf_and_transfer_call_init_conference_module: conf_originator = 1, conf_type = 0, conference_aware = 3
+
+发送subscribe信息，得到反馈后UE两次发送"refer"给sip-server/conference-server(携带需要加入conference-call的对应UE的信息)，最后主叫端分别和其他UE结束之前的通话，两次断开的CallEndReason = CALL_END_CAUSE_REL_NORMAL，在完全断开后会单独去发送对应UE的URI值给sip-server/conference-server
+MSG        [00051/01] IMS/Medium               15:58:44.302     qipcall_conf_and_transfer_call.c  03412  qipcall_conf_and_transfer_init_legacy_conferencing: Sending SUBSCRIBE for conference event package first then REFER
+LOG        [0x156E]   IMS Message              15:58:44.324     Length: 1668
+	Message ID               = IMS_SIP_SUBSCRIBE
+	Response Status Code     = Request
+MSG        [00051/02] IMS/High                 15:58:44.386     qipcall_conf_and_transfer_call.c  01858  conference call: sending refer to call id to Conf Server 12
+LOG        [0x156E]   IMS Message              15:58:44.400     Length: 1858
+	Message ID               = IMS_SIP_REFER
+	Response Status Code     = Request
+
+这里看到BYE信息是从N/w发过来的，且BYE信息早于规范里的notify信息，后面get conference call state被置为了0 --> 不清楚是否是正常现象
+但信息提示依旧是conference-call的状态，最后主叫端自身发起了断开conference-call的操作。
+MSG        [00051/02] IMS/High                 15:58:47.796     qipcall_conf_and_transfer_call.c  04950  QIPCALLE_TRANSFER_STATE_CONFERENCE, sending multiparty call indication
+MSG        [00051/03] IMS/Error                15:58:47.796     qipcall_conf_and_transfer_call.c  00589  Get Conference Call State 1
+MSG        [00051/02] IMS/High                 15:58:47.796     qipcall_conf_and_transfer_call.c  05060  QIPCALLE_TRANSFER_STATE_CONFERENCE status = 1, participants added = 2
+MSG        [00051/03] IMS/Error                15:58:47.796     qipcall_conf_and_transfer_call.c  00560  Setting Conference Call State 0
+MSG        [00051/03] IMS/Error                15:58:47.796     qipcall_conf_and_transfer_call.c  05083  qipcall_conf_and_transfer_call_send_mng_calls_conf: Already subscribed to conference event package, not resubscribing
+MSG        [00090/01] MMODE QMI/Medium         15:58:47.810      qmi_voice_cm_if.c  21872  Manage Calls conf case, could be a conference case ADD REF
+MSG        [00090/01] MMODE QMI/Medium         15:58:47.810     qmi_voice_call_list.c  05632  call id 16 which is a conference call
+LOG        [0x1391]   QMI Link 2 TX PDU        15:59:28.961     Length: 0107
+MsgType = QMI_VOICE_ALL_CALL_STATUS_IND
+            CallId = 3
+            CallState = DISCONNECTING
+            CallType = VT
+            Direction = MO: Mobile Originated Call
+            Mode = LTE
+            Number = sip:mmtel
+            CallEndReason = CALL_END_CAUSE_CLIENT_END
+
+[2]MT-Log(mobeeplus)
+MT接到通话，被置为Hold状态，后面重复出现4次的invite-->trying-->ok(invite)-->ack消息，应该是对应当前UE被置为HOLD状态，和主叫端发起conference-call过程时，server端和当前此UE的信令交互过程
+MSG        [00051/02] IMS/High                15:58:18.790     qipcall_conf_and_transfer_call.c  06542  qipcall_incoming_conference_rpt_ind: cmcc submode is enabled 0, qipcall_is_conf_originator is 0
+LOG        [0x138F]   QMI Link 1 TX PDU       15:58:21.597     Length: 0160
+MsgType = QMI_VOICE_ALL_CALL_STATUS_IND
+            CallState = CONVERSATION
+            CallType = VT
+            Direction = MT: Mobile Terminated Call
+            Mode = LTE
+            Number = +917021263698
+LOG        [0x138F]   QMI Link 1 TX PDU       15:58:32.886     Length: 0018
+MsgType = QMI_VOICE_SUPS_NOTIFICATION_IND
+         VoiceSupsNotificationInf_NotificationType Tlv = CALL_IS_ON_HOLD
+
+当主叫端发起conference-call后，后面疑似出现MT端向网络端发送了URI值，正常情况conference-call的参加者是不需要发送URI值的，主叫端发起者会把其他UE的URI值都发给server端，根据这些URI网络端会找到对应的UE将其加入。
+LOG        [0x138F]   QMI Link 1 TX PDU       15:58:45.878     Length: 0018
+MsgType = QMI_VOICE_SUPS_NOTIFICATION_IND
+         VoiceSupsNotificationInf_NotificationType Tlv = CALL_IS_RETRIEVED
+MSG        [00051/02] IMS/High                15:58:46.469             qipcallh.c  26735  qipcallh_process_call_features_rcvd:setting conference type
+MSG        [00051/02] IMS/High                15:58:46.469     qipcall_conf_and_transfer_call.c  02441  qipcall_conf_and_transfer_call_init_conference_module Conference Terminator, indicating the upper layer about conference call
+MSG        [06067/02] IMS QIPCALL/High        15:58:46.470             qipcallh.c  06072  qipcall_join_conference_rpt_ind: Sending uri = sip:+917021263698@ims.mnc874.mcc405.3gppnetwork.org;use
+MSG        [05000/02] Data Services/High      15:58:46.474      qmi_voice_cm_if.c  21030  CALL EVENT RECEIVED from CM : id = 65651, name = CM_CALL_EVENT_JOIN_CONFERENCE
+
+LOG        [0x138F]   QMI Link 1 TX PDU       15:58:46.477     Length: 0073
+MsgType = QMI_VOICE_CONFERENCE_JOIN_IND
+         Uri Name = {
+            115, 105, 112, 58, 43, 57, 49, 55,
+            48, 50, 49, 50, 54, 51, 54, 57,
+            56, 64, 105, 109, 115, 46, 109, 110,
+            99, 56
+         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

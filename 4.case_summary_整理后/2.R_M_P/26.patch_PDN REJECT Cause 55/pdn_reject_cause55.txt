@@ -1,0 +1,14 @@
+rely on 1035881
+
+title：Additional PDN request with attach PDN APN if there is a mismatch between UE porvided and network accepted APN
+
+cause：if Attach PDN is accepted by network with a different APN than UE requested, any application request on network accepted APN results in additional PDN request. This will be rejected by network who doesn't support multiPDN connection on same APN and IP type.
+
+solution：Added changes in PDN routing to map APN X and APN Y to same PDN if network accepted the attach request of APNX with APNY. Also modified attach params API request to return network provided APN as response when disable_apn_matching NV is set as TRUE.
+
+关联文件：
+/modem_proc/datamodem/3gpp/ps/src/ds_3gpp_rt_acl.c
+/modem_proc/datamodem/3gpp/lteps/src/ds_eps_pdn_context.c
+
+在网络已经通过改名后的APN完成PDN连接后，又发起了一个以原APN名字发起的PDN连接，导致网络端返回CAUSE#55(不允许为一个APN发起多个PDN连接建立的请求)，此问题还和NV-73529（disable_apn_match）有关。
+

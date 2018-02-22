@@ -1,0 +1,18 @@
+//sim卡编辑界面无法active或deactive卡状态，需要申请patch
+
+Changes just in codecahnges.txt(qcril.c, qcril_reqlist.c, qcril_reqlist.h) seems to work. 
+So, CRs 1025790 & 1022457 & 975508 & 1035748 already include all the change mentioned in codecahnges.txt? 
+And, we just need to apply these four CRs for this issue?  --> Yes
+
+-------All related files/changes------- 
+LINUX/android/frameworks/opt/telephony/src/java/com/android/internal/telephony/ProxyController.java 
+LINUX/android/vendor/qcom/proprietary/telephony-apps/PrimaryCardController/src/com/qti/primarycardcontroller/CardStateMonitor.java 
+
+*LINUX/android/vendor/qcom/proprietary/qcril/qcril_qmi/qcril.c 
+*LINUX/android/vendor/qcom/proprietary/qcril/qcril_qmi/qcril_reqlist.c 
+*LINUX/android/vendor/qcom/proprietary/qcril/qcril_qmi/qcril_reqlist.h
+
+LINUX/android/vendor/qcom/proprietary/qcril/qcril_qmi/qcril_qmi_prov.c 
+LINUX/android/vendor/qcom/proprietary/qcril/qcril_qmi/qcril_qmi_nas.c
+
+latest codecahnges.txt(qcril.c, qcril_reqlist.c, qcril_reqlist.h)

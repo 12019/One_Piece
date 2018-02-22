@@ -1,0 +1,11 @@
+KBA-151203111117
+
+adb root 
+adb disable-verity <- this needs to be done only once after flashing meta. 
+adb reboot <-reboot required. 
+adb root 
+adb shell setprop persist.cne.logging.qxdm 3974 
+adb remount 
+adb push 64-bit/libcnelog.so /system/vendor/lib64/ 
+(adb push 32-bit/libcnelog.so /system/vendor/lib/) 
+adb reboot && adb wait-for-device && adb root && adb wait-for-device && adb logcat -b main -b radio -b system -v threadtime > adblog.txt 

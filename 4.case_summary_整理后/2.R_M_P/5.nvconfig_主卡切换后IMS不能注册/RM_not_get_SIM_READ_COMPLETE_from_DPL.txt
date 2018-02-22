@@ -1,0 +1,66 @@
+2016-6-16：
+//From my side，i just found UE send "IMS_SIP_REGISTER" msg to Nw-side, but there is no RSP back.
+Plz help us to analysis this issue.
+
+LOG        [0x156E]           IMS Message     09:56:03.164  Length: 2615
+Direction                = UE To Network
+Message ID               = IMS_SIP_REGISTER
+Response Status Code     = Request
+
+-------------
+2016-6-20：
+NV-71527设置值问题
+
+NV-67261的读写出错引起的ims注册失败
+ims test mode的值设置为了1，从而让ims反注册过程没有被触发，解决办法就是将该值改为0
+
+客户线228版本还没有出，等客户版本出228之后再进行验证
+
+-------------
+2016-6-22：
+
+这两个在最新的228分支上应该都已经集成了
+
+CR 1004166
+ims_settings.lib
+
+issue is happening due to NV read failure
+因为NV-67261参数设置错误(IMS test mode: 1 --> 0；4 --> 1&2)，导致在关机或进入LPM后，IMS反注册过程没有被触发，因此没有及时更新IMS注册的状态，最终导致在切换sim卡后在卡2内sim卡无法注册上IMS
+
+
+CR 1022196
+qpisim.c
+
+//MBN info 
+05-17 10:31:58.461 V/QC_RIL_OEM_HOOK( 5560): QCRIL_EVT_HOOK_GET_META_INFO returned w/ Volte_OpenMkt-Commercial-CMCC 
+05-17 10:31:58.461 D/MbnSystemService( 5560): MbnTest_ Mbn ID:}???5￡¨O?d??? Meta Info:Volte_OpenMkt-Commercial-CMCC 
+05-17 10:31:58.463 D/MbnSystemService( 5560): MbnTest_ EVENT_SERVICE_BINDED 
+05-17 10:31:58.463 D/MbnSystemService( 5560): MbnTest_ Activated commercial:true Preference commercial:true Mbn type: 
+05-17 10:31:58.463 D/MbnSystemService( 5560): MbnTest_ Do nothing for apn 
+05-17 10:31:58.463 D/MbnAppGlobals( 5560): MbnTest_ getMbnConfig, mQcRilHookReady:true Sub:0 mbnType:1 
+//already reg IMS at GWL 
+MSG 02:32:41.945 qcril_qmi_imsa.c RIL[0] qcril_qmi_imsa_is_ims_registered_for_voip_vt_service: IMS registered valid 1, Status 2 
+MSG 02:32:41.945 qcril_qmi_imsa.c RIL[0] qcril_qmi_imsa_is_ims_registered_for_voip_vt_service: IMS service status valid 1 
+MSG 02:32:41.945 qcril_qmi_imsa.c RIL[0] qcril_qmi_imsa_is_ims_registered_for_voip_vt_service: VOIP service STATUS valid 1, VOIP service STATUS 2 
+MSG 02:32:41.945 qcril_qmi_imsa.c RIL[0] qcril_qmi_imsa_is_ims_registered_for_voip_vt_service: VT service STATUS valid 1, VT service STATUS 2 
+MSG 02:32:41.958 qcril_qmi_imsa.c RIL[0] qcril_qmi_imsa_is_ims_registered_for_voip_vt_service: IMS registered for VOIP or VT service 1 
+
+//Re-set Df_telcom bit in card_error/Session_close_evt
+//From the logs I see that IMS Registration is not started by RegisterManager because RegisterManager didnot get the "SIM_READ_COMPLETE from DPL" msg
+//QPE_GET_SUBS_PARAM_SUCCESS/CARD READ COMPLETE is not received by RM 
+MSG [00051/02] IMS/High 10:31:57.667 RegisterManager.cpp 02199 update: RAT changed to 10, RegType[0] 
+MSG [00051/02] IMS/High 10:31:57.667 RegisterManager.cpp 03790 EventChangeRat: NewRat = 10, RegType[0] 
+MSG [00051/02] IMS/High 10:31:57.667 RegisterManager.cpp 04162 CheckValidSim: RegType[0] 
+MSG [00051/02] IMS/High 10:31:57.667 RegisterManager.cpp 04250 CheckRegistrationNeeded - ISIM not ok 
+
+MSG [00051/01] IMS/Medium 10:09:31.728 qpDcm.c 08595 qpDplProcessDSSysEvent: DS Sys Info pref_tech=0, so_mask=2000, pref_rat_value=3 
+
+MSG [00051/02] IMS/High 10:09:31.731 RegisterManager.cpp 04162 CheckValidSim: RegType[0] 
+MSG [00051/03] IMS/Error 10:09:31.731 ImsRegManagerCardModule.cpp 00179 IsCardReady() returning QP_FALSE 
+MSG [00051/02] IMS/High 10:09:31.734 RegisterManager.cpp 04162 CheckValidSim: RegType[0] 
+MSG [00051/03] IMS/Error 10:09:31.734 ImsRegManagerCardModule.cpp 00179 IsCardReady() returning QP_FALSE 
+
+----------
+2016-6-27:
+确认是nv-67261设置问题，高通会再次内部确认新版本是否已经修改了这些部分。
+1&2 for DscpValue&IMSParamSrc 

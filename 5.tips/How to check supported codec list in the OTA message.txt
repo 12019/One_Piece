@@ -1,0 +1,129 @@
+From SETUP message (in case of MO call) and Call Confirmed message (in case of MT call),
+There is information element for supported codec list in the message.
+
+Supported codec list is newly added after Rel4. and this is defined under FEATURE_REL5 in the source code.
+
+From TS24.008
+10.5.4.32    Supported codec list
+The purpose of the Supported Codec List information element is to provide the network with information about the speech codecs supported by the mobile.
+The Supported Codec List information element is coded as shown in figure 10.5.118c/3GPP TS 24.008.
+The Supported Codec List information element is a type 4 information element with a minimum length of 5 octets and a maximum length of m+3 octets.
+Speech codec information belonging to GSM and UMTS radio access shall be conveyed by this information element.
+
+For example, Setup message for MO call,
+
+00:57:51.074 [00]        Day 0    UMTS UE OTA    (0x713A)
+    Message Direction = From UE
+    NAS OTA Message Contents:
+.... ...                    (quiet struct)gsm_msg
+0000 008  00000000........  chan_type = 0 (0x0)
+0008 008  00011100........  (quiet record length 28)
+.... ...                    (begin record; start=16,length=8,buf_ptr=16,last_bit=239)
+0016 004  0000............  trans_id_or_skip_ind = 0 (0x0)
+0020 004  0011............  prot_disc = 3 (0x3) (GSM_CALL_CONTROL)
+0024 002  00..............  reserved field = 0
+0026 006  000101..........  msg_type = 5 (0x5)
+.... ...                    prot
+.... ...                      call_ctrl_prot
+.... ...                        SETUP
+<snipped>
+.... ...                          supp_codecs
+.... ...                            codecs[0]
+0176 008  00000100........            sysid = 4 (0x4)        //UMTS
+0184 008  00000010........            length = 2 (0x2)
+0192 008  01100000........            bitmap[0] = 96 (0x60)    // (0x0110 0000) UMTS_AMR and UMTS_AMR2
+0200 008  00000000........            bitmap[1] = 4 (0x4)       // (0x0100)     UMTS_AMR-WB
+.... ...                            return from gsm_codec_type
+.... ...                            codecs[1]
+0208 008  00000000........            sysid = 0 (0x0)        //GSM
+0216 008  00000010........            length = 2 (0x2)
+0224 008  00011111........            bitmap[0] = 31 (0x1f)    // (0x0001 1111 HR_AMR,FR_AMR, GSM_EFR, GSM_HR, GSM_FR
+0232 008  00000000........            bitmap[1] = 0 (0x0)
+
+
+TS 26.103
+6.2    Codec Bitmap
+The Codec Types are coded in the first and second octet of the Codec List Bitmap as follows:
+
+-----------------------------------------------------------------------------------------------                  
+|  08  |   07  |   06  |   05|    04 |    03 |   02 |   01 |
+------------------------------------------------------------------------------------------------      
+| TDMA | UMTS  | UMTS  | HR  | FR    | GSM   | GSM  |  GSM |        
+|  EFR | AMR2  |  AMR  | AMR | AMR   | EFR   |  HR  |  FR  |        
+-----------------------------------------------------------------------------------------------                  
+|  16  |    15|   14  |   13  |    12|    11 |   10  | 09  |
+-----------------------------------------------------------------------------------------------------                  
+| RESE | RESE | OHR A | OFR A | OHR  |UMTS   |    FR | PDC |        
+| RVED | RVED |MR-WB  | MR-WB | AMR  |AMR-WB |AMR-WB |  EFR|          
+------------------------------------------------------------------------------------------------------                   
+
+A Codec Type is supported, if the corresponding bit is set to "1". All reserved bits shall be set to "0".
+
+In case of MO call, From MN_put_MNCC_SETUP_REQ()
+In case of MT call, From MN_put_MNCC_CALL_CONF_REQ()
+{ 
+<snipped>
+          /* IEI_SUPPORTED_CODECS_LIST */
+          message_ptr->data[data_index++] = IEI_SUPPORTED_CODECS_LIST; 
+          message_ptr->data[data_index++] = 0x08; /* IEI length */
+          /* SysID = UMTS */ 
+          message_ptr->data[data_index++] = SYSID_UMTS; 
+          message_ptr->data[data_index++] = 0x02; /* bitmap length */
+          message_ptr->data[data_index++] = 0x60; /* bitmap 8...1 */
+#ifdef FEATURE_VOC_AMR_WB
+          if( (gsm_wcdma_amr_codec_preference & 0x08) )
+          {
+            message_ptr->data[data_index++] = 0x04; /* bitmap 16...9 */
+          }
+          else
+          {
+            message_ptr->data[data_index++] = 0x00; /* bitmap 16...9 */
+          }
+#else
+          message_ptr->data[data_index++] = 0x00; /* bitmap 16...9 */
+#endif  /*end of FEATURE_VOC_AMR_WB */
+          /* SysID = GSM */
+          message_ptr->data[data_index++] = SYSID_GSM;
+          message_ptr->data[data_index++] = 0x02; /* bitmap length */
+
+/* GSM AMR codecs should be included conditionally depending on the 
+    NV Item - NV_GSM_AMR_CALL_CONFIG_I */          
+          
+          message_ptr->data[data_index] = 0x07; /* bitmap 8...1 */
+          if( (gsm_wcdma_amr_codec_preference & 0x01) )
+          {
+            /*GSM AMR NB is supported*/
+            message_ptr->data[data_index] |= 0x08; /* bitmap 8...1 */
+          }
+          if( (gsm_wcdma_amr_codec_preference & 0x04) )
+          {
+            /*GSM AMR NB is supported*/
+            message_ptr->data[data_index] |= 0x10; /* bitmap 8...1 */
+          }
+          data_index++;
+#ifdef FEATURE_GSM_AMR_WB            
+          if( (gsm_wcdma_amr_codec_preference & 0x02) )
+          {
+            /*GSM AMR WB is supported*/
+            message_ptr->data[data_index++] = 0x02; /* bitmap 16...9 */
+          }
+          else
+          {
+            /*GSM AMR WB is NOT supported*/
+            message_ptr->data[data_index++] = 0x00; /* bitmap 16...9 */           
+          }
+#else
+          /*GSM AMR WB is NOT supported*/
+          message_ptr->data[data_index++] = 0x00; /* bitmap 16...9 */
+#endif
+          message_length += 10;
+        }
+<snipped>
+
+TS 26.103 5.4
+Normative for terminals that support GSM and UTRAN radio access ("dual-mode" terminals): 
+Dual-mode terminals of R99 and onwards shall use the UMTS AMR2 as the default speech version in UTRAN access. They need not to support the UMTS AMR, because the UMTS AMR2 in terminals is a fully compatible replacement. 
+
+In case of GSM speech codecs, supported codecs are also included in the Bearcapability.
+
+Depending on NV value and build option, speech codec can be changed.

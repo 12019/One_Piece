@@ -1,0 +1,23 @@
+2016-7-1：
+两张卡似乎都没有成功attach过，全部都是网络端reject掉了，原因是gmm_cause_val = 14 (0xe) (GPRS services not allowed in this PLMN)
+IMS注册信息log里没有看到过，LTE相关的空口log也没有找到，不知道是配置文件没有配置进去，还是本来就没有。
+
+// standby_pref为SYS_MODEM_DS_PREF_DUAL_STANDBY或SYS_MODEM_DS_PREF_NO_CHANGE，
+is_gwl_subscription_available=1，is_hybr_gw_subscription_available=1，is_hybr_gw3_subscription_available
+
+MSG        [00005/02]       Call Manager/High                   06:45:14.151               cmdiag.c  01144  =CM= cmdiag_cm_state_info standby_pref 2, active_subs 3
+MSG        [00005/02]       Call Manager/High                   06:45:14.151               cmdiag.c  01146  =CM= cmdiag_cm_state_info main 1, h2 1, h3 0
+
+
+//卡1当前网络在WCDMA上，目标网络无信号，无LTE网络信号？没有检测到向LTE重选的接入流程，所以trat返回值为0，表示NO_srv
+MSG        [05005/01]       DS 3G Manager/Medium        06:45:26.788              ds3gmgr.c  01867  ds3g_get_current_network_mode_ex on sub 0: mode 5
+MSG        [05005/01]       DS 3G Manager/Medium        06:45:26.788              ds3gmgr.c  01476  ds3g_get_target_rat on sub 0: 0
+
+The description about this issue is not clear enough, plz feedback the details below:
+1.Before swap sim-card, what's the network state?
+2.After swap sim, what's the state of network?
+3.the previous logs can not provide enough effective information, plz provide the relevant logs and video.
+(plz use the qxdm "default.dmc" to collect logs: File -- Manage configuration -- Primary -- choose "Default.dmc" -- confirm and collect logs)
+
+
+

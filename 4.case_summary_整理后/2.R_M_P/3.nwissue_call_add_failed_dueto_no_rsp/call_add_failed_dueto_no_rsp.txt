@@ -1,0 +1,120 @@
+2016-6-14：
+第一次MT被叫的情况下，invite消息从网络端向UE正常发送后UE对接收到的invite消息做出响应，但是网络端发出的后续的ACK消息UE没有做出消息响应(可以不响应)，然后在后面UE端发起call-hold时，多次发送invite消息，网络端同样没有ACK响应，从而导致call-hold失败，call-add流程中包括了和call-hold同样的部分流程也会失败，最后由网络端直接发出“BYE”去结束整个call-add的流程。
+
+在和被叫电话结束通话后，DUT才开始新建我们刚才指定的MO-call，但是由于网络端已经发送“BYE”终止掉了和SIP-server的链接关系，所以最终会收到SIP-cancel的消息。
+
+麻烦FAE和客户沟通检查确认一下是否是网络端问题，call-hold过程中UE发出invite消息后为什么网络端没有ACK消息返回？
+
+---
+2016-6-15：
+
+//At the first time DUT got MT-call from iPhone, NW end send "invite" msg to UE, UE into conversation state.
+LOG        [0x156E]      IMS Message          11:03:06.584  Length: 2120
+	Direction                = Network To UE
+	Message ID               = IMS_SIP_INVITE
+	Response Status Code     = Request
+LOG        [0x156E]      IMS Message          11:03:09.484  Length: 1347
+	Direction                = UE To Network
+	Message ID               = IMS_SIP_INVITE
+	Response Status Code     = OK
+LOG        [0x138F]      QMI Link 1 TX PDU    11:03:06.670  Length: 0073
+	SduCtlFlags = IND
+	MsgType = QMI_VOICE_ALL_CALL_STATUS_IND
+				CallState = INCOMING
+				CallType = VOICE_IP
+				Direction = MT: Mobile Terminated Call
+				Mode = LTE
+LOG        [0x138F]      QMI Link 1 TX PDU    11:03:09.453  Length: 0024
+	SduCtlFlags = RSP
+	MsgType = QMI_VOICE_ANSWER_CALL_MSG
+			 ResultCode = QMI_RESULT_SUCCESS
+			 ErrorCode = QMI_ERROR_NONE
+LOG        [0x138F]      QMI Link 1 TX PDU    11:03:09.506  Length: 0125
+	SduCtlFlags = IND
+	MsgType = QMI_VOICE_ALL_CALL_STATUS_IND
+				CallState = CONVERSATION
+				Direction = MT: Mobile Terminated Call
+				Mode = LTE
+LOG        [0x156E]      IMS Message          11:03:10.193  Length: 0681
+	Direction                = Network To UE
+	Message ID               = IMS_SIP_ACK
+	Response Status Code     = Request
+
+//During the MT-call conversation, UE originate the "call-add" process, when we use "add call", UE will make current call become to "Hold" status, then originate a new MO-call.
+But over here, although UE send many times "invite" msg to NW, NW didn't rsp to UE.
+
+LOG        [0x156E]      IMS Message          11:03:10.269  Length: 1347
+LOG        [0x156E]      IMS Message          11:03:12.286  Length: 1347
+LOG        [0x156E]      IMS Message          11:03:16.293  Length: 1347
+LOG        [0x156E]      IMS Message          11:03:24.296  Length: 1347
+LOG        [0x156E]      IMS Message          11:03:40.366  Length: 1347
+	Direction                = UE To Network
+	Message ID               = IMS_SIP_INVITE
+	Response Status Code     = OK
+
+//After about 30 seconds, NW send "BYE" to terminate the MT-call process.
+LOG        [0x156E]      IMS Message          11:03:54.301  Length: 0773
+	Direction                = Network To UE
+	Message ID               = IMS_SIP_BYE
+	Response Status Code     = Request
+LOG        [0x156E]      IMS Message          11:03:54.319  Length: 0628
+	Direction                = UE To Network
+	Message ID               = IMS_SIP_BYE
+	Response Status Code     = OK
+LOG        [0x156E]      IMS Message          11:03:54.328  Length: 0599
+	Direction                = Network To UE
+	Message ID               = IMS_SIP_ACK
+	Response Status Code     = Request
+LOG        [0x138F]      QMI Link 1 TX PDU    11:03:54.416  Length: 0182
+	SduCtlFlags = IND
+	MsgType = QMI_VOICE_ALL_CALL_STATUS_IND
+				CallState = END
+				Direction = MT: Mobile Terminated Call
+				Mode = LTE
+
+//When we terminate the MT-call, the call-add origination just begin after that, UE into MO-call process.
+LOG        [0x138F]      QMI Link 1 TX PDU    11:03:54.728  Length: 0067
+	SduCtlFlags = IND
+	MsgType = QMI_VOICE_ALL_CALL_STATUS_IND
+				CallState = CC_IN_PROGRESS
+				Direction = MO: Mobile Originated Call
+LOG        [0x138F]      QMI Link 1 TX PDU    11:03:54.740  Length: 0067
+	SduCtlFlags = IND
+	MsgType = QMI_VOICE_ALL_CALL_STATUS_IND
+				CallState = ORIGINATION
+				Direction = MO: Mobile Originated Call
+				Mode = LTE
+LOG        [0x138F]      QMI Link 1 TX PDU    11:03:55.825  Length: 0061
+	SduCtlFlags = IND
+	MsgType = QMI_VOICE_ALL_CALL_STATUS_IND
+				CallState = ALERTING
+				Direction = MO: Mobile Originated Call
+				Mode = LTE
+
+//Because of no ACK rsp back from NW, initial MO-call process failed, UE got the SIP-cancel msg finally.
+LOG        [0x138F]      QMI Link 1 TX PDU    11:04:00.123  Length: 0024
+SduCtlFlags = RSP
+MsgType = QMI_VOICE_END_CALL_MSG
+LOG        [0x138F]      QMI Link 1 TX PDU    11:04:00.128  Length: 0068
+	SduCtlFlags = IND
+	MsgType = QMI_VOICE_ALL_CALL_STATUS_IND
+            CallState = DISCONNECTING
+            Direction = MO: Mobile Originated Call
+LOG        [0x156E]      IMS Message          11:04:00.149  Length: 0618
+	Direction                = UE To Network
+	Message ID               = IMS_SIP_CANCEL
+	Response Status Code     = Request
+LOG        [0x138F]      QMI Link 1 TX PDU    11:04:00.171  Length: 0068
+	SduCtlFlags = IND
+	MsgType = QMI_VOICE_ALL_CALL_STATUS_IND
+				CallState = END
+				Direction = MO: Mobile Originated Call
+LOG        [0x156E]      IMS Message          11:04:00.216  Length: 0435
+	Direction                = Network To UE
+	Message ID               = IMS_SIP_CANCEL
+	Response Status Code     = OK
+
+---------------------------------------------------
+Please let customer to check this issue on NW-side. 
+Why there is no rsp msg(ACK 200 OK) back from NW?
+

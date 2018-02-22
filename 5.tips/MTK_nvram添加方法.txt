@@ -1,0 +1,93 @@
+
+logical_data_item_table_core
+logical_data_item_table_factory
+
+[1][PCORE] Assert fail: mml1_rf_pcore_nvram.c 267 - MMF_PCO". (MetaConfirmHandler.cpp:129)
+libmml1_rf_pcore.a
+mml1_rf_pcore_nvram.c
+mml1_rf_pcore_nvram.obj
+
+//modem这边关于simlock的东西设置在如下NV中，其中具体参数可以参考“NVRAM_EF_SML_DEFAULT”的配置
+NVRAM_EF_SML_LID
+
+//我们自己客制化的nv，用于存放unlock code
+NVRAM_EF_SML_TYPE1_KEY_LID
+
+LID的接口就是一个C的结构体如下：
+nvram_ltable_entry_struct
+{
+        nvram_lid_enum          LID;                                /* Logical Data Item ID, U16 */
+        kal_uint16              total_records;                      /* Number of records */
+        kal_uint32              size;                               /* Size of one record. < sizeof(control buffer) */
+        kal_uint8 const*        default_value;                      /* Hardcoded default */
+        nvram_category_enum     category;                           /* U32 */
+        nvram_attr_enum         attr;                               /* U16 */
+        kal_char                fileprefix[FILE_PREFIX_LEN + 1];
+        kal_char                fileverno[FILE_VERNO_LEN + 1];
+        kal_char*               description;
+} nvram_ltable_entry_struct;
+
+attr和category决定此NV存储的位置，NV item name == prefix_verno
+LID表/结构体只保存着逻辑数据信息，和default_value相互链接，实际的数据值保存在存储系统/特殊分区中。
+每一个LID里可以存放多个record，每个record之间用1个16bit的checksum分隔开。
+
+Access LID:
+SAP message/external interface提供read，write，reset的接口；
+meta-tool；
+
+Add LID：
+mcu/common/interface/service/nvram/nvram_data_items.h
+1.找到nvram的末尾：NVRAM_EF_LAST_LID_CORE，在此之前加上你的定义NVRAM_EF_XXX_LID，这是一个uint的变量。
+2.定义record的size和total_records
+#define NVRAM_EF_XXX_SIZE xxx
+#define NVRAM_EF_XXX_TOTAL xxx
+
+定义结构体：
+typedef struct{
+	kal_uint8 xxx;
+}xxx_struct,
+
+mcu/common/interface/service/nvram/nvram_editor_data_item.h
+3.定义LID的verno
+#define NVRAM_EF_XXX_LID_VERNO “000”
+
+mcu/pcore/custom/service/nvram/nvram_data_items.c
+4.添加客制化LID的default_value，可以不设置，默认为0xFF或0x00(NVRAM_EF_FF_DEFAULT / NVRAM_EF_ZERO_DEFAULT)
+
+在第二步时定义了LID的特有结构体后，可以在这里用这个结构体定义default_value:
+static xxx_struct/kal_uint8 const NVRAM_EF_XXX_DEFAULT[]={
+	{1,2,3} 	//e.g.
+};
+
+如果该LID的category属于NVRAM_CATEGORY_FUNC_DEFAULT则默认值会在运行时被指定。
+
+5.添加LID的完整entry/结构体
+找到ltable_entry_struct logical_data_item_table_core[] 添加即可;
+category类型是calibrat或者important的，LID的数据结构，size，number of records都不能再次改变；
+每一个LID的prefix必须唯一，verno在以下情况中必须进行修改(size，record numbers，attr，default_value有其中一项变化时)
+
+category：决定存放位置，default_value的来源，LID文件应该如何备份或还原
+ATTR：决定LID的reset和access方式
+category和ATTR的详细分类介绍参考MTK官方文档。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

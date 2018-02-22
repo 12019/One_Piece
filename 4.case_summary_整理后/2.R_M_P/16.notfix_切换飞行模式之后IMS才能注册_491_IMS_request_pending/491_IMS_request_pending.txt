@@ -1,0 +1,9 @@
+
+A UAS that receives an INVITE on a dialog while an INVITE it had sent on that dialog is in progress MUST return a 491 (Request Pending) response to the received INVITE.
+
+21.4.27 491 Request Pending
+The request was received by a UAS that had a pending request within the same dialog.
+
+RFC 3261 文档里关于491消息的使用方法
+网络端的暂时性问题（网络端的问题可能不一致）引起IMS的多次注册失败，多次注册失败手机的IMS会被置位的暂时不可用的状态，类似问题的表现可能是网络端和终端一直发送请求超时(504/408)的指示，这个问题是发送请求暂时被挂起(491)的指示。
+此状态会一直持续，直到手机切换飞行模式或重启后才会恢复正常，因此属于正常现象。
