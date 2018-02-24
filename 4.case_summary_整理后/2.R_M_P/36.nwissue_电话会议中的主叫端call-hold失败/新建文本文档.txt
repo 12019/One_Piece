@@ -1,0 +1,23 @@
+Issue Not appear again.
+
+============================
+
+从最新的log来看，是上层/用户自己挂断的电话引起的UE发送486(busy here) code，而且也并不是问题中说的6方会话的情况，怀疑测试流程有误，没有发现问题点。
+
+//操作人员自行挂断了电话，和问题复现流程不一样
+10-25 10:25:34.187 I/InCall ( 5997): AnswerPresenter - onDecline mCallId:[Ljava.lang.String;@294abc2aphoneId:1 
+10-25 10:25:34.191 D/ImsCallSessionImpl( 5840): reject 504 
+10-25 10:25:34.192 V/ImsSenderRxr( 5840): hangupWithReason connId= 1 userUri= null confUri= nullmpty = falsefailCause = 504[SUB1] 
+10-25 10:25:34.192 D/ImsSenderRxr( 5840): imsReason= 504[SUB1] 
+10-25 10:25:34.192 V/ImsSenderRxr( 5840): hangupWithReason callFailCause=502[SUB1] 
+10-25 10:25:34.192 D/ImsSenderRxr( 5840): [0027]> HANGUP[SUB1] 
+
+//呼叫终止，UE发送reject_cause
+[0x138E] | LOG | 2016/10/25 04:57:20.270 | QMI Link 1 RX PDU | Length: 0044 | 
+MsgType = QMI_VOICE_ANSWER_CALL_MSG 
+Reject Call = true 
+Reject Cause = BUSY 
+
+[0x156E] | LOG | 2016/10/25 04:57:20.295 | IMS SIP Message | Length: 0704 | 
+Direction = UE_TO_NETWORK 
+Sip Message = SIP/2.0 486 Busy Here

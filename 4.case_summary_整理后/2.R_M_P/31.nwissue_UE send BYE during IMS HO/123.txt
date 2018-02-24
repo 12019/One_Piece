@@ -1,0 +1,134 @@
+
+//Log第一次voice-call，打开WFC，新建通话过程从volte切换到了vowifi上，切换成功
+LOG   [0x138F]   QMI Link 1 TX PDU          12:14:40.891    Length: 0073
+            CallState = ORIGINATION
+            Direction = MO: Mobile Originated Call
+            Mode = LTE
+LOG   [0x138F]   QMI Link 1 TX PDU          12:14:47.479    Length: 0125
+            CallState = CONVERSATION
+            Direction = MO: Mobile Originated Call
+            Mode = WLAN
+LOG   [0x138F]   QMI Link 1 TX PDU          12:14:47.479    Length: 0020
+            vowifiprofile_status {
+               vowifiprofile_status = IMSA_SERVICE_VOWIFI_QUALITIY_EXCELLENT
+
+//然后逐渐离开wifi热点区域，IMS重新回到LTE上注册成功，同时出现最后3条IMS重注册消息
+LOG   [0x138F]   QMI Link 1 TX PDU          12:15:26.872    Length: 0020
+               vowifiprofile_status = IMSA_SERVICE_VOWIFI_QUALITIY_FAIR
+LOG   [0x138F]   QMI Link 1 TX PDU          12:15:39.361    Length: 0020
+               vowifiprofile_status = IMSA_SERVICE_VOWIFI_QUALITIY_BAD
+LOG   [0x138F]   QMI Link 1 TX PDU          12:15:46.695    Length: 0029
+   MsgType = QMI_IMSA_RAT_HANDOVER_STATUS_IND
+               Source Rat = IWLAN
+               Target Rat = WWAN
+LOG   [0x138F]   QMI Link 1 TX PDU          12:15:46.705    Length: 0125
+            CallState = CONVERSATION
+            Direction = MO: Mobile Originated Call
+            Mode = LTE
+LOG   [0x156E]   IMS Message                12:15:46.756    Length: 2585
+LOG   [0x156E]   IMS Message                12:15:47.380    Length: 0818
+LOG   [0x1832]   IMS Registration           12:15:47.382    Length: 0160
+	Registration Type = Re-Registration
+	Result = OK
+
+//此时又回到wifi热点区域内，由于此时WFC依旧是激活状态，因此应该会再从volte切换回vowifi
+MSG   [00051/01] IMS/Medium                 12:16:21.639               qpDcm.c  11556  PingStatusCB:: QPE_PING_SUCCESS  --> ePDG服务端PING success
+LOG   [0x138F]   QMI Link 1 TX PDU          12:16:24.696    Length: 0029
+   MsgType = QMI_IMSA_RAT_HANDOVER_STATUS_IND
+               Source Rat = WWAN
+               Target Rat = IWLAN
+LOG   [0x138F]   QMI Link 1 TX PDU          12:16:24.702    Length: 0125
+            CallState = CONVERSATION
+            Direction = MO: Mobile Originated Call
+            Mode = WLAN
+LOG   [0x156E]   IMS Message                12:16:24.751    Length: 2571
+LOG   [0x156E]   IMS Message                12:16:25.033    Length: 0817
+LOG   [0x1832]   IMS Registration           12:16:25.034    Length: 0160
+
+//第二次开始，远离wifi热点，正常来说应该是再次从vowifi切换到volte
+LOG   [0x138F]   QMI Link 1 TX PDU          12:17:14.364    Length: 0020
+   MsgType = QMI_IMSA_VoWIFI_STATUS_IND
+               vowifiprofile_status = IMSA_SERVICE_VOWIFI_QUALITIY_BAD  --> 从excellent到fair再到bad
+MSG   [00051/02] IMS/High                   12:17:14.364       qpDplHandOver.c  01793  IsHandOverPossible: TRAT is GOOD, SRAT is BAD but TRAT NOT Preferred: Override PrefRAT: HandOver is POSSIBLE.. notifying APP
+MSG   [00051/02] IMS/High                   12:17:14.364        qipcalliface.c  07587  qipcalliface_process_handover_measurement_cb: SRAT = 6, TRAT = 10, pHOStatus->bIsHOPossible 1 ===>    -->SRAT=6(wlan),TRAT=10(LTE)
+MSG   [00051/01] IMS/Medium                 12:17:14.365    qpIMSPolicyManager.cpp  01014  QPConfigurationHandler::CheckWifiPrefSettings | iWFCStatus:1 iCallModePreference:1, m_bUESIMGBAEnabled 1
+MSG   [00051/01] IMS/Medium                 12:17:14.366        qipcalliface.c  08132  qipcalliface_is_quality_param_met_for_wwan_iwlan_handover: SRAT 6, TRAT 10, HO possible 1
+MSG   [05000/01] Data Services/Medium       12:17:14.367    ds_mppm_rat_calc.c  00741  ds_mppm_is_epc_wwan_rat: PREF radio RAT is an EPC RAT
+
+//这次离开热点区域后，vowifi到volte的切换失败，最终引起掉话，end_cause=RTCP inactivity  --> RTCP是RTP的控制协议
+LOG   [0x138F]   QMI Link 1 TX PDU          12:17:35.736    Length: 0031
+   MsgType = QMI_IMSA_RAT_HANDOVER_STATUS_IND
+               Source Rat = IWLAN
+               Target Rat = WWAN
+MSG   [00051/03] IMS/Error                  12:17:35.736        qipcalliface.c  02751  qipcalliface_process_handover_failed_event :                                   Handover attempt failed. IMS APN remains on  RAT 6.
+MSG   [00051/02] IMS/High                   12:17:35.736            qipcallh.c  33619  Emergency call alive, call state is 13
+MSG   [00051/02] IMS/High                   12:17:35.740           RegInfo.cpp  01750  IsIwlanBackoffTimerRunning
+MSG   [00051/02] IMS/High                   12:17:35.740           RegInfo.cpp  01758  IsIwlanBackoffTimerRunning - bRet = 0
+LOG   [0x1831]   IMS VoLTE Session End      12:17:36.792    Length: 0159
+	Direction = MO
+	End Cause = RTCP inactivity
+LOG   [0x156E]   IMS Message                12:17:36.817    Length: 1496
+	Direction                = UE To Network
+	Message ID               = IMS_SIP_BYE
+LOG   [0x138F]   QMI Link 1 TX PDU          12:17:36.843    Length: 0110
+            CallState = END
+            Direction = MO: Mobile Originated Call
+            Mode = WLAN
+
+
+====================
+====================
+
+和近期的PING error原因不同，当前看到call end原因是RTCP inactivity
+
+LOG   [0x1831]   IMS VoLTE Session End       12:17:36.792    Length: 0159
+Direction = MO
+End Cause = RTCP inactivity
+
+LOG   [0x156E]   IMS Message                 12:17:36.817    Length: 1496
+Direction                = UE To Network
+Message ID               = IMS_SIP_BYE
+Response Status Code     = Request
+
+==========
+==========
+
+分析结果是网络端拒绝了IMS切换中的PDN连接的请求，导致IMS的切换失败，由于此时手机正在远离wifi热点，又无法切换到volte上，因此相关IMS的服务被终止，RTCP变为inactvity状态，引发掉话。
+从log来看是SGW和PGW网关拒绝了所有类型为handover的PDN连接请求(会导致所有的IMS切换失败)，只有最后类型变为initial时才成功接收，属于网络端的逻辑判断问题。
+
+//req_type = 2(0x2)(Handover)时，一直被网络端拒绝
+LOG [0xB0E3] LTE NAS ESM Plain OTA Outgoing Message12:17:15.479 Length: 0063 
+2016 Oct 7 12:17:15.480 [B0] 0xB0E3 LTE NAS ESM Plain OTA Outgoing Message -- PDN connectivity request Msg 
+	pdn_type = 3 (0x3) (Ipv4v6) 
+	req_type = 2 (0x2) (Handover) 
+	acc_pt_name_val[1] = 105 (0x69) (i) 
+	acc_pt_name_val[2] = 109 (0x6d) (m) 
+	acc_pt_name_val[3] = 115 (0x73) (s) 
+LOG [0xB0E2] LTE NAS ESM Plain OTA Incoming Message12:17:15.523 Length: 0008 
+2016 Oct 7 12:17:15.524 [B6] 0xB0E2 LTE NAS ESM Plain OTA Incoming Message -- PDN connectivity reject Msg 
+	msg_type = 209 (0xd1) (PDN connectivity reject) 
+	esm_cause = 30 (0x1e) (Request rejected by Serving GW or PDN GW) 
+...
+LOG [0xB0E3] LTE NAS ESM Plain OTA Outgoing Message12:17:17.388 Length: 0063 
+2016 Oct 7 12:17:17.389 [DD] 0xB0E3 LTE NAS ESM Plain OTA Outgoing Message -- PDN connectivity request Msg 
+	pdn_type = 3 (0x3) (Ipv4v6) 
+	req_type = 2 (0x2) (Handover) 
+	acc_pt_name_val[1] = 105 (0x69) (i) 
+	acc_pt_name_val[2] = 109 (0x6d) (m) 
+	acc_pt_name_val[3] = 115 (0x73) (s) 
+LOG [0xB0E2] LTE NAS ESM Plain OTA Incoming Message12:17:17.434 Length: 0008 
+2016 Oct 7 12:17:17.435 [A1] 0xB0E2 LTE NAS ESM Plain OTA Incoming Message -- PDN connectivity reject Msg 
+	msg_type = 209 (0xd1) (PDN connectivity reject) 
+	esm_cause = 30 (0x1e) (Request rejected by Serving GW or PDN GW)
+
+//PDN连接最后被接收
+LOG [0xB0E3] LTE NAS ESM Plain OTA Outgoing Message12:18:52.522 Length: 0063 
+2016 Oct 7 12:18:52.523 [E3] 0xB0E3 LTE NAS ESM Plain OTA Outgoing Message -- PDN connectivity request Msg 
+	pdn_type = 3 (0x3) (Ipv4v6) 
+	req_type = 1 (0x1) (initial request) 
+	acc_pt_name_val[1] = 105 (0x69) (i) 
+	acc_pt_name_val[2] = 109 (0x6d) (m) 
+	acc_pt_name_val[3] = 115 (0x73) (s) 
+LOG [0xB0E2] LTE NAS ESM Plain OTA Incoming Message12:18:52.613 Length: 0155 
+2016 Oct 7 12:18:52.614 [08] 0xB0E2 LTE NAS ESM Plain OTA Incoming Message -- Activate default EPS bearer context request Msg
+

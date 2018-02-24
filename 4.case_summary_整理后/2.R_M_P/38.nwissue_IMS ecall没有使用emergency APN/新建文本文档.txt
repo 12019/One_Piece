@@ -1,0 +1,26 @@
+测试网络并不支持IMS紧急通话，因此会回落2G，但是同时测试网络没有部署2/3G的CS核心网，因此通话会直接断掉，不是一个问题。
+
+//手机已经正常注册上IMS/LTE，不符合发起emergency PDN的条件（发起条件是手机的网络状态处于只能拨打紧急电话的状态） 
+2016 Oct 7 09:35:07.976 [C3] 0x134F CM SS Event 
+Sevice Status = 2 (Service Available) 
+Service Domain = 3 (Circuit and Packet Switched capable) 
+Service Capability = 3 (Circuit and Packet Switched capable) 
+System Mode = 9 (LTE)
+
+//拨打112紧急电话
+2016 Oct 7 09:35:10.272 [84] 0x138E QMI Link 1 RX PDU 
+MsgType = QMI_VOICE_DIAL_CALL_MSG 
+calling_number = { 49, 49, 50 } 
+
+//打开了WFC选项，想让IMS注册在Wlan上
+MSG [00005/01] Call Manager/Medium 09:35:10.277 cmcall.c 04520 =CM= check ip call possibility, sys_mode=8 
+MSG [00005/02] Call Manager/High 09:35:10.277 cmipapp.c 00891 =CM= Found active app 1 for call type 0, sys mode 8 
+MSG [00005/02] Call Manager/High 09:35:10.277 cmipapp.c 00891 =CM= Found active app 1 for call type 9, sys mode 8 
+
+//网络已经发出了回落的指示，回落因为网络不支持CS域通话引起掉话
+2016 Oct 7 09:35:10.305 [7A] 0xB0ED LTE NAS EMM Plain OTA Outgoing Message -- Extended service request Msg 
+service_type = 2 (0x2) (mobile originating CS fallback emergency call) 
+2016 Oct 7 09:35:10.444 [05] 0xB0EC LTE NAS EMM Plain OTA Incoming Message -- Service reject Msg 
+cause_value = 39 (0x27) (CS domain temporarily not available)
+
+属于正常现象。

@@ -1,0 +1,38 @@
+qxdmlog中发现发送DPD间隔不一致，从pcap-log中没有发现此问题，qxdm-log出现的“NextDPDN(1)”，是因为代码中内置了一个计时器(以秒为单位)，因此会出现这种"NextDPD(1)"的信息，目的是去补足不满1s的时间，为的是去适配这个计时器，从pcap log中看DPD的间隔都是正常的，都是120s.
+
+//note IP address here.. No informational messages are captured here.. 
+13	12:53:05.372	192.168.43.109	49.44.57.170	ISAKMP	32012	500	IKE_SA_INIT MID=00 Initiator Request 
+14	12:53:05.498	49.44.57.170	192.168.43.109	ISAKMP	500	32012	IKE_SA_INIT MID=00 Responder Response 
+16	12:53:06.580	49.44.57.170	192.168.43.109	ISAKMP	4500	32012	IKE_AUTH MID=01 Responder Response 
+
+//note the IP address here.. ends with .160 
+15	13:00:44.506	192.168.43.109	49.44.57.160	ISAKMP	32012	500	IKE_SA_INIT MID=00 Initiator Request 
+16	13:00:44.553	49.44.57.160	192.168.43.109	ISAKMP	500	32012	IKE_SA_INIT MID=00 Responder Response 
+22	13:00:45.635	49.44.57.160	192.168.43.109	ISAKMP	4500	32012	IKE_AUTH MID=03 Responder Response 
+
+// DPD expired here..at 120 secs.. 
+30	13:02:45.637	192.168.43.109	49.44.57.160	ISAKMP	32012	4500	INFORMATIONAL MID=04 Initiator Request 
+31	13:02:45.852	49.44.57.160	192.168.43.109	ISAKMP	4500	32012	INFORMATIONAL MID=04 Responder Response 
+
+// DPD expired here at 120 sec.. 
+37	13:04:45.638	192.168.43.109	49.44.57.160	ISAKMP	32012	4500	INFORMATIONAL MID=05 Initiator Request 
+38	13:04:46.003	49.44.57.160	192.168.43.109	ISAKMP	4500	32012	INFORMATIONAL MID=05 Responder Response 
+
+// DPD expired here at 120 sec.. 
+44	13:06:45.643	192.168.43.109	49.44.57.160	ISAKMP	32012	4500	INFORMATIONAL MID=06 Initiator Request 
+45	13:06:46.005	49.44.57.160	192.168.43.109	ISAKMP	4500	32012	INFORMATIONAL MID=06 Responder Response 
+
+more attempts here and all are with correct interval of 120 secs 
+// i am seeing all the DPD attempts are made correctly till the end of the logs with gaps of 120 sec.. 
+114	13:24:48.639	192.168.43.109	49.44.57.160	ISAKMP	32012	4500	INFORMATIONAL MID=15 Initiator Request 
+115	13:24:48.961	49.44.57.160	192.168.43.109	ISAKMP	4500	32012	INFORMATIONAL MID=15 Responder Response 
+
+关于qxdm-log中出现的"NextDPD(1)"的解释：
+If you carefully monitor PCAP files message exchanges is happening exactly at 120 secs, but there are some milliseconds, we run a timer in the code which calculate time in secs for when to send Next DPD message. so when you have this residual millisecond counts adding up to a secs we will have a print which means DPD needs to be sent after 1 sec. however if you compare this or calculate this works out to be 120 secs only. the prints the you pointed are for internal purposes to round of milliseconds to seconds.
+
+MSG [05503/01] Security/Internet Protocol Security/Medium 07:44:45.639 secipssa.c 02162 IPsec SA - LastPeer (799) NextDPD (1) 
+MSG [05503/01] Security/Internet Protocol Security/Medium 07:44:46.639 secipssa.c 02162 IPsec SA - LastPeer (799) NextDPD (120) 
+
+62	****:45.639	192.168.43.109	49.44.57.160	ISAKMP	32012	4500	INFORMATIONAL MID=08 Initiator Request 
+
+As we have seen from the PCAP timings are working fine, there is no functional issue seen here

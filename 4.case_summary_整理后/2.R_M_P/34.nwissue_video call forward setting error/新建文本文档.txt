@@ -1,0 +1,11 @@
+终端注册IMS后，进入call settings界面选择设置video类型的呼叫转接功能，
+
+从log中发现下发请求的serviceClass = 80
+10-09 16:16:36.801  4129  4129 V ImsSenderRxr: queryCallForwardStatus cfReason= 2 serviceClass = 80number = null[SUB1]
+10-09 16:16:36.802  4129  4129 D ImsSenderRxr: [0197]> REQUEST_QUERY_CALL_FORWARD_STATUS[SUB1]
+
+加log分析发现，收到的上报消息中serviceClass为1，导致界面上没有显示，serviceClass 1为voice，80为video
+
+上层向video类型发出转接申请，但是所有的上发的消息类型都是针对voice的设置。
+实际验证发现call forward的设置voice和video看起来是同步配置的，只要一个被设置另一个也会同样被设置为自动转接。
+怀疑是移动网络的问题，没有做voice和video的区分，印度网络验证此问题。

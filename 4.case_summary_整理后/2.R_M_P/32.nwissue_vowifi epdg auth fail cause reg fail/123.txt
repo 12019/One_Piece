@@ -1,0 +1,54 @@
+//一开始只看到第一次在VoLTE上注册IMS，显示IMS正常注册，此时prefrat=6(wlan)，wifi-call的开关此时应该已经打开，但是后续wlan模块状态变为不可用，所以IMS选择在VoLTE上完成注册。
+MSG   [00051/02] IMS/High                      07:08:20.222        qipcalliface.c  07347  qipcalliface_is_wwan_iwlan_measurement_params_changed: HO params changed SRAT 10, TRAT 10, PrefRAT = 6
+MSG   [00051/03] IMS/Error                     07:08:20.222       qpDplHandOver.c  02677  input SRAT=10 TRAT=25 PREFRAT=6
+MSG   [00051/03] IMS/Error                     07:08:20.223       qpDplHandOver.c  03350  qpDplHOLogicReEvaluate: LTE rat available
+MSG   [00051/03] IMS/Error                     07:08:20.223       qpDplHandOver.c  03365  qpDplHOLogicReEvaluate: IWLAN  NOT available. stop wlan module
+LOG   [0x156E]   IMS Message                   07:08:20.310    Length: 1720
+Message ID               = IMS_SIP_REGISTER
+Response Status Code     = Request
+LOG   [0x156E]   IMS Message                   07:08:21.184    Length: 0818
+Message ID               = IMS_SIP_REGISTER
+Response Status Code     = OK
+
+//接着wlan模块恢复正常，wifi连接，优先级也的确是wlan更高，后续应该会发生VoLTE向vowifi的切换过程，但是后续的切换过程依然失败，同时backoff timer启动
+MSG   [00051/03] IMS/Error                     07:08:34.007       qpDplHandOver.c  03361  qpDplHOLogicReEvaluate: IWLAN  available
+MSG   [05006/01] DS Protocol Services/Medium   07:08:40.310    ds_mppm_rat_calc.c  01171  ds_mppm_run_pref_rat_per_pdn_calc_algo () updated last pref_sys_mask for API based APN overrides is 0x1 and current pref RAT is RADIO_IWLAN
+MSG   [05000/02] Data Services/High            07:08:41.968    ds_iwlan_s2b_pdn_sm.c  00525  Entering DS_IWLAN_S2B_PDN_SM_TUNNEL_CONFIGURING_STATE state from state DS_IWLAN_S2B_PDN_SM_TUNNEL_PRE_CONFIG_STATE
+MSG   [00051/02] IMS/High                      07:08:45.187        qipcalliface.c  02669  qipcalliface_process_handover_failed_event backoff running reset prefsys
+MSG   [00051/02] IMS/High                      07:08:45.191        qipcalliface.c  06502  qipcalliface_get_pref_system backofftimer override
+MSG   [00051/03] IMS/Error                     07:08:45.193        qipcalliface.c  08105  qipcalliface_is_quality_param_met_for_wwan_iwlan_handover: backoff timer running
+MSG   [00051/01] IMS/Medium                    07:08:45.193    qpIMSPolicyManager.cpp  01083  QPConfigurationHandler::CheckWWANandWLAN Entered
+MSG   [00051/01] IMS/Medium                    07:08:45.193    qpIMSPolicyManager.cpp  01127  QPConfigurationHandler::CheckWWANandWLAN | WWAN RAT 10, WLAN RAT 6
+MSG   [00051/01] IMS/Medium                    07:08:45.193    qpIMSPolicyManager.cpp  01129  QPConfigurationHandler::CheckWWANandWLAN | Current RAT 10, Service Value Passed 0
+MSG   [00051/01] IMS/Medium                    07:08:45.197        qipcalliface.c  07105  qipcalliface_set_wwan_iwlan_handover_measurement_params: backoff failure override
+MSG   [00051/02] IMS/High                      07:08:45.198        qipcalliface.c  07347  qipcalliface_is_wwan_iwlan_measurement_params_changed: HO params changed SRAT 10, TRAT 6, PrefRAT = 10
+
+//vowifi的鉴权问题引发的IMS切换失败，vowifi注册失败，因此启动了backoff计时器，属于网络问题，需要客户自行检查网络端，ePDG server的ping已经是成功的，但是EPDG的服务端49.44.57.170 发起对UE的鉴权(IPSEC authentication)。
+
+//Ping is successful 
+IMS/Medium 07:08:40.303 qpDcm.c 11556 PingStatusCB:: QPE_PING_SUCCESS 
+
+//Ho initiated 
+IMS/Medium 07:08:40.304 qipcalliface.c 08132 qipcalliface_is_quality_param_met_for_wwan_iwlan_handover: SRAT 10, TRAT 6, HO possible 1 
+IMS/High 07:08:40.329 qipcalliface.c 02467 qipcalliface_process_handover_events: eDcmRat = 10, eSRat = 10, eTRat = 6 
+IMS/Medium 07:08:40.330 qipcalliface.c 08132 qipcalliface_is_quality_param_met_for_wwan_iwlan_handover: SRAT 10, TRAT 6, HO possible 1 
+IMS/Medium 07:08:40.330 qipcalliface.c 02495 qipcalliface_process_handover_events: Handover Initiated 
+
+//IPSec connection started with ePDG server 49.44.57.170 
+Data Services/Medium 07:08:40.346 ds_iwlan_s2b_pdn_sm.c 01207 Endpoint ip address: 49.44.57.170 
+
+//Auth Failure reported 
+Security/Internet Protocol Security/High07:08:41.439 secips_ikeauth.c 03338 Received IKEAUTH first EAP msg 
+Security/Internet Protocol Security/Error07:08:41.439 secipspkt.c 08282 Received Error Notify (24) <= SECIPSPKTDEFS_IKEV2_NOTIFY_AUTHENTICATION_FAILED 
+Security/Internet Protocol Security/High07:08:41.439 secips.c 02789 ike_sa_handle -1022823504, ipsec_cb_ptr 0x0c308f3d0 ike_failure_cause value is set to 5 
+Security/Internet Protocol Security/Medium07:08:41.439 secips.c 02797 Exit: secips_cb_ptr_ike_failure_update 
+Data Services/Medium 07:08:41.439 ps_eap_server.c 00768 EAP server delete instance - invalid handle: -1 
+
+//So handover failure reported and backoff timer started 
+IMS/High 07:08:45.185 qipcalliface.c 00822 qipcalliface_new_dcm_cb: dcmMsg, 21 
+IMS/Medium 07:08:45.186 qipcalliface.c 02458 qipcalliface_process_handover_events: Event = 21, State = 1 
+IMS/Medium 07:08:45.186 qipcalliface.c 02537 qipcalliface_process_handover_events: Handover Failed. Curr RAT 10 
+
+IMS/High 07:08:45.191 qipcalliface.c 06502 qipcalliface_get_pref_system backofftimer override 
+IMS/High 07:08:45.192 RegInfo.cpp 01750 IsIwlanBackoffTimerRunning 
+IMS/High 07:08:45.192 RegInfo.cpp 01758 IsIwlanBackoffTimerRunning - bRet = 1

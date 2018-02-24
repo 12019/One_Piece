@@ -1,0 +1,9 @@
+It seems there is an APP side crash, due to that, PDN is disconnected. But without ADB logs, it will difficult to say the root cause of the issue.
+
+//AP crash detected 
+MSG [00051/03] IMS/Error 11:50:27.862 qpdplnet.c 00704 qpDplCleanRemoteEntriesOnCrash: CRASH Event Entry 
+MSG [00051/03] IMS/Error 11:50:27.862 qpdplnet.c 00730 qpDplCleanRemoteEntriesOnCrash: CRASH Event Exit 
+
+//So PDN disconnect triggered 
+MSG [00051/01] IMS/Medium 11:50:27.862 qpDcm.c 09666 DPL_M#>>#IMS_APP#1#qpDcmProcessQCCIServiceShutDown-DCM_MSG_PDP_NETWORK_DISCONNECTED HYBRID sending event for AppId (598) 
+MSG [00051/01] IMS/Medium 11:50:27.866 qpDcm.c 09666 DPL_M#>>#IMS_APP#1#qpDcmProcessQCCIServiceShutDown-DCM_MSG_PDP_NETWORK_DISCONNECTED HYBRID sending event for AppId (27)

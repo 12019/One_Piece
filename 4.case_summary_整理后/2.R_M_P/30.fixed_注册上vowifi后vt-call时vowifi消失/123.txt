@@ -1,0 +1,57 @@
+定位为WFC优先级设置问题，问题后续未复现。
+
+//在通话前前注册上vowifi，即sys_mode=8(wlan)情况下，每次发起vt-call的时候会触发通话类型vowifi跳转到volte类型，从log里看是pref_mode=9(LTE)，但实际在发起后接入方式又切换回了vowifi，前两次vt-call异常结束原因疑似编码错误--> CallEndReason = CALL_END_CAUSE_CODEC_ERROR
+2016 Sep 28  12:16:04.313  [D6]  0x138F  QMI Link 1 TX PDU
+            CallType = VT
+            Direction = MO: Mobile Originated Call
+            Mode = LTE
+MSG   [00005/02] Call Manager/High                        12:16:04.312             cmipapp.c  00891  =CM=  Found active app 1 for call type 11, sys mode 8
+MSG   [00005/02] Call Manager/High                        12:16:04.313              cmcall.c  03822  =CM= Updating call_ptr->sr.is_ok_to_orig = 1
+MSG   [09509/02/10]LTE ML1/High/Manager                     12:16:04.313     lte_ml1_mgr_stm.c  24136  MM_CM_VOLTE_STATUS_IND received, is_volte_enabled 1
+MSG   [05000/02] Data Services/High                       12:16:04.314           ds3gdsdif.c  00996  ds3gdsdif_get_preferred_sys, subs_id:0 pref sys: 9
+MSG   [03007/02/03/04]NAS MM/High/Error/Fatal                  12:16:04.315      emm_update_lib.c  06193  DS: SUB 1 =EMM=Video 1 ,Voice 1 ,SMS 0
+MSG   [00063/01] Android QCRIL/Medium                     12:16:03.660           qcril_am.cc  00386  RIL[0][event] RIL_Errno qcril_am_set_ims_call_audio_driver_by_call_state(): no active and hold ims call on WLAN
+
+//CALL_FAIL_NORMAL = 16, CALL_END_CAUSE_RETRY_ORDER_V02 = 0x25,
+MSG   [00063/01] Android QCRIL/Medium                     12:16:03.662    qcril_qmi_ims_misc.c  01788  RIL[0][event] qcril_qmi_ims_map_ril_failcause_to_ims_failcause: RIL_LastCallFailCause 16 with extended error code 25 mapped to Ims__CallFailCause 16
+
+//掉话原因是语音或视频数据包的编码译码发生错误
+2016 Sep 28  12:16:05.662  [6F]  0x138F  QMI Link 1 TX PDU
+            CallState = ALERTING
+            CallType = VT
+            Direction = MO: Mobile Originated Call
+            Mode = WLAN
+2016 Sep 28  12:16:05.789  [75]  0x138F  QMI Link 1 TX PDU
+            CallState = END
+            CallType = VT
+            Direction = MO: Mobile Originated Call
+            Mode = WLAN
+            CallEndReason = CALL_END_CAUSE_CODEC_ERROR
+
+//结束通话后，会再次注册上IMS，没有发现bug描述中所说的需要重启手机才能注册的现象
+2016 Sep 28  12:16:26.317  [5F]  0x1832  IMS Registration
+Registration Type = Initial
+Direction                = Network To UE
+Message ID               = IMS_SIP_REGISTER
+Response Status Code     = OK
+
+//最后一次vt-call通话正常，结束原因是手机端自行挂断
+2016 Sep 28  12:17:45.657  [1D]  0x138F  QMI Link 1 TX PDU
+            CallState = CONVERSATION
+            CallType = VT
+            Direction = MO: Mobile Originated Call
+            Mode = WLAN
+2016 Sep 28  12:18:59.899  [A2]  0x138F  QMI Link 1 TX PDU
+            CallState = DISCONNECTING
+            CallType = VT
+            Direction = MO: Mobile Originated Call
+            Mode = WLAN
+            CallEndReason = CALL_END_CAUSE_CLIENT_END
+2016 Sep 28  12:19:00.020  [71]  0x138F  QMI Link 1 TX PDU
+            CallState = END
+            CallType = VT
+            Direction = MO: Mobile Originated Call
+            Mode = WLAN
+            CallEndReason = CALL_END_CAUSE_CLIENT_END
+
+对于WFC优先级的问题，因为测试情况是9月份的，不清楚是否是之前没更新的MBN中是否对应WFC的优先级设置有误，当前MBN中WFC优先级代码中确认是wlan，稍后告知一线同学用最新版本再复测一下此问题。

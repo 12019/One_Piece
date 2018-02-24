@@ -1,0 +1,61 @@
+10月28号的新log发现和之前log网络端响应404不一样的现象，提示是不允许这种类型的操作进行。
+
+2016 Oct 27  08:13:25.185  [4E]  0x138E  QMI Link 1 RX PDU
+MsgType = QMI_VOICE_GET_CALL_FORWARDING
+         Reason = FWDREASON_UNCONDITIONAL
+
+MSG   [00063/02] Android QCRIL/High                       08:13:24.485               qcril.c  05705  RIL[0][event] qcril_process_event: RIL <--- QCRIL_EVT_IMS_SOCKET_REQ_QUERY_CALL_FORWARD_STATUS(851990), RID 0, MID 0 --- AMSS
+MSG   [00063/03] Android QCRIL/Error                      08:13:40.870     qcril_qmi_voice.c  10520  RIL[0][event] qcril_qmi_voice_query_call_forward_status_resp_hdlr: RESP : sups_failure_cause=219, for Token ID= -2147483640
+MSG   [00090/03] MMODE QMI/Error                          08:13:41.545     qmi_voice_cm_if.c  17057  Recieved Get CALL FORWARDING with Error confirmation type  = 16
+
+2016 Oct 27  08:13:41.546  [06]  0x138F  QMI Link 1 TX PDU
+         QmiError = QMI_ERR_SUPS_FAILURE_CAUSE
+         FailureCause = QMI_FAILURE_CAUSE_ACCESS_CLASS_BLOCKED
+
+//提示终端处于busy状态，forward操作不可及
+2016 Oct 27  08:13:41.645  [68]  0x138E  QMI Link 1 RX PDU
+         Reason = FWDREASON_MOBILEBUSY
+         ServiceCalss = CLASS_VOICE
+2016 Oct 27  08:14:05.792  [E1]  0x138E  QMI Link 1 RX PDU
+MsgType = QMI_VOICE_GET_CALL_FORWARDING
+         Reason = FWDREASON_UNREACHABLE
+		 
+======================
+We further checked the logs from our DATA perspective but no abnormality is seen. 
+Seems no response is received from nwk for DNS query. 
+
+In failure DPL logs we don’t see any response to DNS query so It should mostly be that UE didn’t receive the DNS response but cannot 100% guarantee as logs are not complete. 
+In pass logs not sure if it is log drops but I don’t see any DNS query request for xcap server itself. 
+
+Is there any possibility of hardcoding UT server address in REF device or not testing at the same location? 
+
+Failure: 
+[6052/0002] | MSG | 08:15:06.455 | IMS DPL/High | [qpDns.c 660] qpDplHostResolveByName: name = xcap.ims.mnc874.mcc405.pub.3gppnetwork.org | 
+[0051/0002] | MSG | 08:15:06.456 | IMS/High | [qpDns.c 805] qpDplHostResolveByName: Creating a new dns session! | 
+[0051/0001] | MSG | 08:15:06.462 | IMS/Medium | [qpDns.c 305] ProcessDnsResult - ds_errno 0 NumOfRecords 1 | 
+[6052/0002] | MSG | 08:15:06.462 | IMS DPL/High | [qpDns.c 471] ProcessDnsResult - Posting callbacks to applications for xcap.ims.mnc874.mcc405.pub.3gppnetwork.org fo | 
+[0051/0001] | MSG | 08:15:06.462 | IMS/Medium | [QimfHttp.cpp 486] HttpConnection::InitializeNetConnProfile: m_HttpConnProfile 8b3047c0 available | 
+[0051/0001] | MSG | 08:15:06.462 | IMS/Medium | [QimfHttp.cpp 1105] HttpConnection::Send| PDP - ID 5 | 
+[0051/0001] | MSG | 08:15:06.462 | IMS/Medium | [qpdplnet.c 1494] qpDplNetOpen: Net Open called for Connection Profile PDPID=5, Profile=8b3047c0 | 
+//No DNS response seen for any of the DNS query requests. 
+
+Ref: 
+[6052/0002] | MSG | 10:43:49.392 | IMS DPL/High | [qpDns.c 660] qpDplHostResolveByName: name = xcap.ims.mnc874.mcc405.pub.3gppnetwork.org | 
+[0051/0002] | MSG | 10:43:49.392 | IMS/High | [qpDns.c 805] qpDplHostResolveByName: Creating a new dns session! | 
+[0051/0002] | MSG | 10:43:49.399 | IMS/High | [qpDns.c 588] DPL_M#$$#0#DNS_EVENT_PROCESSING | 
+[6052/0002] | MSG | 10:43:49.399 | IMS DPL/High | [qpDns.c 471] ProcessDnsResult - Posting callbacks to applications for xcap.ims.mnc874.mcc405.pub.3gppnetwork.org fo | 
+
+[0051/0001] | MSG | 10:43:49.399 | IMS/Medium | [qpDns.c 305] ProcessDnsResult - ds_errno 0 NumOfRecords 1 |
+
+========================
+最终认定为网络问题，后续未复现。
+//Seems this is nwk issue at that particular time. From the logs, it is clearly observed that there is no DNS response from nwk. 
+//No DNS response seen for any of the DNS query requests. 
+Failure: 
+[6052/0002] | MSG | 08:15:06.455 | IMS DPL/High | [qpDns.c 660] qpDplHostResolveByName: name = xcap.ims.mnc874.mcc405.pub.3gppnetwork.org | 
+[0051/0002] | MSG | 08:15:06.456 | IMS/High | [qpDns.c 805] qpDplHostResolveByName: Creating a new dns session! | 
+[0051/0001] | MSG | 08:15:06.462 | IMS/Medium | [qpDns.c 305] ProcessDnsResult - ds_errno 0 NumOfRecords 1 | 
+[6052/0002] | MSG | 08:15:06.462 | IMS DPL/High | [qpDns.c 471] ProcessDnsResult - Posting callbacks to applications for xcap.ims.mnc874.mcc405.pub.3gppnetwork.org fo | 
+[0051/0001] | MSG | 08:15:06.462 | IMS/Medium | [QimfHttp.cpp 486] HttpConnection::InitializeNetConnProfile: m_HttpConnProfile 8b3047c0 available | 
+[0051/0001] | MSG | 08:15:06.462 | IMS/Medium | [QimfHttp.cpp 1105] HttpConnection::Send| PDP - ID 5 | 
+[0051/0001] | MSG | 08:15:06.462 | IMS/Medium | [qpdplnet.c 1494] qpDplNetOpen: Net Open called for Connection Profile PDPID=5, Profile=8b3047c0 |

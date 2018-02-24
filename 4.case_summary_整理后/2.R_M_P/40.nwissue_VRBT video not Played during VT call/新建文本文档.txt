@@ -1,0 +1,25 @@
+预期：VTcall前预置了一段广告视频，每次通话前都会自动播放。
+
+从log中可以看到在会话建立过程(Session Progress)中网络端并没有实际的视频数据包发给终端，属于网络问题。
+
+Log analysis: 
+============= 
+//Outgoing INVITE 
+[0x156E] | LOG | 2016/09/29 07:07:35.467 | IMS SIP Message | Length: 1817 | 
+Direction = UE_TO_NETWORK 
+Sip Message = INVITE tel:7021095911;phone-context=ims.mnc874.mcc405.3gppnetwork.org SIP/2.0 
+
+//Incoming 183 
+[0x156E] | LOG | 2016/09/29 07:07:35.467 | IMS SIP Message | Length: 1817 | 
+Direction = NETWORK_TO_UE 
+Sip Message = SIP/2.0 183 Session Progress 
+CSeq:600624258 INVITE 
+
+//Inocming 200 OK 
+[0x156E] | LOG | 2016/09/29 07:07:38.726 | IMS SIP Message | Length: 1058 | 
+Direction = NETWORK_TO_UE 
+Sip Message = SIP/2.0 200 OK 
+CSeq:600624258 INVITE 
+
+//First Incoming Video RTP with seq number 0 
+[6056/0002] | MSG | 2016/09/29 07:07:39.560 | IMS RTP/High | [[IMS_AP] qvp_rtp_packet.c 673] | 1034 |unpack seq = 0 rX ROC = 0 rx ssrc=457147989 |

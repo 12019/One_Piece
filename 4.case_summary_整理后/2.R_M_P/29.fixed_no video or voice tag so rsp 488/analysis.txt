@@ -1,0 +1,56 @@
+//UE is registered with SMS service only as no audio & Video feature tags are configured so 488 response is sent.
+MSG [00051/01] IMS/Medium 09:02:35.311 qimfif_cbs.cpp 06783 Qimfif_RegisterServiceMonitor::ProcessRequest() : DOMAIN SMS & VOIP.
+MSG [00051/01] IMS/Medium 09:02:35.311 qimfif_cbs.cpp 06804 Qimfif_RegisterServiceMonitor::ProcessRequest() : SendRequestToRegManager
+MSG [00051/01] IMS/Medium 09:02:35.311 qimfif_cbs.cpp 04943 Qimfif_RegisterServiceMonitor::SendRequestToRegManager() : Start.
+MSG [00051/01] IMS/Medium 09:02:35.311 qimfif_cbs.cpp 05012 Qimfif_RegisterServiceMonitor::SendRequestToRegManager() : No feature tag for add service.
+
+MSG [00051/02] IMS/High 09:02:38.771 qipcallh.c 25007 Not registered for voice or video services, sending 488
+MSG [00051/02] IMS/High 09:02:38.771 qipcallh.c 25418 qipcallh_process_incoming_call: Cannot accept call, response code = 488
+
+重新确认加载正确的MBN或配置后可解决。
+
+=======
+//消息主体没有SIP-header
+MSG     [00051/02]  IMS/High              09:02:38.768     qpRequestProcessor.cpp  01063  RequestProcessor::NotifyRequest | MessageBody has no SIP Headers
+
+//NV被disable，这个不确定是否有影响
+MSG     [00051/02]  IMS/High              09:02:38.770         qimfif_cbs.cpp  01296  qimfif_cbs_set_srvcc_related_information nv value 0
+MSG     [00051/02]  IMS/High              09:02:38.770         qimfif_cbs.cpp  01314  qimfif_cbs_set_srvcc_related_information: midcall srvcc nv disabled
+MSG     [00051/02]  IMS/High              09:02:38.770         qimfif_cbs.cpp  01333  qimfif_cbs_set_srvcc_related_information: alerting srvcc nv disabled
+MSG     [00051/02]  IMS/High              09:02:38.770         qimfif_cbs.cpp  01351  qimfif_cbs_set_srvcc_related_information:pre-alerting nv disabled
+
+//dialog-id为空，即使分配了临时的也没有被识别出来
+MSG     [00051/02]  IMS/High              09:02:38.770        qipcalldialog.c  01753  qipcalldialog_get_dialogptr | dialog_id is empty
+MSG     [00051/02]  IMS/High              09:02:38.770              qipcall.c  01415  qipcall_process_messages_from_qimfif: Rxed SIP Incoming Call
+MSG     [06067/02]  IMS QIPCALL/High      09:02:38.771        qipcalldialog.c  01757  [qipcalldialog_get_dialogptr] [dialog_id: TEMP_INCOMING_DIALOG]
+MSG     [00051/03]  IMS/Error             09:02:38.771        qipcalldialog.c  01770  qipcalldialog_get_dialogptr | dialog_id not found
+
+//UE认为IMS服务没有成功建立，不接受当前打入的IMS-call，同时发送488 code响应
+MSG     [00051/02]  IMS/High              09:02:38.771             qipcallh.c  25007  Not registered for voice or video services, sending 488
+MSG     [00051/02]  IMS/High              09:02:38.771             qipcallh.c  25418  qipcallh_process_incoming_call: Cannot accept call, response code = 488
+MSG     [00051/02]  IMS/High              09:02:38.771     qpSipRequestHandler.cpp  00973  SipRequestHandler::initResponse: 488
+MSG     [06054/02]  IMS SIP/High          09:02:38.779      sipConnection.cpp  03843  EVENT_SIP_RESPONSE_SEND: SIP/2.0 488 Not Acceptable Here
+v: SIP/2.0/UDP [2405:200:310:1581::15]:5067;
+
+//why there is no SIP-header in message-body?
+MSG     [00051/02]  IMS/High              09:02:38.768     qpRequestProcessor.cpp  01063  RequestProcessor::NotifyRequest | MessageBody has no SIP Headers
+
+//it seems that some NV are disabled, are they related to this issue?
+MSG     [00051/02]  IMS/High              09:02:38.770         qimfif_cbs.cpp  01296  qimfif_cbs_set_srvcc_related_information nv value 0
+MSG     [00051/02]  IMS/High              09:02:38.770         qimfif_cbs.cpp  01314  qimfif_cbs_set_srvcc_related_information: midcall srvcc nv disabled
+MSG     [00051/02]  IMS/High              09:02:38.770         qimfif_cbs.cpp  01333  qimfif_cbs_set_srvcc_related_information: alerting srvcc nv disabled
+MSG     [00051/02]  IMS/High              09:02:38.770         qimfif_cbs.cpp  01351  qimfif_cbs_set_srvcc_related_information:pre-alerting nv disabled
+
+//dialog-id is empty/not found even if after got a "TEMP_INCOMING_DIALOG"
+MSG     [00051/02]  IMS/High              09:02:38.770        qipcalldialog.c  01753  qipcalldialog_get_dialogptr | dialog_id is empty
+MSG     [00051/02]  IMS/High              09:02:38.770              qipcall.c  01415  qipcall_process_messages_from_qimfif: Rxed SIP Incoming Call
+MSG     [06067/02]  IMS QIPCALL/High      09:02:38.771        qipcalldialog.c  01757  [qipcalldialog_get_dialogptr] [dialog_id: TEMP_INCOMING_DIALOG]
+MSG     [00051/03]  IMS/Error             09:02:38.771        qipcalldialog.c  01770  qipcalldialog_get_dialogptr | dialog_id not found
+
+//488 responce code was transmit to MO side
+MSG     [00051/02]  IMS/High              09:02:38.771             qipcallh.c  25007  Not registered for voice or video services, sending 488
+MSG     [00051/02]  IMS/High              09:02:38.771             qipcallh.c  25418  qipcallh_process_incoming_call: Cannot accept call, response code = 488
+MSG     [00051/02]  IMS/High              09:02:38.771     qpSipRequestHandler.cpp  00973  SipRequestHandler::initResponse: 488
+MSG     [06054/02]  IMS SIP/High          09:02:38.779      sipConnection.cpp  03843  EVENT_SIP_RESPONSE_SEND: SIP/2.0 488 Not Acceptable Here
+v: SIP/2.0/UDP [2405:200:310:1581::15]:5067;
+

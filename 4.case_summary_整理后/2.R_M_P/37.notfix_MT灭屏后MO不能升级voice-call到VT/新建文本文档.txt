@@ -1,0 +1,34 @@
+10-06 14:46:20.993 D/ImsSenderRxr( 3843): responseModifyCall  1  3 2  callSubState 0 videoPauseState2 mediaId8 Local Ability  Peer Ability  7[SUB0]   <<<最后一位是7代表是modify 发生了错误。
+10-06 14:46:20.993 D/ImsSenderRxr( 3843): [UNSL]< UNSOL_MODIFY_CALL  1  3 2  callSubState 0 videoPauseState2 mediaId8 Local Ability  Peer Ability  7[SUB0]
+10-06 14:46:20.993 D/ImsServiceSub( 3843): Message received: what = 13
+10-06 14:46:20.994 D/ImsServiceSub( 3843): handleCallModifyRequest( 1  3 2  callSubState 0 videoPauseState2 mediaId8 Local Ability  Peer Ability  7)
+10-06 14:46:20.994 D/VideoCall_ImsCallModification( 3843): onReceivedCallModify( 1  3 2  callSubState 0 videoPauseState2 mediaId8 Local Ability  Peer Ability  7)
+10-06 14:46:20.994 D/VideoCall_ImsCallModification( 3843): clearPendingModify imsconn=org.codeaurora.ims.ImsCallModification@34767579             <<<<<这里讲modify给清除掉了。
+
+从代码中看 0代表成功，7代表被取消了。所以现在问题是要么是modem侧取消了，要么是电话对端取消了。从现象来看由于我们这边是黑屏之后才会出现这种情况。
+public class CallModify {
+    // Keep this error codes in sync with error codes defined in
+    // imsIF.proto file.
+    public static int E_SUCCESS = 0;
+    public static int E_CANCELLED = 7;
+    public static int E_UNUSED = 16;
+	
+=====
+
+被叫灭屏的情况下，主叫发起VT upgrade失败，从目前adb-log里看是正常的情况。
+
+//屏幕暗掉 
+10-06 14:46:00.225 D/RILJ ( 3843): [4191]> SCREEN_STATE: false [SUB0] 
+10-06 14:46:00.227 D/RILJ ( 3843): [4192]> SCREEN_STATE: false [SUB1] 
+
+//vt升级的指示信息成功接收 
+10-06 14:46:05.654 D/ImsSenderRxr( 3843): [UNSL]< UNSOL_MODIFY_CALL 1 3 2 callSubState 0 videoPauseState2 mediaId-1 Local Ability Peer Ability 0[SUB0] 
+10-06 14:46:05.655 D/VideoCall_ImsCallModification( 3843): onReceivedCallModify( 1 3 2 callSubState 0 videoPauseState2 mediaId-1 Local Ability Peer Ability 0) 
+
+//屏幕重新亮起
+10-06 14:46:05.825 D/RILJ ( 3843): [4193]> SCREEN_STATE: true [SUB0] 
+10-06 14:46:05.826 D/RILJ ( 3843): [4194]> SCREEN_STATE: true [SUB1] 
+
+//这里request被cancel的原因应该是被叫用户长时间没有做出接收vt升级的响应，因此就清除了之前发送的modify request.
+10-06 14:46:20.993 D/ImsSenderRxr( 3843): [UNSL]< UNSOL_MODIFY_CALL 1 3 2 callSubState 0 videoPauseState2 mediaId8 Local Ability Peer Ability 7[SUB0] 
+10-06 14:46:20.994 D/VideoCall_ImsCallModification( 3843): clearPendingModify imsconn=org.codeaurora.ims.ImsCallModification@34767579 
