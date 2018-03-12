@@ -1,0 +1,111 @@
+正常来说，当终端已经没有数据交互，但RF依旧保持激活状态，长时间无法自动休眠，会造成额外的功耗。针对此情况提出了fast-dormancy(快速休眠)的功能，当终端满足一定条件(例如，无数据交互超过一定时间，假设一个定时器T1)后即可快速休眠。
+
+【1】T1的值一般取决于
+Screen state: ON: x secs / OFF: y secs
+Tethering state(RNDIS SoftAp only): ON(a cellular interface): z secs, irrespective of the screen state
+
+【2】T1(inactivity timer)配置：
+//delay_time while issuing dormancy_request
+dpm_fd_delay_time_timer_value:0
+
+dpm_fd_screen_on_idle_timer_value: x
+//Amount of time for which the interface must be monitored for idleness when the screen is on
+
+dpm_fd_screen_off_idle_timer_value: y
+//Amount of time for which which the interface must be monitored for idleness when the screen is off
+
+dpm_fd_tethering_idle_timer_value: z
+//Amount of time for which which the interface must be monitored for idleness when tethering is on
+
+dpm_fd_enable_network_mask: mask
+//Bitmask stating for which networks FD is to be enabled
+
+[Recommended configuration example]
+dpm_fd_screen_on_idle_timer_value:15
+dpm_fd_screen_off_idle_timer_value:3
+dpm_fd_tethering_on_idle_timer_value:15
+dpm_fd_enable_networks_mask:0x28708
+#Default 101000011100001000 (see next slide for the bit selection of each network type)
+
+【3】配置文件路径
+The default recommended configuration file is present in one for the following:
+ /system/etc/dpm/fdmgr/fd.conf (targets not supporting TCM)
+ /system/etc/dpm/dpm.conf (targets supporting TCM)
+
+(!!!)OEMs can push their own configuration file to one for the following:
+ /data/dpm/fdmgr/fd.conf (targets not supporting TCM)
+ /data/dpm/dpm.conf (targets supporting TCM)
+
+Configuration parser logic is as follows:
+If a valid file is present in /data, it is used. Otherwise, the parser falls back to the file in /system. If for some reason the file in that location becomes corrupted and parsing fails, the parser uses the software hardcoded recommended values.
+
+【4】network mode mask
+#FastDormancy and TCM can be configured for a network type
+#NETWORK_TYPE_UNKNOWN = 0
+#NETWORK_TYPE_GPRS = 1
+#NETWORK_TYPE_EDGE = 2
+#NETWORK_TYPE_UMTS = 3
+#NETWORK_TYPE_CDMA = 4
+#NETWORK_TYPE_EVDO_0 = 5
+#NETWORK_TYPE_EVDO_A = 6
+#NETWORK_TYPE_1xRTT = 7
+#NETWORK_TYPE_HSDPA = 8
+#NETWORK_TYPE_HSUPA = 9
+#NETWORK_TYPE_HSPA = 10
+#NETWORK_TYPE_IDEN = 11
+#NETWORK_TYPE_EVDO_B = 12
+#NETWORK_TYPE_LTE = 13
+#NETWORK_TYPE_EHRPD = 14
+#NETWORK_TYPE_HSPAP = 15
+#NETWORK_TYPE_GSM = 16
+#NETWORK_TYPE_TD_SCDMA = 17
+#NETWORK_TYPE_IWLAN = 18
+#NETWORK_TYPE_LTE_CA = 19;
+
+【5】FD enable/disable
+To enable FD:
+1. adb root
+2. adb wait-for-device
+3. adb remount
+4. adb setprop persist.dpm.feature 1
+This enables only the FD feature by changing the currently enabled features. If you do not want to disturb an already enabled DPM feature: read the property value, set the LSB bit to 1 on top of it, and then set the property.To update the config, do one of the following:
+ adb push fd.conf /data/dpm/fdmgr/fd.conf
+ abd push dpm.conf /data/dpm/dpm.conf
+5. adb reboot
+
+To disable FD:
+1. adb root
+2. adb wait-for-device
+3. adb setprop persist.dpm.feature 0
+This disables all the DPM features. If you do not want to disturb any other DPM feature and only disable FD: read the property first, set the LSB bit to 0 on top of it, and then set the property.
+
+===================
+【DPM】
+Features
+Fast Dormancy (FD)
+Connection Tracking (CT) – For modem filtering and modem FD
+Network Socket Request Manager (NSRM)
+TCP Connection Manager (TCM)
+
+Persist property to control enable or disable
+persist.dpm.feature (32-bit mask)
+FD enable or disable – 0x00000001 (first bit 2 – LSB)
+CT enable or disable – 0x00000002 (second bit)
+NSRM enable or disable – 0x00000004 (third bit)
+TCM enable or disable – 0x00000008 (fourth bit)
+
+=================
+【modem FD--CT】
+Note that the CT feature works in conjunction with the following modem support: Modem performs filtering and drops packets for mismatched filters if the apps processor side installs a filter. Modem triggers FD if the network has established an RAB for data transfer and there no activity for 6 sec (configurable in EFS with TIMER_VALUE_1 below).
+Enable or disable modem FD and filtering, and configure FD timer values To enable or disable the FD feature, push the fast_dormancy.txt to EFS.
+ EFS file location: /ds/qmi/fast_dormancy.txt
+ Write 1 to enable
+ Write 0 to disable
+If the fast_dormancy.txt file is not present in EFS, FD is enabled by default.
+
+To configure FD timer values in milliseconds, push the fast_dormancy_config.txt to EFS.
+ EFS file location: /nv/item_files/modem/data/3gpp/fast_dormancy_config.txt
+ TIMER_VALUE_1:xxxx; // FD timer with no packet drops
+ TIMER_VALUE_2:yyyy; // FD timer when packets dropped
+TimerRange must be less than 10 sec && (TIMER_VALUE_1 > TIMER_VALUE_2).
+If the fast_dormancy_config.txt file is not present, default values of 6000 and 1000 are used, respectively.

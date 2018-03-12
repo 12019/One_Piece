@@ -1,0 +1,61 @@
+"why IMS registration sends IMS PDN connectivity request twice", ims承载出现了一次断连然后正常发起重连接，第一次断连具体原因当前不清楚。
+
+//一开始的PDN连接失败是因为PLMN是用的老的PLMN，之后选择在HPLMN上驻网后，第一个默认承载的建立OK，第二个ims的承载建立OK
+2016 Oct  7  08:41:57.659  [51]  0xB0EC  LTE NAS EMM Plain OTA Incoming Message  --  Attach reject Msg
+msg_type = 68 (0x44) (Attach reject)
+  emm_attach_reject
+    cause_value = 11 (0xb) (PLMN not allowed)
+2016 Oct  7  08:42:01.322  [73]  0xB0E2  LTE NAS ESM Plain OTA Incoming Message  --  Activate default EPS bearer context request Msg
+msg_type = 193 (0xc1) (Activate default EPS bearer context request)
+      acc_pt_name_val[1] = 106 (0x6a) (j)
+      acc_pt_name_val[2] = 105 (0x69) (i)
+      acc_pt_name_val[3] = 111 (0x6f) (o)
+      acc_pt_name_val[4] = 110 (0x6e) (n)
+      acc_pt_name_val[5] = 101 (0x65) (e)
+      acc_pt_name_val[6] = 116 (0x74) (t)
+2016 Oct  7  08:42:05.534  [63]  0xB0E3  LTE NAS ESM Plain OTA Outgoing Message  --  PDN connectivity request Msg
+msg_type = 208 (0xd0) (PDN connectivity request)
+      acc_pt_name_val[1] = 105 (0x69) (i)
+      acc_pt_name_val[2] = 109 (0x6d) (m)
+      acc_pt_name_val[3] = 115 (0x73) (s)
+
+//RSM发起PDP deactive过程，IMS承载断开，PDN断连，断连原因esm_cause = 36 (0x24) (Regular deactivation)
+MSG   [06055/02] IMS REGMGR/High                          08:42:08.577    qpRegistrationMoni  00256  RegisterServiceMonitor::ProcessIPCMessage: PDP-Deactivating
+MSG   [05025/02] DS 3GPP/High                             08:42:08.577    ds_3gpp_roaming_hdlr.c  01447  UE is not roaming. No need to process change to disallowed flag
+EVENT [01969]    EVENT_LTE_ESM_OTA_OUTGOING_MSG           08:42:08.584    Message ID = PDN DISCONNECT REQUEST
+MSG   [05005/02] DS 3G Manager/High                       08:42:08.579           ds3gmshif.c  01594  PDN disconnect request for cm_call_id 1, subs_id:0
+MSG   [00005/01] Call Manager/Medium                      08:42:08.580           cmltecall.c  01933  =CM= SEND: NAS_ESM_PDN_DISCONNECT_REQ
+MSG   [03011/02/03/04]NAS SM/High/Error/Fatal                  08:42:08.580             esmtask.c  00517  DS: SUB 1 ESM: Message from the CM received
+MSG   [03011/01/02/03/04]NAS SM/Medium/High/Error/Fatal           08:42:08.580           esm_utils.c  03266  DS: SUB 1 ESM: ENTER esm_build_and_send_pdn_disconnect_req\n
+MSG   [03011/02/03/04]NAS SM/High/Error/Fatal                  08:42:08.580           esm_utils.c  03290  DS: SUB 1 ESM: ESM sent NAS_EMM_DATA_REQ carrying PDN_DISCONNECT_REQUEST
+MSG   [03007/01/02/03/04]NAS MM/Medium/High/Error/Fatal           08:42:08.583    msg_lib_encode_esm.c  00151  DS: SUB 1 Encoding PDN DISCONENCT REQUEST\n
+
+
+2016 Oct  7  08:42:08.682  [7A]  0xB0E2  LTE NAS ESM Plain OTA Incoming Message  --  Deactivate EPS bearer context request Msg
+msg_type = 205 (0xcd) (Deactivate EPS bearer context request)
+      esm_cause = 36 (0x24) (Regular deactivation)
+
+MSG   [09507/04] LTE PDCPUL/Fatal                         08:42:08.682    lte_pdcp_ul_protocol.c  04327  Request to deactivate RB which is not activated RB Cfg Index = 2, cfg_act = 5, cfg_reason = 1
+MSG   [03007/02/03/04]NAS MM/High/Error/Fatal                  08:42:08.682    msg_lib_decode_esm.c  02588  DS: SUB 1 DEACTIVATE EPS BEARER REQUEST is decoded successfully\n
+
+//IMS承载的第二次发起PDN连接，连接成功，后续IMS注册成功
+2016 Oct  7  08:42:08.953  [B9]  0xB0E3  LTE NAS ESM Plain OTA Outgoing Message  --  PDN connectivity request Msg
+msg_type = 208 (0xd0) (PDN connectivity request)
+    req_type = 1 (0x1) (initial request)
+      acc_pt_name_val[1] = 105 (0x69) (i)
+      acc_pt_name_val[2] = 109 (0x6d) (m)
+      acc_pt_name_val[3] = 115 (0x73) (s)
+
+2016 Oct  7  08:42:13.245  [36]  0x1832  IMS Registration
+Registration Type = Initial
+Result = OK
+
+=================
+This Issue is due to missing CR: 884420 not present on this CPL. 
+Due to this, we are posting handling back-to-back bad wifi indication, thereby resulting in posting additional PDP deactivation.
+
+MSG [00051/03]IMS/Error 08:42:05.482 PDPRATHandlerVoLTE.cpp 00862 CPDPRATHandlerVoLTE::WifiMeasurementCallBack received callback 
+MSG [00051/01]IMS/Medium 08:42:05.482 PDPRATHandlerVoLTE.cpp 00905 CPDPRATHandlerVoLTE::HandleWifiMeasurement HO Not possible, register on LTE if available 
+MSG [00051/03]IMS/Error 08:42:05.483 PDPRATHandlerVoLTE.cpp 00862 CPDPRATHandlerVoLTE::WifiMeasurementCallBack received callback 
+MSG [00051/01]IMS/Medium 08:42:05.483 PDPRATHandlerVoLTE.cpp 00905 CPDPRATHandlerVoLTE::HandleWifiMeasurement HO Not possible, register on LTE if available 
+MSG [00051/01]IMS/Medium 08:42:05.484 RegisterManager.cpp 01841 CRegisterManager::update: Bad WIfi Fall back to LTE, RegType[0]

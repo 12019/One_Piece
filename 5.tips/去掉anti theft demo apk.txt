@@ -1,0 +1,5 @@
+去掉anti theft demo：
+/vendor/qcom/proprietary/common/config/device-vendor.mk里
+172#	AntiTheftDemo
+173#	ANTITHEFTDEMO := AntiTheftDemo
+把以上内容注释掉

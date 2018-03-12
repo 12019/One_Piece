@@ -1,0 +1,27 @@
+此问题本地验证未出现，属于特定网络单机问题，当前看log中在切换飞行模式后，RM返回没有找到可以注册IMS的sim卡。
+
+//qmi的log显示卡1正常识别，但是uim初始化提示卡的“IMSI无效”，此时还未进入飞行模式，modem online
+[00063/01] MSG        11:05:07.413     Android QCRIL/Medium                       qcril_qmi_nas.c  16983  RIL[0][cmd-22(216)] qcril_qmi_nas_get_plmn_name_from_modem: short eons derived from spn Jio 4G
+[00021/03] MSG        11:05:06.162     User Identity Module/Error              mmgsdi_card_init.c  01580  Invalid IMSI (imsi len: 0x9)
+[00063/02] MSG        11:20:58.571     Android QCRIL/High                         qcril_qmi_nas.c  17490  RIL[0][cmd-23(216)] qcril_qmi_nas_log_radio_power_process_state: telephony LPM | ril NONE | card UP | modem ONLINE
+[00063/02] MSG        11:20:58.571     Android QCRIL/High                         qcril_qmi_nas.c  17490  RIL[0][cmd-23(216)] qcril_qmi_nas_log_radio_power_process_state: telephony LPM | ril INITIALIZED | card UP | modem ONLINE
+[00063/02] MSG        11:20:58.576     Android QCRIL/High                         qcril_qmi_nas.c  17490  RIL[0][cmd-23(216)] qcril_qmi_nas_log_radio_power_process_state: telephony LPM | ril SETTING_OP_MODE | card UP | modem ONLINE
+
+//切换到飞行模式，PDP相关服务关闭后重新检查能否在LPM下支持，同时上报状态
+[00051/01] MSG        11:20:57.348     IMS/Medium                              RegisterManager.cpp  01085  Power Down received
+[00051/01] MSG        11:20:57.350     IMS/Medium                              RegisterManager.cpp  03779  RegisterManager ===== Stop
+[00051/01] MSG        11:20:57.350     IMS/Medium                              RegisterManager.cpp  03388  CRegisterManager::CheckUserPrefAndEnableRegInLPM: registration is required in LPM mode
+[00051/01] MSG        11:20:57.350     IMS/Medium                              RegisterManager.cpp  03405  CRegisterManager::CheckUserPrefAndEnableRegInLPM: Timer started with interval 6000
+[00051/01] MSG        11:20:57.351     IMS/Medium                              RegisterManager.cpp  01810  CRegisterManager::update, RegType[0]
+[00051/01] MSG        11:20:57.351     IMS/Medium                              RegisterManager.cpp  02061  CRegisterManager::update: PDP Stop for RegType[0]
+[00051/01] MSG        11:20:57.351     IMS/Medium                              RegisterManager.cpp  02076  CRegisterManager::update: bDeInitPDP 1 for RegType[0]
+[00051/01] MSG        11:20:57.356     IMS/Medium                              RegisterManager.cpp  02106  CRegisterManager::update: m_bPowerDown pending for RegType[0]
+[00063/02] MSG        11:20:59.048     Android QCRIL/High                         qcril_qmi_nas.c  06832  RIL[0][event] qcril_qmi_nas_dms_op_state_update_handler: reported op mode LPM
+[00063/02] MSG        11:20:59.048     Android QCRIL/High                         qcril_qmi_nas.c  06846  RIL[0][event] qcril_qmi_nas_dms_op_state_update_handler: expected op mode LPM
+
+//重新关掉飞行模式，提示IMSI依然无效，uim识别卡有问题
+[00051/01] MSG        11:21:01.424     IMS/Medium                              RegisterManager.cpp  01125  Power Up received
+[00051/03] MSG        11:21:01.470     IMS/Error                               PDPRATHandlerVoLTE.cpp  00597  CPDPRATHandlerVoLTE::Reset No IMSI Value, should not go to here!!
+[00051/01] MSG        11:21:02.833     IMS/Medium                              RegisterManager.cpp  03238  RegisterManager ===== Making RM active
+[00051/01] MSG        11:21:02.833     IMS/Medium                              RegisterManager.cpp  03530  CRegisterManager::CheckRegistrationNeeded - ISIM not ok
+[00021/03] MSG        11:21:02.908     User Identity Module/Error              mmgsdi_card_init.c  01580  Invalid IMSI (imsi len: 0x9)

@@ -1,0 +1,140 @@
+2016-5-17：
+MO-1：发送cancel请求是因为专用无线承载断掉了，这个应该是网络原因引起
+MO-2：呼叫收到来自网络端的480失败响应，在建立IMS连接时，invite消息发送过后，Sip Message = SIP/2.0 480 Temporarily not available 
+----------------
+2016-5-18：
+参考
+NV-71572 = qipcall_qos_reservation_timer = 2000 msec
+NV-65957去使能qipcall_precondition_enable这个宏（0-disable，1-enable）
+
+NV-67281设置UE ringing阶段的等待时间(单位是毫秒),超过此等待时间则主叫UE会取消这次VoLTE呼叫建立.
+NV-69673: IMS operation mode
+NV-67280: 响铃定时器,单位毫秒,超时则终止通话,如果拒绝则回返"486 buys here"的提示给MO端
+
+【1】From MO_1/2 logs: 
+//MO-DUT sending the "CANCEL" request due to Dedicated bearer loss，there is no causal relationship between "cancel" and "180 ringing".
+//At the beginning，the "Deactivate EPS bearer context request" msg is received from network-side，it indicates UE to send the "cancel" msg，after that，the UE will got "480" response from network-side that means SIP-service become "Temporarily not available"，so it's suggest to check whether the network-side has some problem.
+LOG        [0x156E]         IMS Message                            10:42:16.548  Length: 0891
+LOG        [0xB0E2]         LTE NAS ESM Plain OTA Incoming Message 10:42:17.435  Length: 0008
+MSG        [00051/01]       IMS/Medium                             10:42:17.515     qipcalldialog.c  03544  qipcalldialog_handle_qos_unavailable_for_voip_call: Audio bearer lost call end reason 580
+MSG        [00051/02]       IMS/High                               10:42:17.515     qipcalldialog.c  03556  qipcalldialog_handle_qos_unavailable_for_voip_call: Audio bearer unavailable. Ending the call, send CANCEL
+LOG        [0x156E]         IMS Message                            10:42:17.532  Length: 0541
+MSG        [06054/02]       IMS SIP/High                           10:42:17.537   sipConnection.cpp  03661  
+Sent SIP Message:
+CANCEL tel:7675962528;phone-context=ims.mnc874.mcc405.3gppnetwork.org SIP/2.0
+f: <
+MSG        [06054/02]       IMS SIP/High                           10:42:17.537   sipConnection.cpp  03700  EVENT_SIP_REQUEST_SEND: CANCEL tel:7675962528;phone-context=ims.mnc874.mcc405.3gppnetwork.org SIP/2.0
+MSG        [06054/03]       IMS SIP/Error                          10:42:17.543      qimfsiplib.cpp  01541  QimfSipActiveObj::ProcessMessage | Received Message is SIP/2.0 480 Temporarily not available
+l:0
+f:<
+MSG        [06054/02]       IMS SIP/High                           10:42:17.543      qimfsiplib.cpp  04724  
+
+EVENT_SIP_MESSAGE_RECV:
+SIP/2.0 480 Temporarily not available
+l:0
+f:<sip:+917021086490@ims.mnc874
+
+【2】From MT1/2 logs: 
+//During the call-flow，the MT-device will CSFB to 2/3G network，after call setup，the RB setup failed with unknow reasons，finally into LAU process and back to LTE network.
+OTA LOG    [0xB0C0/008/006/006] DL_DCCH/RRCConnectionRelease                           10:42:10.556  Radio Bearer ID: 1, Freq: 1368, SFN: 959
+OTA LOG    [0x412F/000/001]     CCCH UL/RRC Connection Request                         10:42:11.295  Radio Bearer ID: 0, Length: 17
+OTA LOG    [0x713A/006/039]     RR/Paging Response                                     10:42:11.544  Direction: MS To Network, Length: 13
+OTA LOG    [0x713A/003/005]     CC/Setup                                               10:42:12.018  Direction: Network To MS, Length: 16
+OTA LOG    [0x713A/003/008]     CC/Call Confirmed                                      10:42:12.024  Direction: MS To Network, Length: 24
+OTA LOG    [0x713A/003/001]     CC/Alerting                                            10:42:13.257  Direction: MS To Network, Length: 2
+OTA LOG    [0x412F/003/014]     DCCH DL/Radio Bearer Setup                             10:42:14.218  Radio Bearer ID: 2, Length: 88
+OTA LOG    [0x412F/001/016]     DCCH UL/Radio Bearer Setup Failure                     10:42:14.221  Radio Bearer ID: 2, Length: 7
+OTA LOG    [0x412F/003/015]     DCCH DL/RRC Connection Release                         10:42:14.458  Radio Bearer ID: 1, Length: 7
+OTA LOG    [0x412F/001/017]     DCCH UL/RRC Connection Release Complete                10:42:14.459  Radio Bearer ID: 1, Length: 6
+OTA LOG    [0x412F/009/067]     Extension SIB (BCCH-BCH DL)/System Information Type 19 10:42:15.231  Radio Bearer ID: 40, Length: 9
+OTA LOG    [0x713A/005/008]     MM/Location Updating Request                           10:42:16.227  Direction: MS To Network, Length: 20
+OTA LOG    [0x713A/005/002]     MM/Location Updating Accept                            10:42:17.577  Direction: Network To MS, Length: 7
+
+【3】conclusion：
+1.From MO-logs，it seems all the disconnect indications are from network-side, this is could be the network issue instead of UE itself.
+----------------------------
+2016-5-19：
+MT端接收到LTE网络的寻呼，在释放LTE的RRC链接时重定向CSFB到2/3G网络，进入实际通话建立的过程。
+
+//一开始出现的"RAB未建立"原因可能是"RAB对应的逻辑信道无法建立"引起的，正常情况UE会根据网络端发向UE端RAB-id建立相应的逻辑信道，但是这里UE提示RAB-id是无效值,说明还没有传入网络端指定的相应的rab-id。
+MSG        [03005/03]           WCDMA RRC/Error                  10:42:12.644           rrcdata.c  02731  RAB 5 not established
+MSG        [05027/03]           DS WCDMA/Error                   10:42:12.644  ds_wcdma_bearer_context.c  02433  rab_id: 5 not found, emptying WM for bearer_inst: 0
+MSG        [05025/03]           DS 3GPP/Error                    10:42:12.645  ds_3gpp_dyn_mem_hdlr.c  00301  Error in freeing UMTS bearer
+MSG        [05026/03]           DS LTE/Error                     10:42:12.645  ds_eps_bearer_context.c  07689  EPS bearer context is not valid
+
+//UE内部发出停止网络接口的相关信息
+LOG        [0x138F]             QMI Link 1 TX PDU                10:42:12.652  Length: 0020
+MsgType = QMI_WDS_STOP_NETWORK_INTERFACE_MSG
+LOG        [0x138F]             QMI Link 1 TX PDU                10:42:12.652  Length: 0034
+ConnectionStatus = QMI_WDS_PKT_DATA_DISCONNECTED
+Call End Resons = WDS_CER_CLIENT_END
+call_end_reason_type = WDS_VCER_TYPE_CALL_MANAGER_DEFINED
+
+//到这里系统第一次发起RAB初始化建立，看起来像是成功了？
+OTA LOG    [0x412F/003/014]     DCCH DL/Radio Bearer Setup                      10:42:12.870  Radio Bearer ID: 2, Length: 133
+OTA LOG    [0x412F/001/015]     DCCH UL/Radio Bearer Setup Complete             10:42:13.252  Radio Bearer ID: 2, Length: 10
+
+//提示当前这个rab-id是1，现在一共有3个RB被映射到这个rab上
+MSG        [03005/03]           WCDMA RRC/Error                      10:42:13.252            rrclog.c  00348  RAB_ID 1, num_rbs 3
+MSG        [03005/03]           WCDMA RRC/Error                      10:42:13.252            rrclog.c  00352  Total num rbs 3
+
+//呼叫类型为被叫，呼叫类型为0，对应普通的voice call，UE模式为普通通话模式
+LOG        [0x12C1]             Call Manager Call Event              10:42:13.261  Length: 0366
+ Call State = 2 (CM_CALL_STATE_INCOM)
+ Call Type = 0 (CM_CALL_TYPE_VOICE)
+ ue_mode=SYS_UE_MODE_NORMAL
+
+//源码未开放，不清楚原因
+MSG        [03001/03]           WCDMA L1/Error                       10:42:13.260        dltrchmeas.c  02109  End of call spike? -245
+MSG        [03001/03]           WCDMA L1/Error                       10:42:13.260  drxofflineprocmgr.c  03415  SSMGR:Unfrz status query when not operational, ss_st:3
+MSG        [03001/03]           WCDMA L1/Error                       10:42:13.310  drxofflineprocmgr.c  03415  SSMGR:Unfrz status query when not operational, ss_st:3
+
+//依旧在提示rab-id为1，最下面那几条信息同样是源码未开放的部分，不清楚原因
+MSG        [03005/03]           WCDMA RRC/Error                                 10:42:13.621            rrclog.c  00348  RAB_ID 1, num_rbs 3
+MSG        [03001/03]           WCDMA L1/Error                                  10:42:13.630  drxofflineprocmgr.c  03415  SSMGR:Unfrz status query when not operational, ss_st:3
+MSG        [03001/04]           WCDMA L1/Fatal                                  10:42:13.649          mdspsync.c  02342  MDSP_UL_DPCCH_CFG:En 1 SFmt 0 TFCI 4
+MSG        [03001/04]           WCDMA L1/Fatal                                  10:42:13.649          mdspsync.c  02345  MDSP_UL_DPCCH_CFG:En 1 inSyncDetect 0
+MSG        [03001/04]           WCDMA L1/Fatal                                  10:42:13.729          mdspsync.c  02342  MDSP_UL_DPCCH_CFG:En 1 SFmt 0 TFCI 0
+MSG        [03001/04]           WCDMA L1/Fatal                                  10:42:13.729          mdspsync.c  02345  MDSP_UL_DPCCH_CFG:En 1 inSyncDetect 0
+
+//UE发向网络端的RB初始化建立失败，然后直接进入了rrc连接释放
+OTA LOG    [0x412F/003/014]     DCCH DL/Radio Bearer Setup                      10:42:14.218  Radio Bearer ID: 2, Length: 88
+OTA LOG    [0x412F/001/016]     DCCH UL/Radio Bearer Setup Failure              10:42:14.221  Radio Bearer ID: 2, Length: 7
+ failureCause invalidConfiguration : NULL
+OTA LOG    [0x412F/003/015]     DCCH DL/RRC Connection Release                  10:42:14.458  Radio Bearer ID: 1, Length: 7
+OTA LOG    [0x412F/001/017]     DCCH UL/RRC Connection Release Complete         10:42:14.459  Radio Bearer ID: 1, Length: 6
+
+//最后出现RLL无线链路失败的错误提示
+LOG        [0x134F]             Call Manager Serving System Event               10:42:14.593  Length: 2607
+LOG        [0x138F]             QMI Link 1 TX PDU                               10:42:14.593  Length: 0074
+ MsgType = QMI_VOICE_ALL_CALL_STATUS_IND
+            CallState = END
+            CallType = VOICE
+            Direction = MT: Mobile Terminated Call
+            CallEndReason = CALL_END_CAUSE_RADIO_LINK_LOST
+
+无线承载的建立一开始是成功的，至少空口log看起来是接收了，但是后面都失败掉导致RRC连接释放，随后发生RLL错误通话断掉.
+
+-------
+2016-5-20：
+判断为NW端问题
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

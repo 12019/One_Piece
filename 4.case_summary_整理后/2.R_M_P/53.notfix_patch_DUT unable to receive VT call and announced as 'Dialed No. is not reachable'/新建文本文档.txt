@@ -1,0 +1,17 @@
+2016-4-15-15:00:
+不能拨打视频电话,主叫之后,被叫不会接通而是直接变成短信提醒有一个呼叫未接,主叫这边是语音提示"Dialed No. is not reachable",正常的呼叫时正常的.
+出现"VT通话的呼叫不可及前转",一般不可及发生在被叫手机关机或不在服务区的情况，或是被叫侧做了CF的设置。
+
+2016-4-15-19:30
+qxdm-log分析:
+[1]MO这边一直在重复RRC连接重配置
+
+[2]MT那边是的确接收到了寻呼消息,上行发起了RRC连接建立并且连接建立成功,接着上报了UE的信息给网络端"rach-ReportReq-r9 TRUE,rlf-ReportReq-r9 FALSE",头文件的ROHC失败了? 上行直传消息发起TAU请求,连续3次出现的RRC连接重配置消息中出现"a3-Offset 6,reportOnLeave FALSE",出现一些没有找对应规范的NAS消息 '27DDEE041C2CAD851609'H  '27080B53EF36D9027B'H --> MessageID = EQ PLMN CHANGE IND ??
+
+测试过程触发了GSM重选,重选类型是"reselectType = RR_SLOW_SNR_RESELECTION_TRIGGER"，这里开始LAU过程/第二次LAU，后续RRC连接释放,原因未知。
+
+2016-4-18-10:21
+2145历史分支上有一个解决类似问题的CR-906255
+
+2016-4-18-16:32:
+有一个8976平台的CR 993190,解决VT通话失败变成普通通话的案例，解决方法是在IMS任务在modem启动时重启RTP-daemon，涉及源文件:dpl/platform/src/qpdpl.c, rtp/core/src/qvp_rtp_dpl.cpp

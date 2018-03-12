@@ -1,0 +1,78 @@
+eMBMS log capture:
+1.把debug_params.xml拷贝到以下地址重抓adblog:
+/sdcard/data/com.jio.qcmiddleware/files/debug/debug_params.xml 
+
+adb logcat -v time -b main -b radio -b system > adb.txt
+
+2.利用参考dmc重抓qxdmlog
+
+3.提供设备这个目录下面的所有文件
+/data/data/com.jio.qcmiddleware/files/msc/ 
+
+4.PCAP文件
+adb shell tcpdump -i any -s 0 -w /data/pcap.pcap
+-----------------
+LINUX/android/vendor/qcom/proprietary/qrdplus/Extension/apps/eMBMS/
+lte boardcast的apk在这个路径下
+
+==================================
+error qxdm-log：
+MSG        [05025/03] DS 3GPP/Error            12:06:17.269     ds_3gpp_embms_hdlr.c  01959  DS 3GPP eMBMS IOCTL: Invalid IOCTL on eMBMS Iface: 62
+MSG        [05025/03] DS 3GPP/Error            12:06:17.269     ds_3gpp_embms_hdlr.c  01959  DS 3GPP eMBMS IOCTL: Invalid IOCTL on eMBMS Iface: 227
+MSG        [00065/03] Linux Data/Error         12:06:20.105                  qdi.c  00806  process QMI_WDS_SRVC_EMBMS_TMGI_LIST_IND_MSG
+MSG        [00065/03] Linux Data/Error         12:06:20.105                  qdi.c  00735  process QMI_WDS_SRVC_EMBMS_TMGI_ACTIVATE_IND_MSG
+MSG        [00065/03] Linux Data/Error         12:06:20.106                  qdi.c  00806  process QMI_WDS_SRVC_EMBMS_TMGI_LIST_IND_MSG
+MSG        [00065/03] Linux Data/Error         12:06:21.090                  qdi.c  00756  process QMI_WDS_SRVC_EMBMS_TMGI_DEACTIVATE_IND_MSG
+MSG        [00065/03] Linux Data/Error         12:06:21.090                  qdi.c  00806  process QMI_WDS_SRVC_EMBMS_TMGI_LIST_IND_MSG
+MSG        [00065/03] Linux Data/Error         12:06:21.141                  qdi.c  00735  process QMI_WDS_SRVC_EMBMS_TMGI_ACTIVATE_IND_MSG
+MSG        [00065/03] Linux Data/Error         12:06:21.141                  qdi.c  00806  process QMI_WDS_SRVC_EMBMS_TMGI_LIST_IND_MSG
+MSG        [00065/03] Linux Data/Error         12:06:22.083                  qdi.c  00756  process QMI_WDS_SRVC_EMBMS_TMGI_DEACTIVATE_IND_MSG
+MSG        [00065/03] Linux Data/Error         12:06:22.083                  qdi.c  00806  process QMI_WDS_SRVC_EMBMS_TMGI_LIST_IND_MSG
+MSG        [05025/03] DS 3GPP/Error            12:06:51.930     ds_3gpp_embms_hdlr.c  01959  DS 3GPP eMBMS IOCTL: Invalid IOCTL on eMBMS Iface: 62
+MSG        [05025/03] DS 3GPP/Error            12:06:51.931     ds_3gpp_embms_hdlr.c  01959  DS 3GPP eMBMS IOCTL: Invalid IOCTL on eMBMS Iface: 227
+MSG        [00065/03] Linux Data/Error         12:06:54.622                  qdi.c  00806  process QMI_WDS_SRVC_EMBMS_TMGI_LIST_IND_MSG
+MSG        [00065/03] Linux Data/Error         12:06:54.622                  qdi.c  00735  process QMI_WDS_SRVC_EMBMS_TMGI_ACTIVATE_IND_MSG
+MSG        [00065/03] Linux Data/Error         12:06:54.622                  qdi.c  00806  process QMI_WDS_SRVC_EMBMS_TMGI_LIST_IND_MSG
+MSG        [00065/03] Linux Data/Error         12:06:55.742                  qdi.c  00756  process QMI_WDS_SRVC_EMBMS_TMGI_DEACTIVATE_IND_MSG
+MSG        [00065/03] Linux Data/Error         12:06:55.742                  qdi.c  00806  process QMI_WDS_SRVC_EMBMS_TMGI_LIST_IND_MSG
+==================================
+
+2016-4-28：log抓取时发现debug_param.xml文件拷贝失败。
+04-28 11:42:28.039 19173 19201 D LTE_CONFIG: copyDebugFile: debug file copy failed: srcDebugFile = /storage/emulated/0/Android/data/com.jio.qcmiddleware/files/debug/debug_params.xml does not exist 
+
+新的错误log：
+MSG        [00063/03]     Android QCRIL/Error    06:12:28.730        qcril_qmi_nas.c  35372  RIL[0][oem_socket0] qcril_qmi_nas_embms_deliver_log_packet: log_alloc failed for packet id 5985
+MSG        [00063/03]     Android QCRIL/Error    06:12:28.748        qcril_qmi_nas.c  35372  RIL[0][oem_socket0] qcril_qmi_nas_embms_deliver_log_packet: log_alloc failed for packet id 5980
+MSG        [00063/03]     Android QCRIL/Error    06:12:28.751        qcril_qmi_nas.c  35372  RIL[0][oem_socket0] qcril_qmi_nas_embms_deliver_log_packet: log_alloc failed for packet id 5980
+MSG        [05025/03]     DS 3GPP/Error          06:12:29.149     ds_3gpp_embms_hdlr.c  01959  DS 3GPP eMBMS IOCTL: Invalid IOCTL on eMBMS Iface: 62
+MSG        [05025/03]     DS 3GPP/Error          06:12:29.151     ds_3gpp_embms_hdlr.c  01959  DS 3GPP eMBMS IOCTL: Invalid IOCTL on eMBMS Iface: 227
+MSG        [00065/03]     Linux Data/Error       06:12:29.508         qmi_wds_srvc.c  02647  qmi_wds_srvc_process_embms_sai_list_ind: unknown type = 12
+MSG        [00065/03]     Linux Data/Error       06:12:29.508                  qdi.c  00831  process QMI_WDS_SRVC_EMBMS_SAI_LIST_IND_MSG         
+
+处理io请求的函数，embms相关的io控制有些无效的，对应Iface：62,227
+==================================
+
+2016-5-4：
+文件push进去以后重启一下手机，检查一下文件还在不在指定的目录里，重启机器之后就开始抓adb-log，然后再进行场景的复现（不要复现到途中才开始抓log），命令就用这个“adb logcat -v time -b main -b radio -b system > adb.txt”，最后完成了ctrl+c终止掉。
+你完成复现过程之后，再检查一下手机里这个路径里/data/data/com.jio.qcmiddleware/files/msc/，看有没有之前push进去的那个debug_params.xml就知道有没有成功了，正常的情况复现过程中它使用这个debug文件会被拷贝到这个目录下面去。
+==================================
+
+2016-5-5:
+eMBMS的问题：
+1.试一下把以下这几个文件夹和文件改一下操作权限再复现抓一下log，和昨天一样检查adb.txt中有没有字段“debug file copy failed”出现，若没有即是正常的。
+adb shell chmod 777 /sdcard/data/com.jio.qcmiddleware/files/debug/debug_params.xml 
+
+2.试一下把之前那个debug_param.xml文件push到这个目录下，重新抓一次log，检验方法同上查看最后的adb.txt文件。
+/sdcard/Android/data/com.jio.qcmiddleware/files/debug/ 
+
+capture log：adb logcat -v time -b main -b radio -b system > adb.txt
+==================================
+
+2016-5-6：
+eMBMS-enable：*#36267#1#
+eMBMS-disable：*#36267#0#
+vowifi-enable：*#869434#1#
+vowifi-disable：*#869434#0#
+
+==================================
+问题最终判断为apk本身问题，和终端/网络无关。

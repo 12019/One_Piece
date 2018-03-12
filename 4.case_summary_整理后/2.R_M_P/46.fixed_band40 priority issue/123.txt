@@ -1,0 +1,3 @@
+band_priority_list的16进制数错误写成了10进制，修改后复测PASS.
+
+CR-1091340：band priority correct from "40 03 05(hex)" to "28 03 05(hex)"

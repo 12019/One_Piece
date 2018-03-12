@@ -1,0 +1,9 @@
+Device is not preferring IPV6 DNS query for XCAP.
+
+Root_cause：不支持ipv6类型的DNS请求xcap。
+
+XCAP：XML配置访问协议，一种应用层协议，它允许一个客户端来读，写，修改和删除应用程序配置数据存储在服务器上的XML格式文件。
+
+-----------
+2016-5-17：
+属于39平台的共性问题，当前平台不支持。

@@ -1,0 +1,25 @@
+【1】title：
+The phone doesn't display LTE and can't go to internet after register IMS
+
+【2】单机问题：刷机后插卡注册上IMS_但没有显示LTE并且无法上网_飞行模式也不行_重启后正常
+
+【3】
+2016-5-6：
+空口log显示正常接收下发的系统消息，也接入了服务小区(还重选了一次小区，小区物理id->411/106，MCC->405，MNC->874)，PSS分组数据服务结果也表明是正常在接收下行的数据。
+
+EVENT     [01606]            EVENT_LTE_RRC_STATE_CHANGE              07:27:41.719 RRC State = Idle Camped
+EVENT     [01611]            EVENT_LTE_RRC_NEW_CELL_IND              07:27:41.720 Cause = Selection, Frequency = 38800, Cell ID = 411
+MSG        [00005/01]       Call Manager/Medium              03:26:35.923              cmss.c  29414  =CM= CMSS: ss:0 srv:2 mode:9
+MSG        [00005/01]       Call Manager/Medium              03:26:35.923              cmss.c  29414  =CM= CMSS: ss:1 srv:0 mode:4
+MSG        [00005/01]       Call Manager/Medium              03:26:35.923              cmss.c  29414  =CM= CMSS: ss:2 srv:0 mode:0
+MSG        [00005/01]       Call Manager/Medium              03:26:35.923              cmss.c  29414  =CM= CMSS: ss:3 srv:0 mode:0
+MSG       [00005/01]    Call Manager/Medium                           07:27:44.271             cmss.c  11346  =CM= LTE:cmss_report_rssi(), rsrp=-84, current_rsrp=-84, rsrp_delta=1
+MSG       [00051/02]    IMS/High                                      07:27:46.511            qpDcm.c  07943    Cell-Identity : 974608, LAC : 0, TAC : 6
+MSG       [06052/02]    IMS DPL/High                                  07:27:46.511            qpDcm.c  07949    MCC : 405, MNC : 874, SectorId
+-------
+2016-5-9：
+modem侧数据连接正常，需要分析安卓上层问题。
+ref：modem_proc/mmcp/mmode/cm/src/cmss.c
+
+=======
+后续复测未复现。

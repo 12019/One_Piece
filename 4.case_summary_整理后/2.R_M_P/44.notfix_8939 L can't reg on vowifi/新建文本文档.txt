@@ -1,0 +1,61 @@
+//根据提供pcap来看server failure出现在以下几个DNS query中，这里返回了server failure
+619	129.701845	192.168.0.1	192.168.0.102	DNS	75	Standard query response, Server failure
+
+==================================
+
+//ping error引起的pre-tunnel error，导致volte到vowifi的IMS切换失败，触发backoff timer，造成10分钟之内无法注册vowifi
+MSG   [06053/02] IMS FW/High                              08:25:34.423               qpDcm.c  11845  InitiatePingService - IPString=216.58.220.4
+MSG   [00051/01] IMS/Medium                               08:25:34.425               qpDcm.c  11864  InitiatePingService - DCM_PINGSERVER_FQDN pinghandle=8b335e60
+MSG   [00051/03] IMS/Error                                08:25:34.425        qipcalliface.c  08020  qipcalliface_is_quality_param_met_for_wwan_iwlan_handover: pre tunnel procedure not complete        --> pre tunnel failed so IMS handover process failed too
+MSG   [00051/03] IMS/Error                                08:25:36.444               qpDcm.c  11559  PingStatusCB:: QPE_PING_COMPLETE/PARTIAL_FAILURE     --> ping failure
+MSG   [00051/01] IMS/Medium                               08:25:36.444        qipcalliface.c  07821   start backoff         --> backoff timer start-up
+MSG   [00051/02] IMS/High                                 08:25:36.446               qpDcm.c  11173  qpDplProcessDSSSPingStatusCallback: complete failure
+MSG   [00051/01] IMS/Medium                               08:25:36.447        qipcalliface.c  07082  qipcalliface_set_wwan_iwlan_handover_measurement_params: backoff failure override
+MSG   [00051/02] IMS/High                                 08:25:36.448        qipcalliface.c  06490  qipcalliface_get_pref_system backofftimer override
+
+//因为vowifi不可用，因此在这10分钟内手机通过volte成功注册上IMS
+2016 Oct 24  08:25:26.399  [66]  0x138F  QMI Link 1 TX PDU
+   MsgType = QMI_IMSA_REGISTRATION_STATUS_IND
+               IMS Registered = false
+               Ims Reg Status = REGISTERING
+               Registration Network = WLAN
+2016 Oct 24  08:25:27.078  [F9]  0x138F  QMI Link 1 TX PDU
+   MsgType = QMI_IMSA_REGISTRATION_STATUS_IND         -->在LTE网络上正常注册IMS
+               IMS Registered = true
+               Ims Reg Status = REGISTERED
+               Registration Network = WWAN
+LOG   [0x156E]   IMS Message                              08:25:26.423    Length: 1716
+         Direction                = UE To Network
+         Message ID               = IMS_SIP_REGISTER
+         Response Status Code     = Request
+LOG   [0x156E]   IMS Message                              08:25:27.047    Length: 0819
+         Direction                = Network To UE
+         Message ID               = IMS_SIP_REGISTER
+         Response Status Code     = OK
+
+//10分钟后再次发起IMS切换，再次失败，backoff timer再次被触发
+MSG   [06053/02] IMS FW/High                              08:35:36.596               qpDcm.c  11845  InitiatePingService - IPString=216.58.220.4
+MSG   [00051/01] IMS/Medium                               08:35:36.598               qpDcm.c  11864  InitiatePingService - DCM_PINGSERVER_FQDN pinghandle=8b335e60
+MSG   [00051/03] IMS/Error                                08:35:36.598        qipcalliface.c  08020  qipcalliface_is_quality_param_met_for_wwan_iwlan_handover: pre tunnel procedure not complete
+MSG   [00051/03] IMS/Error                                08:35:38.616               qpDcm.c  11559  PingStatusCB:: QPE_PING_COMPLETE/PARTIAL_FAILURE
+MSG   [00051/01] IMS/Medium                               08:35:38.616        qipcalliface.c  07821   start backoff
+MSG   [00051/02] IMS/High                                 08:35:38.616               qpDcm.c  11173  qpDplProcessDSSSPingStatusCallback: complete failure
+MSG   [00051/01] IMS/Medium                               08:35:38.617        qipcalliface.c  07082  qipcalliface_set_wwan_iwlan_handover_measurement_params: backoff failure override
+MSG   [00051/02] IMS/High                                 08:35:38.618        qipcalliface.c  06490  qipcalliface_get_pref_system backofftimer override
+
+=======================
+
+Multiple Epdg ip address reading is not supported in 8939 L.
+Anyways Ping will not be sent to Epdg server but to Google server.
+In logs it is sent that whenever the ip address of Google server is starting with 216.*.*.* pings are not working. Ping to all other IP address is working.
+
+//In the new logs, DNS query is done. Still Ping failed for this IP 216.58.220.164. 
+
+44	2016-11-09 07:44:07.586761	192.168.0.1	192.168.0.102	DNS	92	Standard query response 0xdc6b A www.google.com A 216.58.220.164 
+[6053/0002] | MSG | 2016/11/09 07:43:14.645 | IMS FW/High | [qpDcm.c 11845] InitiatePingService - IPString=216.58.220.164 | 
+
+[0051/0003] | MSG | 2016/11/09 07:43:16.662 | IMS/Error | [qpDcm.c 11559] PingStatusCB:: QPE_PING_COMPLETE/PARTIAL_FAILURE | 
+[0051/0003] | MSG | 2016/11/09 07:43:16.662 | IMS/Error | [qpDcm.c 11651] PingStatusCB - Current Row=0, Column=0 | 
+[0051/0003] | MSG | 2016/11/09 07:43:16.662 | IMS/Error | [qpDcm.c 11662] PingStatusCB - Current Row=1, Column=0 | 
+[0051/0003] | MSG | 2016/11/09 07:43:16.662 | IMS/Error | [qpDcm.c 11696] PingStatusCB - iFqdnListRow=1 All IP/FQDN tried but no success, Report Ping Failure | 
+[0051/0001] | MSG | 2016/11/09 07:43:16.662 | IMS/Medium | [qipcalliface.c 7821] start backoff |

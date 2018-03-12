@@ -1,0 +1,90 @@
+【1】title：
+The call break off after enter unwifi range in wificall
+
+【2】main content：
+wifi优先模式，wificall通话过程中走到没有wifi的地方通话自动中断.
+
+【3】comment：
+2016-5-10：
+检查NV-69750的vowifi偏好设置，Call_mode_preference这个字段的值不应该为3，改为2或4；
+wifi连接下，发起一个vowifi-call，离开wifi区域（不是关闭wifi功能）测试是否自动掉话。
+
+//vowifi下的建立ims任务
+MSG    [00051/02]   IMS/High                          11:30:13.110       ims_task.cpp  01586  imstask_process_cmd_q: begin
+//subsmode=2代表DSAT_SUB_STANDALONE  = 2, /* Only one Stack per Subs*/
+MSG    [05012/02]   DS AT Command Parser/High         11:30:13.110         dsatcmif.c  02643  is_main_operational: 1 is_hybr_operational: 0 Subs Mode: 2 Main sys mode 9 Hybr sys mode 0
+//进入到“检查参数的改动并执行相应的记录”的处理函数，ss_event=1表示RSSI参数有变化，asubs_id是在G/W网络模式下才会有参数，asubs_id=0表示类型是SYS_MODEM_AS_ID_1 /*< Subscription ID 1 */
+MSG    [00005/02]   Call Manager/High                 11:30:13.110            cmlog.c  01412  =CM= Entering into cmlog_ss_event_handler_msim
+MSG    [00005/02]   Call Manager/High                 11:30:13.110            cmlog.c  01413  =CM= Check : ss_event 1
+MSG    [00005/02]   Call Manager/High                 11:30:13.110            cmlog.c  01415  =CM= Check : subs_id 0
+LOG    [0x184E]     Call Manager Serving System MSIM Event 11:30:13.110 Length: 1871
+//cmss_init-->cmss_event根据event类型，对相应事件做出提醒的处理操作，传入ss事件类型和事件本身，无返回值
+
+//利用vowifi建立IMS任务
+MSG    [00051/01]   IMS/Medium                        11:29:57.351            qpdpl.c  06865  TimerCallBack - Received for RexTimer handle=c22bb808
+MSG    [00051/01]   IMS/Medium                        11:29:57.351            qpdpl.c  06895  *** TimerCallBack Timehandle -> c22bb808
+MSG    [00051/02]   IMS/High                          11:29:57.351       ims_task.cpp  01586  imstask_process_cmd_q: begin
+MSG    [00051/02]   IMS/High                          11:29:57.351 ims_task_common.cpp  00445  task_process_cmd_q: begin
+//判断qmi连接状态重要的两个log
+LOG    [0x138E]     QMI Link 1 RX PDU
+LOG		    QMI Link 1 TX PDU
+========================================
+分析部分：
+//ims的RAT优先选择是RADIO_LTE而不是vowifi，怀疑测试时并没有使能vowifi
+MSG [05006/01] DS Protocol Services/Medium 11:32:00.081 ds_mppm_rat_calc.c 00614 ds_mppm_recalc_per_PDN_pref_network: MPPM calculated pref_rat RADIO_LTE, is_lte_attach_allowed 1 for apn of apn_string jionet 
+MSG [05006/01] DS Protocol Services/Medium 11:32:00.082 ds_mppm_rat_calc.c 00614 ds_mppm_recalc_per_PDN_pref_network: MPPM calculated pref_rat RADIO_LTE, is_lte_attach_allowed 1 for apn of apn_string ims 
+
+//after that IMS task triggered the call 
+MSG [05000/01] Data Services/Medium 11:32:00.081 DSS_NetDSAPI.cpp 00588 dss_pppopen(): app_id 28 
+MSG [05000/01] Data Services/Medium 11:32:00.108 ps_iface.c 04331 Active bringing up iface 0x8004:2, state 2, curr priority 0x80000000 
+MSG [05000/01] Data Services/Medium 11:32:00.111 ps_iface.c 04331 Active bringing up iface 0x8004:3, state 2, curr priority 0x0 
+MSG [05005/02] DS 3G Manager/High 11:32:00.114 ds3gmshif.c 01737 Initiate PDN connectivity request 
+MSG [05025/02] DS 3GPP/High 11:32:00.114 ds_3gpp_auth_mgr.c 00862 ds_3gpp_auth_mgr_get_auth_type:returns auth_type: 0 apn: ims 
+LOG [0xB0E3] LTE NAS ESM Plain OTA Outgoing Message11:32:00.300 Length: 0063 
+2016 May 5 11:32:00.300 [D2] 0xB0E3 LTE NAS ESM Plain OTA Outgoing Message -- PDN connectivity request Msg 
+acc_pt_name_val[1] = 105 (0x69) (i) 
+acc_pt_name_val[2] = 109 (0x6d) (m) 
+acc_pt_name_val[3] = 115 (0x73) (s) 
+LOG [0xB0E2] LTE NAS ESM Plain OTA Incoming Message11:32:00.497 Length: 0155 
+2016 May 5 11:32:00.497 [35] 0xB0E2 LTE NAS ESM Plain OTA Incoming Message -- Activate default EPS bearer context request Msg 
+
+//call is connected in LTE mode only. 
+MSG [05005/02] DS 3G Manager/High 11:32:00.500 ds3gcmif.c 06477 Rx'ed CM_CALL_EVENT_ACT_BEARER_IND, call id: 5 
+MSG [05005/02] DS 3G Manager/High 11:32:00.503 ds3gcmif.c 07275 Rx'ed CM_CALL_RAB_REESTAB_IND_CMD 
+MSG [05005/02] DS 3G Manager/High 11:32:00.511 ds3gcmif.c 05354 Rx'ed CM_CALL_CONNECTED_CMD 
+MSG [05005/01] DS 3G Manager/Medium 11:32:00.511 ds3gcmif.c 00530 CM sez call mode is 9 
+
+======================================================
+2016-5-11：vowifi优先级设置参考
+call priority setting between the vowifi and volte，is done by using below 
+pdn_policy_db.txt file 
+
+//配置1
+PDN_APN_String:ims; 
+Override_Type:API; 
+Supported_RAT_Priority_List:WWAN, IWLAN; 
+
+from above if both LTE and WIfi is available first priority is LTE then if LTE is not available wifi will be taken care. 
+
+//配置2
+PDN_APN_String:ims; 
+Override_Type:API; 
+Supported_RAT_Priority_List:IWLAN , WWAN; 
+
+Here above first priority is Wifi then if wifi is not available LTE will be taken care. 
+========================================================
+2016-5-12：qxdm-LOG里是正常的，wifi信号断开后，并没有切换到volte的过程，而通话断开的原因感觉是上层操作或app导致的。
+
+//log显示推测是上层app或者是人为操作断开的。
+LOG [0x138E] QMI Link 1 RX PDU 11:31:59.948 Length: 0020 
+SduCtlFlags = REQ 
+MsgType = QMI_WDS_STOP_NETWORK_INTERFACE_MSG 
+
+MSG [05000/01] Data Services/Medium 11:31:59.948 ds_qmi_fw_common.c 00972 Handling (qmi_svc_hdlr_ftype) qmi_wdsi_stop_network_interface
+
+//ims的RAT优先选择是RADIO_LTE而不是vowifi，怀疑测试时并没有使能vowifi
+MSG [05006/01] DS Protocol Services/Medium 11:32:00.081 ds_mppm_rat_calc.c 00614 ds_mppm_recalc_per_PDN_pref_network: MPPM calculated pref_rat RADIO_LTE, is_lte_attach_allowed 1 for apn of apn_string jionet 
+MSG [05006/01] DS Protocol Services/Medium 11:32:00.082 ds_mppm_rat_calc.c 00614 ds_mppm_recalc_per_PDN_pref_network: MPPM calculated pref_rat RADIO_LTE, is_lte_attach_allowed 1 for apn of apn_string ims 
+
+==============================
+后续复测问题未复现。

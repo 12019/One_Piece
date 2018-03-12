@@ -1,0 +1,7 @@
+修改环境变量导致ubuntu无法正常开机 
+
+无法进入到图形登录界面
+
+重装(可以用iso文件修复)
+
+长按shift进入ubuntu的recovery模式

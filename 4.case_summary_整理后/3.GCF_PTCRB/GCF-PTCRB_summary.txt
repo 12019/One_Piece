@@ -1,0 +1,19 @@
+参考
+80-P5399-1sc //protocol&RF
+
+80-NG315-1 // STK/USIM
+80-NG315-2
+80-NG315-3
+kba-170521201554_5
+
+80-np797-1 // CTA
+
+kba-161222231835_3 //IMS SS
+kba-170320015610_1 //三方会话，qmitestpro
+kba-170425060419_2 //IMS TC_6.3&7.1
+kba-170806233857_1 // 73777 testmode
+kba-170918011547_2 //ims注册 msg header/contact_header/feature_tag
+
+====================
+
+【1】仪器耦合/传导方式均无法连接仪器驻网W&L，持续较长时间，最终RF修改校准参数解决。

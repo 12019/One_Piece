@@ -1,0 +1,13 @@
+2016-5-13：卡状态异常
+//拒绝原因=11，应该是HPLMN被加入到forbidden PLMN list中了
+OTA LOG    [0x713A/005/004]     MM/Location Updating Reject                   09:49:52.593  Direction: Network To MS, Length: 5
+        rej_cause_val = 11 (0xb)
+//PLMN的变化情况，MCC和MNC的变化如下
+
+---------
+2016-5-16：
+关联CR-972883，缺少对ISIM refresh voting的响应。
+
+Title：DS3GMMGSDI client is registering for ISIM refresh voting but there was no response for Refresh.
+Problem Description：DS is not handling WAIT_FOR_OK_TO_FCN stage during refresh and thus ISIM refresh test cases are failing.
+Change Description：Handle WAIT_FOR_OK_TO_FCN stage when ISIM refresh happens. Process new ISIM ok_to_refresh event.

@@ -1,0 +1,55 @@
+网络返回的200-OK信息中包含了emergency类型注册信息，其中定时器设置300s，为了让手机保持紧急类型的注册状态，协议规定是每经过定时器的一半时间就会重新发起一次紧急类型的注册过程，因此每150s会刷新一次这个状态，让emergency-PDN保持永远不被反注册掉。
+对于满足IR92的运营商，emergency-PDN的反注册过程应该是由网络端的PGW发出，而不是由UE端发出，因此该问题属于网络端问题。
+
+Log分析：
+Emergency registration is get refreshed after every 150 seconds when network sends 200 OK with expires value as 300. 
+So Emergency registration will never expired on DUT and also for IR92 operator, always network should do the emeregcy PDN disconnect. 
+//initial IMS 
+2016 Sep 26 06:36:39.970 [8D] 0x156E IMS SIP Message -- IMS_SIP_REGISTER/INFORMAL_RESPONSE 
+Direction = UE_TO_NETWORK 
+Message ID = IMS_SIP_REGISTER 
+Expires: 600000 
+
+//200 OK with 300 
+2016 Sep 26 06:36:40.090 [B0] 0x156E IMS SIP Message -- IMS_SIP_REGISTER/OK 
+Direction = NETWORK_TO_UE 
+Message ID = IMS_SIP_REGISTER 
+Response Code = OK (200) 
+m:<sip:405874999990738@[2405:201:fffb:232::1e3:40a5]:6901;sos>;+g.3gpp.icsi-ref="urn%3Aurn-7%3A3gpp-service.ims.icsi.mmtel";+sip.instance="<urn:gsma:imei:35609202-966758-0>";+g.3gpp.accesstype="cellular2";expires=300 
+
+//After 150 seconds refresh REGISTER sent 
+2016 Sep 26 06:39:10.850 [FD] 0x156E IMS SIP Message -- IMS_SIP_REGISTER/INFORMAL_RESPONSE 
+Direction = UE_TO_NETWORK 
+Message ID = IMS_SIP_REGISTER 
+Expires: 600000 
+
+//300 in 200 OK 
+2016 Sep 26 06:39:10.971 [0A] 0x156E IMS SIP Message -- IMS_SIP_REGISTER/OK 
+Direction = NETWORK_TO_UE 
+Message ID = IMS_SIP_REGISTER 
+Response Code = OK (200) 
+m:<sip:405874999990738@[2405:201:fffb:232::1e3:40a5]:6901;sos>;+g.3gpp.icsi-ref="urn%3Aurn-7%3A3gpp-service.ims.icsi.mmtel";+sip.instance="<urn:gsma:imei:35609202-966758-0>";+g.3gpp.accesstype="cellular2";expires=300 
+
+//again sent after 150 seconds 
+2016 Sep 26 06:41:41.019 [18] 0x156E IMS SIP Message -- IMS_SIP_REGISTER/INFORMAL_RESPONSE 
+Direction = UE_TO_NETWORK 
+Message ID = IMS_SIP_REGISTER 
+Response Code = INFORMAL_RESPONSE (0) 
+Expires: 600000 
+
+2016 Sep 26 06:41:41.128 [F1] 0x156E IMS SIP Message -- IMS_SIP_REGISTER/OK 
+Direction = NETWORK_TO_UE 
+Message ID = IMS_SIP_REGISTER 
+Response Code = OK (200) 
+m:<sip:405874999990738@[2405:201:fffb:232::1e3:40a5]:6901;sos>;+g.3gpp.icsi-ref="urn%3Aurn-7%3A3gpp-service.ims.icsi.mmtel";+sip.instance="<urn:gsma:imei:35609202-966758-0>";+g.3gpp.accesstype="cellular2";expires=300 
+
+
+协议规范的参考信息：
+Spec: 3GPP TS24.403 
+5.1.6.4 User-initiated emergency reregistration 
+- The UE shall perform user-initiated emergency reregistration as specified in subclause 5.1.1.4 if half of the time for the emergency registration has expired and the UE has emergency related ongoing dialog or if standalone transactions exist; or the user initiates an emergency call. 
+- The UE shall not perform user-initiated emergency reregistration in any other cases
+
+Spec: 3GPP TS23.401 
+5.4.4.1 PDN GW initiated bearer deactivation 
+- For an emergency PDN connection the PDN GW initiates the deactivation of all bearers of that emergency PDN connection when the PDN connection is inactive (i.e. not transferring any packets) for a configured period of time or when triggered by dynamic PCC.

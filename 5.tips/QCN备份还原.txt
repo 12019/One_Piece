@@ -1,0 +1,10 @@
+QCN备份还原
+
+1.手机打开usb调试选项
+2.adb reboot bootloader
+3.fastboot erase fsg
+  fastboot erase modemst1
+  fastboot erase modemst2
+4.fastboot reboot
+5.重新开机后，打开QFIL工具，tool --> qcn backup restore --> 选择附件的qcn文件，执行restore操作，手机还原后会自动重启
+6.手机重启开机后，请手动搜网，观察搜网是否正常

@@ -1,0 +1,56 @@
+//Why registeredclients set the service status to unavailable after RM start?
+MSG        [00051/02] IMS/High            05:52:56.888     RegisterManager.cpp  02320  update: Card read complete
+MSG        [00051/02] IMS/High            05:52:56.890     RegisterManager.cpp  03681  RegisterManager ===== Start
+MSG        [06055/02] IMS REGMGR/High     05:52:56.891     RegMonitorHandler.  00237  UpdateRegisteredClients Card available
+MSG        [00051/02] IMS/High            05:53:12.846     RegMonitorHandler.cpp  00160  UpdateRegisteredClients enter
+MSG        [06055/02] IMS REGMGR/High     05:53:12.846     RegMonitorHandler.  00237  UpdateRegisteredClients Service UnAvailable Temporary#0
+IMS_REGMANAGER_LIB_CPP_SOURCES = [
+	'${BUILDPATH}/RegMonitorHandler.cpp',
+
+//unavailable reason = 9
+MSG        [00051/02] IMS/High            05:53:12.848         qimfif_cbs.cpp  05835  Qimfif_RegisterServiceMonitor::ServiceUnAvailable() : Start. Reason = 9
+
+IMS_QIPCALL_LIB_CPP_SOURCES=[
+	'${BUILDPATH}/qimfif_cbs.cpp',
+...
+
+//If IMS disable on roaming --> 0; WWAN --> 1; voip registered status --> 0;
+MSG        [00051/01] IMS/Medium          05:53:12.852     RegisterManager.cpp  04240  CRegisterManager::IsIMSDisabledonRoaming: returning[0]
+MSG        [00051/01] IMS/Medium          05:53:13.221     RegisterManager.cpp  01659  isUEonWWAN returning 1
+MSG        [00051/02] IMS/High            05:53:16.360              qipcall.c  05695  Is VOIP registered 0,
+
+在漫游时，IMS注册是否被disable --> 0
+是否处于WWAN --> 1
+voip vowifi是否注册 --> 0
+
+//Why RAT changed from LTE to 2/3G network? bad quality of LTE-network? high frequency cell reselection?
+MSG        [00051/02] IMS/High            05:53:17.037     RegisterManager.cpp  02233  update: RAT changed to 10, RegType[0]
+MSG        [00051/02] IMS/High            05:53:17.037     RegisterManager.cpp  03842  EventChangeRat: NewRat = 10,  RegType[0]
+MSG        [00051/01] IMS/Medium          05:53:17.037     RegisterManager.cpp  03872  EventChangeRat: isGSM call Active 0
+
+网络切换到了2/3G网络上，IMS肯定此时不能注册
+
+//In LTE network, the device received too many thoes two signalings --> "RRCConnectionReconfiguration" and "RRCConnectionReestablishment" 
+OTA LOG    [0xB0C0/012/014/001]UL_CCCH/RRCConnectionReestablishmentRequest       05:53:17.240     Radio Bearer ID: 0, Freq: 38950, SFN: 0
+    physCellId 176,
+    reestablishmentCause reconfigurationFailure,
+	
+一直处于RRC连接重配置和重建的信令中，重建的理由是RRC连接重配置失败，反复失败-->反复重配置
+
+//MNC changed a lot of times in this captured log, it this a normal scene?
+MNC 00-->11-->01-->00...
+
+PCI 176-->449-->259
+PCI也多次变换-->网络不稳定?
+MNC也多次变化，电信/移动/联通MNC都有
+
+//there is no remove sim operation, but appear detach request msg when device in 2/3G network.
+OTA LOG    [0x713A/008/005]       GMM/Detach Request                                05:53:57.860     Direction: MS To Network, Length: 15
+OTA LOG    [0x713A/008/006]       GMM/Detach Accept                                 05:53:58.528     Direction: Network To MS, Length: 3
+MSG        [00051/01] IMS/Medium          05:53:57.837     RegisterManager.cpp  01272  PS Detach received
+
+在2/3G网络下出现detach的现象，卡detach之后又回到LTE网络，再次处于重配置的重建的循环中
+像是PS域鉴权失败了，auth的信息只有Request和response，没有accept和complete。
+
+
+

@@ -1,0 +1,19 @@
+This seems an issue with NW. 
+NW has sent EMM Information Request 2 times (back to back) and then before UE respond to the request, Attach reject with esm cause 53 received. 
+
+// ESM info request 
+
+2016 Nov 7 10:02:16.389 [80] 0xB0E2 LTE NAS ESM Plain OTA Incoming Message -- ESM information request Msg 
+
+// ESM info request received from NW again. 
+
+2016 Nov 7 10:02:16.390 [0E] 0xB0E2 LTE NAS ESM Plain OTA Incoming Message -- ESM information request Msg 
+
+// NAS started sending ESM Information Response but at the same time Attach Reject received with esm cause 53. 
+
+NAS SM/High/Error/Fatal 10:02:16.391 esm_utils.c 04175 DS: SUB 1 ESM: Send NAS_EMM_DATA_REQ carrying ESM_INFORMATION_RESPONSE 
+
+2016 Nov 7 10:02:16.391 [62] 0xB0EC LTE NAS EMM Plain OTA Incoming Message -- Attach reject Msg 
+pdn_connectivity_rej 
+esm_cause 
+esm_cause = 53 (0x35) (ESM information not received)

@@ -1,0 +1,72 @@
+//当前网络的RSRP较差，SNR非常差
+2016 Feb 29  06:44:16.910  [97]  0xB193  LTE ML1 Idle Serving Cell Meas Response
+Version              = 1
+Number of SubPackets = 1
+SubPacket ID         = 25
+Serving Cell Measurement Result
+   Version = 7
+   SubPacket Size = 84 bytes
+   E-ARFCN                   = 1724
+   Physical Cell ID          = 276
+   Serving Cell Index        = PCell
+   Reserved = 0
+   Current SFN               = 11
+   Cell Timing[0]            = 65548
+   Cell Timing[1]            = 65548
+   Cell Timing SFN[0]        = 11
+   Cell Timing SFN[1]        = 11
+   Inst RSRP Rx[0]           = -105.94 dBm
+   Inst RSRP Rx[1]           = -104.50 dBm
+   Inst Measured RSRP        = -104.50 dBm
+   Inst RSRQ Rx[0]           = -21.75 dB
+   Inst RSRQ Rx[1]           = -14.31 dB
+   Inst RSRQ                 = -14.31 dB
+   Inst RSSI Rx[0]           = -70.19 dBm
+   Inst RSSI Rx[1]           = -76.19 dBm
+   Residual Frequency Error  = 0
+   FTL SNR Rx[0]             = -10.00 dB
+   FTL SNR Rx[1]             = -1.10 dB
+   Inst RSSI                 = -70.19 dBm
+
+2016 Feb 29  07:14:37.223  [18]  0xB193  LTE ML1 Idle Serving Cell Meas Response
+Version              = 1
+Number of SubPackets = 1
+SubPacket ID         = 25
+Serving Cell Measurement Result
+   Version = 7
+   SubPacket Size = 84 bytes
+   E-ARFCN                   = 1724
+   Physical Cell ID          = 276
+   Serving Cell Index        = PCell
+   Reserved = 0
+   Current SFN               = 879
+   Cell Timing[0]            = 188800
+   Cell Timing[1]            = 188800
+   Cell Timing SFN[0]        = 879
+   Cell Timing SFN[1]        = 879
+   Inst RSRP Rx[0]           = -104.63 dBm
+   Inst RSRP Rx[1]           = -110.19 dBm
+   Inst Measured RSRP        = -104.63 dBm
+   Inst RSRQ Rx[0]           = -18.00 dB
+   Inst RSRQ Rx[1]           = -18.31 dB
+   Inst RSRQ                 = -18.00 dB
+   Inst RSSI Rx[0]           = -72.63 dBm
+   Inst RSSI Rx[1]           = -77.88 dBm
+   Residual Frequency Error  = 0
+   FTL SNR Rx[0]             = -5.30 dB
+   FTL SNR Rx[1]             = -9.50 dB
+   Inst RSSI                 = -72.63 dBm
+
+//LTE RACH接入失败
+MSG        [09501/01/10]LTE RRC/Medium/CEP                06:46:44.461          lte_rrc_cep.c  00902  RRC CEP: Sent Connection Est Started  indication
+MSG        [09509/01/10]LTE ML1/Medium/Manager            06:46:44.462      lte_ml1_mgr_stm.c  09583  ML1: LTE_CPHY_START_RACH_REQ rcvd
+MSG        [09509/02/16]LTE ML1/High/ULM                  06:46:44.653      lte_ml1_ulm_l1m.c  01388  ULM<-L1M: Received Start RACH req
+MSG        [09509/02/16]LTE ML1/High/ULM                  06:46:44.653      lte_ml1_ulm_stm.c  00673  ULM: PRACH MSG1 STATE ENTER
+MSG        [09509/01/09]LTE ML1/Medium/GM                 06:46:44.653       lte_ml1_gm_stm.c  01110  GM: Entering PRACH State
+MSG        [09509/00/07]LTE ML1/Low/DLM                   06:46:44.654     lte_ml1_dlm_rach.c  01186  DLM RACH STM: MSG2 STATE ENTRY
+MSG        [09509/02/16]LTE ML1/High/ULM                  06:46:44.654      lte_ml1_ulm_l1m.c  00962  ULM<-Schdlr :Received LTE_ML1_ULM_RACH_MSG12_SCHDLR_REG_IND
+MSG        [09501/02/10]LTE RRC/High/CEP                  06:46:44.661          lte_rrc_cep.c  08177  RRC CEP: T300 expired
+MSG        [09501/02/10]LTE RRC/High/CEP                  06:46:44.661          lte_rrc_cep.c  00725  RRC CEP: Sent MAC Access Abort Request
+MSG        [09509/01/10]LTE ML1/Medium/Manager            06:46:44.661      lte_ml1_mgr_stm.c  09944  ML1: LTE_CPHY_RACH_ABORT_REQ rcvd
+
+从log来看，当前网络的信号很差，并且有时也会出现直接掉网。所以建议到信号好的地方复测，或在当前环境用对比机进行测试，以便确定是网络信号差还是单机射频问题。

@@ -1,0 +1,32 @@
+﻿Precondition:
+persist.radio.custom_ecc = 1
+
+CMCC网络自带紧急号码设置是: 110,112,119,120,122,999
+RL网络自带紧急号码是: 100,101,102,108
+
+[1]无卡情况
+MSG     [00063/01]  Android QCRIL/Medium   03:12:15.590    qcril_qmi_nas.c  36324  RIL[0][event] qmi_ril_nwreg_update_current_nw_mcc_for_custom_ecc: recalculate emergency numbers
+MSG     [00063/00]  Android QCRIL/Low      03:12:15.718    qcril_qmi_nas.c  35342  RIL[0][event] qcril_qmi_nas_assess_emergency_number_list_handler: function entry
+MSG     [00063/01]  Android QCRIL/Medium   03:12:15.718    qcril_qmi_nas.c  35347  RIL[0][event] qcril_qmi_nas_assess_emergency_number_list_handler: custom emergency numbers enabled 1
+MSG     [00063/00]  Android QCRIL/Low      03:12:15.720    qcril_qmi_nas.c  35704  RIL[0][event] qcril_qmi_nas_evaluate_custom_emergency_numbers_for_card: function entry
+MSG     [00063/02]  Android QCRIL/High     03:12:15.720    qcril_qmi_nas.c  35722  RIL[0][event] qcril_qmi_nas_evaluate_custom_emergency_numbers_for_card: cur_status 16384, card_state 9
+MSG     [00063/00]  Android QCRIL/Low      03:12:15.720         qcril_db.c  01122  RIL[0][event] qcril_db_is_mcc_part_of_emergency_numbers_table: function entry
+MSG     [00063/01]  Android QCRIL/Medium   03:12:15.720         qcril_db.c  01123  RIL[0][event] qcril_db_is_mcc_part_of_emergency_numbers_table: Source 3 MCC 460 MNC null
+MSG     [00063/01]  Android QCRIL/Medium   03:12:15.720         qcril_db.c  00515  RIL[0][event] qcril_db_retrieve_emergency_num_callback: argc 1 argv[0] 110
+MSG     [00063/01]  Android QCRIL/Medium   03:12:15.720         qcril_db.c  00515  RIL[0][event] qcril_db_retrieve_emergency_num_callback: argc 1 argv[0] 112
+MSG     [00063/01]  Android QCRIL/Medium   03:12:15.720         qcril_db.c  00515  RIL[0][event] qcril_db_retrieve_emergency_num_callback: argc 1 argv[0] 119
+MSG     [00063/01]  Android QCRIL/Medium   03:12:15.720         qcril_db.c  00515  RIL[0][event] qcril_db_retrieve_emergency_num_callback: argc 1 argv[0] 120
+MSG     [00063/01]  Android QCRIL/Medium   03:12:15.720         qcril_db.c  00515  RIL[0][event] qcril_db_retrieve_emergency_num_callback: argc 1 argv[0] 122
+MSG     [00063/01]  Android QCRIL/Medium   03:12:15.720         qcril_db.c  00515  RIL[0][event] qcril_db_retrieve_emergency_num_callback: argc 1 argv[0] 999
+MSG     [00063/01]  Android QCRIL/Medium   03:12:15.720         qcril_db.c  01162  RIL[0][event] qcril_db_is_mcc_part_of_emergency_numbers_table: Emergency numbers 110,112,119,120,122,999
+MSG     [00063/00]  Android QCRIL/Low      03:12:15.720         qcril_db.c  01167  RIL[0][event] qcril_db_is_mcc_part_of_emergency_numbers_table: function exit with ret 1
+
+[2]插入单卡sim1
+MSG  [00063/00]  Android QCRIL/Low     06:22:56.856    qcril_qmi_nas.c  36278  RIL[0][event] qmi_ril_nwreg_update_current_nw_mcc_for_custom_ecc: function entry
+MSG  [00063/01]  Android QCRIL/Medium  06:22:56.856    qcril_qmi_nas.c  36292  RIL[0][event] qmi_ril_nwreg_update_current_nw_mcc_for_custom_ecc: retrieve nw mcc - 460 mnc - 00
+MSG  [00063/00]  Android QCRIL/Low     06:22:56.856    qcril_qmi_nas.c  36336  RIL[0][event] qmi_ril_nwreg_update_current_nw_mcc_for_custom_ecc: function exit
+
+[3]插入双卡情况
+
+-------
+不修改persist.radio.custom_ecc这个值，保留现状不变。

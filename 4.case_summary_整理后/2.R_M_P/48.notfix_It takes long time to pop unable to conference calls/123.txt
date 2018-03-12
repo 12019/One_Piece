@@ -1,0 +1,19 @@
+移动网络下合并电话会议失败（实际卡不支持），但是失败提示弹框很晚才出现，modem大概用10-20秒在走流程。
+
+log中46到11中间大概20多秒的时间空白，没有发出也没有接受到网络关于conference-call的信息，需要对比一下同网络下对比机的测试情况。
+[00051/03] MSG        08:33:45.825     IMS/Error                               qipcall_conf_and_transfer_call.c  00593  Get Conference Call State 0
+[00051/03] MSG        08:33:45.825     IMS/Error                               qipcall_conf_and_transfer_call.c  00564  Setting Conference Call State 1
+[00051/03] MSG        08:33:45.827     IMS/Error                               qipcall_conf_and_transfer_call.c  00593  Get Conference Call State 1
+[00051/02] MSG        08:33:45.873     IMS/High                                qipcall_conf_and_transfer_call.c  06189  qipcall_conf_and_transfer_call_process_conference_call_cmd: reINVITE in progress
+[00063/01] MSG        08:33:45.757     Android QCRIL/Medium                    qcril_qmi_ims_socket.cc  00256  RIL[1][ims_socket1] boolean qcril_qmi_ims_socket_agent::process_incoming_message(): token: 22, msg: IMS_CONFERENCE REQ(type: 1, id: 10), error: 0
+[00063/02] MSG        08:33:45.757     Android QCRIL/High                      qcril_qmi_ims_flow_control.c  00492  RIL[1][ims_socket1] qcril_qmi_ims_flow_control_event_queue: Event [QCRIL_EVT_IMS_SOCKET_REQ_CONFERENCE, d000a] data was NULL
+[00063/02] MSG        08:33:45.758     Android QCRIL/High                      qcril_qmi_ims_flow_control.c  00529  RIL[1][ims_socket1] qcril_qmi_ims_flow_control_event_queue: Queued IMS event QCRIL_EVT_IMS_SOCKET_REQ_CONFERENCE(851978)
+[00063/02] MSG        08:33:45.758     Android QCRIL/High                      qcril_qmi_ims_flow_control.c  00379  RIL[1][ims_flow_control] qcril_qmi_ims_flow_control_main: De-queued ims flow control event QCRIL_EVT_IMS_SOCKET_REQ_CONFERENCE(851978)
+[00063/01] MSG        08:33:45.758     Android QCRIL/Medium                    qcril_qmi_ims_flow_control.c  00646  RIL[1][ims_flow_control] qcril_ims_flow_control_process_request: Flow control not required for QCRIL_EVT_IMS_SOCKET_REQ_CONFERENCE(851978)
+[00063/02] MSG        08:33:45.760     Android QCRIL/High                                 qcril.c  06114  RIL[1][event] qcril_process_event: RIL <--- QCRIL_EVT_IMS_SOCKET_REQ_CONFERENCE(851978), RID 0, MID 0 --- AMSS
+[00063/03] MSG        08:33:45.760     Android QCRIL/Error                      qcril_qmi_voice.c  17607  RIL[1][event] qcril_qmi_voice_request_manage_calls_conference: .. nof voice 0, nof voip 2
+[00090/01] MSG        08:33:46.268     MMODE QMI/Medium                         qmi_voice_cm_if.c  22158  Not a conference package event
+[00051/02] MSG        08:33:46.295     IMS/High                                qipcall_conf_and_transfer_call.c  01025  qipcall_conf_and_transfer_call_set_call_id: call id = 6, conference type = 0
+[00051/02] MSG        08:33:46.949     IMS/High                                         qipcall.c  01783  qipcall_process_rtp_msg: QIPCALL_RTP_CONFIGURE_DONE
+[00051/03] MSG        08:34:11.196     IMS/Error                               qipcall_conf_and_transfer_call.c  00593  Get Conference Call State 1
+[00051/03] MSG        08:34:11.576     IMS/Error                               qipcall_conf_and_transfer_call.c  00593  Get Conference Call State 0

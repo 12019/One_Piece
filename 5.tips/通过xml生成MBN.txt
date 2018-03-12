@@ -1,0 +1,1 @@
+perl ./build_mcfgs.pl --xml --force-rebuild --source-dir=generic/EU/Elisa

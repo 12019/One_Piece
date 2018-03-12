@@ -1,0 +1,15 @@
+400MHz, 700 MHz, 810 MHz, 850 MHz, 900 MHz, 1800 MHz and 1900 MHz band
+(GSM 450, GSM 480, GSM 710, GSM 750, T-GSM 810, GSM 850, R-GSM 900, ER-GSM 900, GSM 900, DCS 1800 and PCS 1900)
+
+GSM400(GSM450/480)：450.4 - 457.6 MHz paired with 460.4 - 467.6 MHz / 478.8 - 486 MHz paired with 488.8 - 496 MHz.
+GSM850：			824 - 849 MHz / 869 - 894 MHz
+PGSM(GSM900)：		890 - 915 MHz / 935 - 960 Mhz
+EGSM(extended GSM)：880 - 915 MHz / 925 - 960 MHz (比PGSM多10M带宽)
+RGSM(railway)：		876 - 915 MHz / 921 - 960 MHz (包含PGSM，EGSM，多出来的5M是铁路专用)
+DCS1800(GSM1800)：	1710-1785 MHz / 1805-1880 MHz
+PCS1900(GSM1900)：	1850-1910 MHz / 1930-1990 MHz
+
+DCS：xxx
+PCS：Personal Communications Service
+
+900和1800是最通用的GSM频段，850和1900频段在北美使用较多，GSM400属于第一代通信系统的遗留频段，少数北欧东欧和俄罗斯可能还在使用。
