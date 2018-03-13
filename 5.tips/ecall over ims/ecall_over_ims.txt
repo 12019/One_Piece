@@ -1,0 +1,142 @@
+80-P7116-1 A
+===================================
+CM控制紧急通话在哪一个域建立，现在可以分为CS域和IMS域两种情况。
+
+NV67348 QIPCALL Related Config Items /nv/item_files/ims/qipcall_config_items
+NV67348-->emerg_call_cs_only
+0 - 允许cs+ims两种类型紧急通话(默认)
+1 - 只允许cs域紧急通话
+
+IMS/High  02:02:51.676  qipcalliface.c  05684  qipcalliface_update_run_status_to_cm() :: eRUN_STATUS_INACTIVE:emerg_call_cs_only is 1
+
+
+NV73717 Disable emergency call over VoWIFI /nv/item_files/ims/qp_ims_emerg_wifi_disable
+0 - 允许vowifi紧急通话
+1 - 不允许vowifi紧急通话(默认)
+
+IMS/High 02:46:54.653 qipcalliface.c 05426 qipcalliface_update_run_status_to_cm() :: eRUN_STATUS_ACTIVE:emerg_wifi_call_disable is 1
+
+======================================
+1.插入支持IMS的sim卡
+2.如果支持IMS e911，那么会有以下流程。
+Emergency PDN Establishment
+Emergency IMS Registration
+E911 Call Setup
+E911 Call Termination
+
+3.紧急APN建立
+LTE NAS ESM Plain OTA Outgoing Message -- PDN connectivity request Msg
+msg_type = 208 (0xd0) (PDN connectivity request)
+req_type = 4 (0x4) (emergency)
+
+紧急通话关连的IMS注册
+0x1832 IMS Registration
+Registration Type = Emergency-Registration
+Result = OK
+
+Emergency call setup
+0x1830 IMS VoLTE Session Setup
+Dialled String = urn:service:sos
+
+Emergency call termination
+0x1831 IMS VoLTE Session End
+Dialled String = urn:service:sos
+========================================
+1.不插卡的情况，要如何去判断是在IMS上还是CS上建立紧急呼叫呢？
+2.对比插卡的流程，会缺少第二步，紧急通话IMS注册的部分。
+3.如下
+Emergency PDN establishment
+LTE NAS ESM Plain OTA Outgoing Message -- PDN connectivity request Msg
+msg_type = 208 (0xd0) (PDN connectivity request)
+req_type = 4 (0x4) (emergency)
+
+Emergency call setup
+IMS/High 08:08:00.273 qimfif.cpp 04035 qimfif_send_invite: call_type = 512, Emerg_reg_status = 4
+0x1830 IMS VoLTE Session Setup
+Dialled String = urn:service:sos@anonymous.invalid
+
+Emergency call termination
+0x1831 IMS VoLTE Session End
+Dialled String = urn:service:sos@anonymous.invalid
+=======================
+【ecall category】略
+紧急通话类型部分定义在QMI VOICE消息的emer_cat中，如果qmi消息没有相关定义，可以到PBM module去看看。
+
+//qmi消息中的紧急通话类型
+QMI Link 1 RX PDU
+MsgType = QMI_VOICE_DIAL_CALL_MSG
+call_type = EMERGENCY
+emer_cat = AMBULANCE_BIT
+service_type = VOICE_DIAL_CALL_SRV_TYPE_AUTOMATIC
+
+19:34:11.687 cm.c 02964 =CM= Emerg serv categ given = 1
+19:34:11.753 /local/mnt/workspa 23392 23392|Emergency sub category urn:service:sos.ambulance
+
+//pbmlib.c中的紧急通话类型
+13:24:45.186 cm.c 02964 =CM= Emerg serv categ given = 0
+03:56:35.348 pbmlib.c 04706 Emergency number status 1 gw cat 15 1X cat 0
+//15 decimal = 0x0F = 0000 1111
+//service category bits，这里是选择的是police类型，即第1bit。
+13:24:45.233 /local/mnt/workspa 23392 23392|Emergency sub category urn:service:sos.police
+
+==============================
+【380 Alternative Service】
+以下终端可能无法检测到紧急通话：
+1.接收到380响应(for invite)
+2.The value of the path header in 200 OK (REGISTER) *should* match the value of the P-Asserted-Identity header in 380 alternative service
+  3GPP TS 24.229 section 5.1.6.8.1
+  3GPP TS 34.229 section 19.3.3.1
+3.网络不满足3gpp标准，终端可以用 NV67257-->VoIPConfigDisableChecksFor380Res置1，VoipSilentRedialEnabled置1 的规避方案，让终端不去检查380响应并且直接发起重播号。
+
+//案例1：网络端不满足标准导致通话建立失败
+IMS SIP Message -- IMS_SIP_REGISTER/OK
+Message ID = IMS_SIP_REGISTER
+Response Code = OK (200)
+Path: <sip:[fd29:cc43:7fb9:0002:020c:29ff:fe66:b4c7];lr>
+
+IMS SIP Message -- IMS_SIP_INVITE/ALTERNATIVE_SERVICE
+Contact: <urn:service:sos.ambulance>
+P-Asserted-Identity:<sip:[fd29:cc43:7fb9:2:20c:29ff:fe66:b4c7];lr>
+
+IMS/High 19:19:42.661 qimfif.cpp 12975 Alternate Handling:validate_p_asserted_id failed
+IMS/High 19:19:42.661 qipcallh.c 42518 alternate_service_event: Some thing wrong with P-ASSERTED-ID, Sending PERMANENT failure to CM
+
+//案例2：使用67257 VoipSilentRedialEnabled置1规避方案，即使path header和P-Asserted-Id匹配，通话也可以在CS域重播(slient redial)
+IMS/High 19:33:08.061 qipcallh.c 39270 Alternate Handling:Emergency Alternative call over CS
+
+//网络支持LTE紧急通话附着，但是sib2中紧急通话接入被禁止了 --> "ac-BarringForEmergency TRUE", 因此最终在cs域重播，如果这里的紧急接入是"false"，那么会优先在IMS上重播。
+LTE NAS EMM Plain OTA Incoming Message -- Attach accept Msg
+EMC_BS = 1 (0x1) (Emergency bearer services in S1 Mode supported)
+
+BCCH_DL_SCH/SystemInformation 19:26:00.468 Radio Bearer ID: 0, Freq: 348,
+SFN: 512
+value BCCH-DL-SCH-Message ::=
+{
+message c1 : systemInformation :
+{
+criticalExtensions systemInformation-r8 :
+{
+sib-TypeAndInfo
+{
+sib2 :
+{
+ac-BarringInfo
+{
+ac-BarringForEmergency TRUE
+
+IMS/High 19:33:08.061 qipcallh.c 39270 Alternate Handling:Emergency Alternative call over CS
+
+==================================================
+【E911 Call Setup Timer】
+如果在一定时间内( 67348-->E911_Call_Timer 单位ms)，IMS紧急通话没有建立成功，终端会自动发送sip:cancel中断，选择CS域重新发起紧急通话。
+
+1.E911 call is routed to IMS
+IMS/High 22:02:52.829 qipcallh.c 14077 Handling emergency Call Origination
+
+2.The e911 call timer expires 20 seconds after the E911 call is originated, and CANCEL is sent
+IMS/High 22:03:12.527 qipcallh.c 03612 emergency call timer expired(St:11) release call id 3
+IMS SIP/High 22:03:12.541 sipConnection.cpp 03792 EVENT_SIP_REQUEST_SEND: CANCEL urn:service:sos SIP/2.0
+
+3.Since e911 call failed over IMS, the UE performs silent redial for e911 over CS domain
+0xB0ED LTE NAS EMM Plain OTA Outgoing Message -- Extended service request Msg
+service_type = 2 (0x2) (mobile originating CS fallback emergency call)

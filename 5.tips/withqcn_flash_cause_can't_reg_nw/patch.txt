@@ -1,0 +1,84 @@
+注释掉simlock.c中fuse部分的判断，并且让逻辑可以走到重新创建对应efs目录/safe和配置文件的地方 --> simlock_create_dir_and_default_config_file()
+
+/*===========================================================================
+FUNCTION SIMLOCK_INIT
+
+DESCRIPTION
+  This is the init function expected to be called during the power-up. If
+  config file is not already present, it will create the file.
+
+DEPENDENCIES
+  NONE
+
+LIMITATIONS
+  NONE
+
+RETURN VALUE
+  simlock_result_enum_type
+
+SIDE EFFECTS
+  NONE
+===========================================================================*/
+simlock_result_enum_type simlock_init
+(
+  void
+)
+{
+  simlock_result_enum_type simlock_status = SIMLOCK_SUCCESS;
+
+  /* Check if the /safe dir exists in EFS */
+  simlock_status = simlock_config_check_dir(SIMLOCK_DIR_SAFE);
+  if(simlock_status != SIMLOCK_SUCCESS)
+  {
+    SIMLOCK_MSG_ERR_1("simlock: safe dir check failed, status: 0x%x",
+                       simlock_status);
+    return simlock_status;
+  }
+
+  /* indicates the "/safe" dirs presence */
+  simlock_init_status.simlock_safe_dir_present = TRUE;
+
+  /* Check if the config file already exists */
+  simlock_status = simlock_config_check_config_file();
+  if(simlock_status == SIMLOCK_SUCCESS)
+  {
+    SIMLOCK_MSG_MED_0("config file is present");
+
+    /* indicates config file is present */
+    simlock_init_status.simlock_config_file_present = TRUE;
+  }
+  else
+  {
+    /* Config files are not present. At this point we should not
+       allow creation of configuration dir and files if the
+       SimLock fuse is in blown state. Note that the SimLock fuse
+       is blown by SimLock once the lock is enabled successfully */
+/*注释这一部分*/
+    if(simlock_fuse_is_fuse_blown())
+    {
+      SIMLOCK_MSG_ERR_0("Device is SimLock locked");
+      return SIMLOCK_GENERIC_ERROR;
+    }
+/*注释这一部分*/
+
+    simlock_status = simlock_create_dir_and_default_config_file();
+    if(simlock_status != SIMLOCK_SUCCESS)
+    {
+      return SIMLOCK_GENERIC_ERROR;
+    }
+  }
+
+#ifdef FEATURE_SIMLOCK_RSU
+  simlock_time_init();
+
+  simlock_temp_unlock_init();
+#endif /* FEATURE_SIMLOCK_RSU */
+
+#if defined(FEATURE_SIMLOCK_RSU) || defined(FEATURE_SIMLOCK_QC_REMOTE_LOCK)
+  /* read the pbkey file from EFS and store it in the
+     SFS. We ignore the return status here */
+  (void)simlock_rsu_key_read_and_store_pubkey_file();
+#endif /* FEATURE_SIMLOCK_RSU || FEATURE_SIMLOCK_QC_REMOTE_LOCK */
+
+  return SIMLOCK_SUCCESS;
+} /* simlock_init */

@@ -1,0 +1,18 @@
+--- a/modem_proc/uim/gstk/src/gstk_term_profile.c
++++ b/modem_proc/uim/gstk/src/gstk_term_profile.c
+@@ -1390,7 +1390,14 @@
+           uim_cmd_ptr->terminal_profile.num_bytes = 30;
+           break;
+       }
+-
++/* Begin: sync TP to PICS_31.124 */
++      /* Item70: Language notification set to NO*/
++      gstk_curr_inst_ptr->gstk_terminal_profile_cache[8] = (gstk_curr_inst_ptr->gstk_terminal_profile_cache[8] & 0xDF);
++      /* Item163: HTML browser supported set to NO*/
++      gstk_curr_inst_ptr->gstk_terminal_profile_cache[20] = (gstk_curr_inst_ptr->gstk_terminal_profile_cache[20] & 0xFB);
++      /* Item173: Toolkit-initiated GBA set to NO*/
++      gstk_curr_inst_ptr->gstk_terminal_profile_cache[21] = (gstk_curr_inst_ptr->gstk_terminal_profile_cache[21] & 0xEF);
++/* End:   sync TP to PICS_31.124 */
+       (void)memscpy(uim_cmd_ptr->terminal_profile.data,
+              sizeof(uim_cmd_ptr->terminal_profile.data),
+              gstk_curr_inst_ptr->gstk_terminal_profile_cache,
