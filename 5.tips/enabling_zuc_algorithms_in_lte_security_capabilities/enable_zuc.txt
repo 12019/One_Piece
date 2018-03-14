@@ -1,0 +1,7 @@
+因为部分网络无法接入支持zuc的终端，因此zuc在某些平台默认关闭。
+
+1.MSM8960/MDM9x15平台需要检查FEATURE_LTE_ZUC_INTEGRITY and FEATURE_LTE_ZUC_CIPHER这两个宏，MSM8974/MDM9x25平台硬件默认支持，无宏控制。
+2.CR538563
+3.EFS：lte_nas_ue_sec_capability
+
+log中检查“EIA3、EEA3”两个bit

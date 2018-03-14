@@ -1,0 +1,15 @@
+/init.qcom.usb.rc
+
+原USB接口：getprop sys.usb.config
+使能ATcmd接口(diag接口)设置：setprop  sys.usb.config diag,serial_tty,serial_smd,adb
+
+==================
+
+【1】参考命令
+adb root
+adb shell setprop sys.usb.config diag,serial_smd,rmnet_qti_bam,adb
+
+【2】按照以上命令设置终端以后，右键"我的电脑"-->"设备管理器"中可以看到"调制解调器"端口：
+
+右键调制解调器中的"Qualcomm...9091 #13" 选择"属性"，即可看到对应的AT端口为com118。
+ 

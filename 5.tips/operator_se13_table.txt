@@ -1,0 +1,3 @@
+/modem_proc/uim/mmgsdi/src/mmgsdi_se13_table.h
+
+根据MCC-MNC来定义的一个SPN表格，GSMA SE13表格。

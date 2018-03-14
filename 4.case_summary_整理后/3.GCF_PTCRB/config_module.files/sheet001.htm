@@ -1,0 +1,897 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=gb2312">
+<meta name=ProgId content=Excel.Sheet>
+<meta name=Generator content="Microsoft Excel 12">
+<link id=Main-File rel=Main-File href="../config_module.htm">
+<link rel=File-List href=filelist.xml>
+<link rel=Stylesheet href=stylesheet.css>
+<style>
+<!--table
+	{mso-displayed-decimal-separator:"\.";
+	mso-displayed-thousand-separator:"\,";}
+@page
+	{margin:.75in .7in .75in .7in;
+	mso-header-margin:.3in;
+	mso-footer-margin:.3in;}
+ruby
+	{ruby-align:left;}
+rt
+	{color:windowtext;
+	font-size:9.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:宋体;
+	mso-generic-font-family:auto;
+	mso-font-charset:134;
+	mso-char-type:none;
+	display:none;}
+-->
+</style>
+<![if !supportTabStrip]><script language="JavaScript">
+<!--
+function fnUpdateTabs()
+ {
+  if (parent.window.g_iIEVer>=4) {
+   if (parent.document.readyState=="complete"
+    && parent.frames['frTabs'].document.readyState=="complete")
+   parent.fnSetActiveSheet(0);
+  else
+   window.setTimeout("fnUpdateTabs();",150);
+ }
+}
+
+if (window.name!="frSheet")
+ window.location.replace("../config_module.htm");
+else
+ fnUpdateTabs();
+//-->
+</script>
+<![endif]>
+</head>
+
+<body link="#8DC765" vlink="#AA8A14">
+
+<table border=0 cellpadding=0 cellspacing=0 width=2113 style='border-collapse:
+ collapse;table-layout:fixed;width:1586pt'>
+ <col width=237 style='mso-width-source:userset;mso-width-alt:8667;width:178pt'>
+ <col width=64 span=3 style='width:48pt'>
+ <col width=242 style='mso-width-source:userset;mso-width-alt:8850;width:182pt'>
+ <col width=64 span=2 style='width:48pt'>
+ <col width=166 style='mso-width-source:userset;mso-width-alt:6070;width:125pt'>
+ <col width=413 style='mso-width-source:userset;mso-width-alt:15104;width:310pt'>
+ <col width=287 style='mso-width-source:userset;mso-width-alt:10496;width:215pt'>
+ <col width=64 span=7 style='width:48pt'>
+ <tr height=26 style='mso-height-source:userset;height:20.1pt'>
+  <td height=26 class=xl61951 width=237 style='height:20.1pt;width:178pt'>Disable
+  CM Call Type</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>5280</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>int</td>
+  <td class=xl61953 align=right width=64 style='border-left:none;width:48pt'>8</td>
+  <td class=xl61954 width=242 style='border-left:none;width:182pt'>disable_cm_call_type</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>2</td>
+  <td class=xl61953 width=64 style='border-left:none;width:48pt'>0x19</td>
+  <td class=xl61955 width=166 style='border-left:none;width:125pt'>【GCF】<br>
+    0 -- Answering incoming call will be successful if it is of type
+  VOICE<br>
+    1 -- Answering with this call is only successful if the incoming call is of
+  type CS DATA, Voice is disabled<br>
+    2 -- CS Voice supported but not CS Data</td>
+  <td class=xl61956 width=413 style='width:310pt'>当PC_AddInfo_DataSvc或PC_AddInfo_96Data为true时，协议测试要求disable
+  CSD，因此bitmask建议设置为0x2</td>
+  <td class=xl61956 width=287 style='width:215pt'>0<br>
+    -----<br>
+    /modem_proc/mmcp/nas/mm/src/gmmutils.c</td>
+  <td width=64 style='width:48pt'></td>
+  <td width=64 style='width:48pt'></td>
+  <td width=64 style='width:48pt'></td>
+  <td width=64 style='width:48pt'></td>
+  <td width=64 style='width:48pt'></td>
+  <td width=64 style='width:48pt'></td>
+  <td width=64 style='width:48pt'></td>
+ </tr>
+ <tr height=26 style='mso-height-source:userset;height:20.1pt'>
+  <td height=26 class=xl61951 width=237 style='height:20.1pt;width:178pt'>Toolkit
+  CS PS Parallel</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>5770</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>int</td>
+  <td class=xl61953 align=right width=64 style='border-left:none;width:48pt'>1</td>
+  <td class=xl61954 width=242 style='border-left:none;width:182pt'>toolkit_cs_ps_parallel</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>0</td>
+  <td class=xl61953 width=64 style='border-left:none;width:48pt'>0x19</td>
+  <td class=xl61955 width=166 style='border-left:none;width:125pt'>【GCF】<br>
+    NV 5770= Simultanous BIP and call Should default to 0 in case not, re-write
+  it to 0</td>
+  <td colspan=2 class=xl61956 style='mso-ignore:colspan'></td>
+  <td colspan=7 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=26 style='mso-height-source:userset;height:20.1pt'>
+  <td height=26 class=xl61951 width=237 style='height:20.1pt;width:178pt'>Ipv6
+  Enabled</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>1896</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>int</td>
+  <td class=xl61953 align=right width=64 style='border-left:none;width:48pt'>1</td>
+  <td class=xl61954 width=242 style='border-left:none;width:182pt'>ipv6_enabled</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>1</td>
+  <td class=xl61953 width=64 style='border-left:none;width:48pt'>0x19</td>
+  <td class=xl61955 width=166 style='border-left:none;width:125pt'>【GCF】<br>
+    Ipv6 settings</td>
+  <td class=xl61956 width=413 style='width:310pt'>pics项pc_IPv6为true时当前NV应该使能</td>
+  <td class=xl61956 width=287 style='width:215pt'>0<br>
+    -----<br>
+    /modem_proc/datamodem/interface/utils/src/ps_utils_cs.c</td>
+  <td colspan=7 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=26 style='mso-height-source:userset;height:20.1pt'>
+  <td height=26 class=xl61951 width=237 style='height:20.1pt;width:178pt'>GEA
+  algorithm</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>4432</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>int</td>
+  <td class=xl61953 align=right width=64 style='border-left:none;width:48pt'>1</td>
+  <td class=xl61954 width=242 style='border-left:none;width:182pt'>gprs_gea_algorithms_supported</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>7</td>
+  <td class=xl61953 width=64 style='border-left:none;width:48pt'>0x19</td>
+  <td class=xl61955 width=166 style='border-left:none;width:125pt'>【GCF】<br>
+    This NV item configures the GEA<br>
+    security algorithms</td>
+  <td class=xl61956 width=413 style='width:310pt'>Lab test建议使能GEA 1/2/3 bit</td>
+  <td class=xl61956 width=287 style='width:215pt'>#ifdef
+  FEATURE_NAS_REL12_SPEC_CHANGE<br>
+    /* Spec 24.008, Spec CR 2352 -Prohibited usage of GEA1 by SA3<br>
+    <span style='mso-spacerun:yes'>&nbsp;</span>* For Rel-11, text and a note
+  is added pointing to the SA3 recommendation not to use GEA1.<br>
+    <span style='mso-spacerun:yes'>&nbsp;</span>* For Rel-12, text introduced
+  to indicate that GEA1 is prohibited.<br>
+    <span style='mso-spacerun:yes'>&nbsp;</span>*/<br>
+    #define GPRS_GEA_SUPPORT<span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>0x6<br>
+    #else<br>
+    #define GPRS_GEA_SUPPORT<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>0x7<span style='mso-spacerun:yes'>&nbsp; </span>/* By default GEA1
+  &amp; GEA2 support is enabled */<br>
+    #endif</td>
+  <td colspan=7 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=26 style='mso-height-source:userset;height:20.1pt'>
+  <td height=26 class=xl61951 width=237 style='height:20.1pt;width:178pt'>GSM
+  A5 Algorithms Supported</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>553</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>int</td>
+  <td class=xl61953 align=right width=64 style='border-left:none;width:48pt'>1</td>
+  <td class=xl61954 width=242 style='border-left:none;width:182pt'>gsm_a5_algorithms_supported</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>5</td>
+  <td class=xl61953 width=64 style='border-left:none;width:48pt'>0x19</td>
+  <td class=xl61955 width=166 style='border-left:none;width:125pt'>【GCF】default
+  value 0x5</td>
+  <td class=xl61956 width=413 style='width:310pt'>GSM A5加密算法使能<br>
+    协议测试建议配置使能A5_1和A5_3：<br>
+    NV553=5 When UE supports GSM<br>
+    NV553=0 When UE doesn't support GSM</td>
+  <td class=xl61956 width=287 style='width:215pt'>默认值：0x5<br>
+    hw_classmark-&gt;A5_1_supported = TRUE;<br>
+    hw_classmark-&gt;A5_2_supported = FALSE; /* weak algorithm, not supported
+  */<br>
+    hw_classmark-&gt;A5_3_supported = TRUE;<br>
+    hw_classmark-&gt;A5_4_supported = FALSE;<br>
+    hw_classmark-&gt;A5_5_supported = FALSE;<br>
+    hw_classmark-&gt;A5_6_supported = FALSE;<br>
+    hw_classmark-&gt;A5_7_supported = FALSE;<br>
+    hw_classmark-&gt;freq_capability = 0;<br>
+    hw_classmark-&gt;default_rf_power_capability = (byte) CLASS_4;<br>
+    hw_classmark-&gt;current_rf_power_capability = (byte) CLASS_4;</td>
+  <td colspan=7 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=26 style='mso-height-source:userset;height:20.1pt'>
+  <td height=26 class=xl61951 width=237 style='height:20.1pt;width:178pt'>DARP
+  Feature Support<span style='mso-spacerun:yes'>&nbsp; </span>GPRS</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>4117</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>int</td>
+  <td class=xl61953 align=right width=64 style='border-left:none;width:48pt'>1</td>
+  <td class=xl61954 width=242 style='border-left:none;width:182pt'>darp_feature_support</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>1</td>
+  <td class=xl61953 width=64 style='border-left:none;width:48pt'>0x19</td>
+  <td class=xl61955 width=166 style='border-left:none;width:125pt'>【GCF】默认值1</td>
+  <td class=xl61956 width=413 style='width:310pt'>当pc_VAMOS_Type1为true，协议测试时此nv置1</td>
+  <td class=xl61956 width=287 style='width:215pt'>1<br>
+    -----<br>
+    /modem_proc/mmcp/nas/mm/src/gmmutils.c</td>
+  <td colspan=7 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=26 style='mso-height-source:userset;height:20.1pt'>
+  <td height=26 class=xl61951 width=237 style='height:20.1pt;width:178pt'>Repeated
+  ACCH</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>5107</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>int</td>
+  <td class=xl61953 align=right width=64 style='border-left:none;width:48pt'>2</td>
+  <td class=xl61954 width=242 style='border-left:none;width:182pt'>repeated_acch</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>1</td>
+  <td class=xl61953 width=64 style='border-left:none;width:48pt'>0x19</td>
+  <td class=xl61955 width=166 style='border-left:none;width:125pt'>【GCF】默认值1</td>
+  <td class=xl61956 width=413 style='width:310pt'>当pc_VAMOS_Type1为true，协议测试时此nv置1</td>
+  <td class=xl61956 width=287 style='width:215pt'>1<br>
+    -----<br>
+    /modem_proc/mmcp/nas/mm/src/gmmutils.c</td>
+  <td colspan=7 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=26 style='mso-height-source:userset;height:20.1pt'>
+  <td height=26 class=xl61951 width=237 style='height:20.1pt;width:178pt'>DTM
+  Feature Support</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>3628</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>int</td>
+  <td class=xl61953 align=right width=64 style='border-left:none;width:48pt'>1</td>
+  <td class=xl61954 width=242 style='border-left:none;width:182pt'>dtm_feature_support</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>0</td>
+  <td class=xl61953 width=64 style='border-left:none;width:48pt'>0x19</td>
+  <td class=xl61955 width=166 style='border-left:none;width:125pt'>【GCF】<br>
+    0 - Disable DTM Feature Support<br>
+    1 - Enable DTM Feature Support</td>
+  <td class=xl61956 width=413 style='width:310pt'>对应PC_DTM_GPRS = false</td>
+  <td class=xl61956 width=287 style='width:215pt'>1<br>
+    -----<br>
+    /modem_proc/mmcp/nas/mm/src/gmmutils.c</td>
+  <td colspan=7 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=26 style='mso-height-source:userset;height:20.1pt'>
+  <td height=26 class=xl61951 width=237 style='height:20.1pt;width:178pt'>DTM
+  Multislot class</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>3629</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>int</td>
+  <td class=xl61953 align=right width=64 style='border-left:none;width:48pt'>1</td>
+  <td class=xl61954 width=242 style='border-left:none;width:182pt'>dtm_multislot_class</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>0</td>
+  <td class=xl61953 width=64 style='border-left:none;width:48pt'>0x19</td>
+  <td class=xl61955 width=166 style='border-left:none;width:125pt'>【GCF】<br>
+    3 - DTM MSC of 11 if GPRS MSC is set to 12.<br>
+    2 - DTM MSC of 9 f the GPRS MSC is set to 10</td>
+  <td class=xl61956></td>
+  <td class=xl61956 width=287 style='width:215pt'>GPRS_EDGE_DTM_MULTISLOT_SUBCLASS<span
+  style='mso-spacerun:yes'>&nbsp; </span>(0x3)<br>
+    -----<br>
+    /modem_proc/mmcp/nas/mm/src/gmmutils.c</td>
+  <td colspan=7 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=26 style='mso-height-source:userset;height:20.1pt'>
+  <td height=26 class=xl61951 width=237 style='height:20.1pt;width:178pt'>EDTM
+  Feature Support</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>4209</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>int</td>
+  <td class=xl61953 align=right width=64 style='border-left:none;width:48pt'>1</td>
+  <td class=xl61954 width=242 style='border-left:none;width:182pt'>edtm_feature_support</td>
+  <td class=xl61952 width=64 style='border-left:none;width:48pt'>0</td>
+  <td class=xl61953 width=64 style='border-left:none;width:48pt'>0x19</td>
+  <td class=xl61955 width=166 style='border-left:none;width:125pt'>【GCF】<br>
+    0 - Disable EDTM Feature Support<br>
+    1 - Enable EDTM Feature Support</td>
+  <td class=xl61956 width=413 style='width:310pt'>对应PC_DTM_EGPRS = false</td>
+  <td class=xl61956 width=287 style='width:215pt'>1<br>
+    -----<br>
+    /modem_proc/mmcp/nas/mm/src/gmmutils.c</td>
+  <td colspan=7 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=17 style='height:12.75pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl61957 style='height:12.75pt'>IMS Enable</td>
+  <td class=xl61957>/nv/item_fil<span style='display:none'>es/ims/IMS_enable</span></td>
+  <td class=xl61957>efs_item</td>
+  <td colspan=3 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>0x19</td>
+  <td class=xl61957></td>
+  <td class=xl61957><font class="font11">【</font><font class="font0">GCF</font><font
+  class="font11">】</font><font class="font0">set to false for GCF/PTCRB
+  TEST<span style='mso-spacerun:yes'>&nbsp; </span>/<span
+  style='mso-spacerun:yes'>&nbsp; </span>67218</font></td>
+  <td class=xl61957></td>
+  <td colspan=7 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>1</td>
+  <td class=xl61957>0</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>IMS_enable</td>
+  <td class=xl61957></td>
+  <td colspan=7 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=10 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td colspan=7 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl61957 style='height:12.75pt'>diff_fdd_tdd_fgi_enable</td>
+  <td class=xl61957>/nv/item_fil<span style='display:none'>es/modem/lte/rrc/cap/diff_fdd_tdd_fgi_enable</span></td>
+  <td class=xl61957>efs_item</td>
+  <td colspan=3 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>0x19</td>
+  <td class=xl61957></td>
+  <td class=xl61957>【GCF】For TDD/FDD handover gcf-case</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>1</td>
+  <td class=xl61957>1</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>默认值0</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=11 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl61957 style='height:12.75pt'>gstk_feature_bmask</td>
+  <td class=xl61957>/nv/item_fil<span style='display:none'>es/modem/uim/gstk/feature_bmsk</span></td>
+  <td class=xl61957>efs_item</td>
+  <td colspan=3 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>0x19</td>
+  <td class=xl61957></td>
+  <td class=xl61957>【GCF】65674</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=68 style='height:51.0pt'>
+  <td height=68 colspan=3 class=xl61957 style='height:51.0pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>4</td>
+  <td class=xl61957 colspan=2 style='mso-ignore:colspan'>0x000000C6</td>
+  <td class=xl61957></td>
+  <td class=xl61958 width=413 style='width:310pt'>GSTK Setting mask<br>
+    65674 as 0x00000047 for Android, 65674 is 0x000000c2 for WP8, 65674 is
+  0x00000188 for<br>
+    data card, 65674 0x00000086 for thin UI</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=11 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=119 style='height:89.25pt'>
+  <td height=119 class=xl61957 style='height:89.25pt'>GSM Rx Diversity</td>
+  <td class=xl61957>/nv/item_fil<span style='display:none'>es/gsm/gl1/gsm_rx_diversity</span></td>
+  <td class=xl61957>efs_item</td>
+  <td colspan=3 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>0x19</td>
+  <td class=xl61957></td>
+  <td class=xl61957>【GCF】71588</td>
+  <td class=xl61957>协议一致性测试中均置为0.</td>
+  <td class=xl61958 width=64 style='width:48pt'><font class="font11">默认值</font><font
+  class="font0">0<br>
+    /modem_proc/mmcp/nas/mm/src/gmmutils.c#1500</font></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>4</td>
+  <td class=xl61957>0</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61958 width=413 style='width:310pt'>This NV item controls GSM RxD
+  Feature Enable/Disable</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=11 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=170 style='height:127.5pt'>
+  <td height=170 class=xl61957 style='height:127.5pt'>NAS Feature Configuration</td>
+  <td class=xl61957>/nv/item_fil<span style='display:none'>es/modem/nas/nas_config_feature</span></td>
+  <td class=xl61957>efs_item</td>
+  <td colspan=3 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>0x19</td>
+  <td class=xl61957></td>
+  <td class=xl61957>【GCF】65882</td>
+  <td class=xl61957></td>
+  <td class=xl61958 width=64 style='width:48pt'><font class="font11">默认值为</font><font
+  class="font0"> 0,0,21,0,0,0 (version</font><font class="font11">除外</font><font
+  class="font0">)<br>
+    -----<br>
+    /modem_proc/mmcp/nas/mm/src/mmglbl.c#1308</font></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>1</td>
+  <td class=xl61957>0</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>version</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>1</td>
+  <td class=xl61957>0</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>als_itc_value</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>1</td>
+  <td class=xl61957>0</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>No_auto_answer_on_hold</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>1</td>
+  <td class=xl61957>21</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>MT_Call_reject_cause</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>1</td>
+  <td class=xl61957>0</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>UE_init_rel_on_spurious_page (协议测试中此位置0)</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>1</td>
+  <td class=xl61957>0</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>CS_Domain_absolutely_preferred</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>20</td>
+  <td colspan=3 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>Reserve</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=11 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl61957 style='height:12.75pt'>WCDMA RRC PPAC Supported</td>
+  <td class=xl61957>/nv/item_fil<span style='display:none'>es/wcdma/rrc/wcdma_ppac_support</span></td>
+  <td class=xl61957>efs_item</td>
+  <td class=xl61957><span style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl61957><span style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl61957><span style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl61957>0x19</td>
+  <td class=xl61957></td>
+  <td class=xl61957>【GCF】67305</td>
+  <td class=xl61957><font class="font11">如果终端支持</font><font class="font0">3/4G</font><font
+  class="font11">用例，则协议测试中此位置</font><font class="font0">1</font></td>
+  <td class=xl61957 colspan=3 style='mso-ignore:colspan'><font class="font11">默认值</font><font
+  class="font0">1</font><font class="font11">，代码不可见</font></td>
+  <td colspan=4 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>1</td>
+  <td class=xl61957>1</td>
+  <td colspan=5 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=11 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=153 style='height:114.75pt'>
+  <td height=153 class=xl61957 style='height:114.75pt'>Call Orig Allowed Before
+  Ps Attach</td>
+  <td class=xl61957>/nv/item_fil<span style='display:none'>es/modem/data/3gpp/call_orig_allowed_before_ps_attach</span></td>
+  <td class=xl61957>efs_item</td>
+  <td colspan=3 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>0x19</td>
+  <td class=xl61957></td>
+  <td class=xl61957>【GCF】70332</td>
+  <td class=xl61957>协议测试中建议此位置1</td>
+  <td class=xl61958 width=64 style='width:48pt'>1<br>
+    -----<br>
+    modem_proc/datamodem/3gpp/ps/src/ds_3gpp_nv_manager.c#3261</td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>1</td>
+  <td class=xl61957>1</td>
+  <td colspan=5 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=11 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl61957 style='height:12.75pt'>WCDMA RRC WToL CM Support</td>
+  <td class=xl61957>/nv/item_fil<span style='display:none'>es/wcdma/rrc/wcdma_rrc_wtol_cm_support</span></td>
+  <td class=xl61957>efs_item</td>
+  <td colspan=3 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>0x19</td>
+  <td class=xl61957></td>
+  <td class=xl61957>【GCF】67256</td>
+  <td class=xl61957>当pc_FeatrGrp_8项为true时，协议测试中此位置1</td>
+  <td class=xl61957 colspan=3 style='mso-ignore:colspan'>默认值1，代码不可见</td>
+  <td colspan=4 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>1</td>
+  <td class=xl61957>1</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957 colspan=9 style='mso-ignore:colspan'>This NV item is used
+  to disable EUTRA compressed mode measurement in WCDMA。<br>
+    0 – Disables W2L EUTRA compressed mode support<br>
+    1 – Enables W2L EUTRA compressed mode support</td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=11 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl61957 style='height:12.75pt'>NV variable for feature
+  WtoL PS handove<span style='display:none'>r</span></td>
+  <td class=xl61957>/nv/item_fil<span style='display:none'>es/wcdma/rrc/wcdma_rrc_wtol_ps_ho_support</span></td>
+  <td class=xl61957>efs_item</td>
+  <td colspan=3 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>0x19</td>
+  <td class=xl61957></td>
+  <td class=xl61957>【GCF】67347</td>
+  <td class=xl61957>当pc_FeatrGrp_22项为true时，协议测试中此位置<span style='display:none'>1</span></td>
+  <td class=xl61957 colspan=3 style='mso-ignore:colspan'>默认值1，代码不可见</td>
+  <td colspan=4 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>1</td>
+  <td class=xl61957>1</td>
+  <td colspan=5 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=11 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=36 style='mso-height-source:userset;height:27.0pt'>
+  <td height=36 class=xl61957 style='height:27.0pt'>Closed subscriber group
+  support<span style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl61957>/nv/item_fil<span style='display:none'>es/modem/nas/csg_support_configuration</span></td>
+  <td class=xl61957>efs_item</td>
+  <td colspan=3 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>0x19</td>
+  <td class=xl61957></td>
+  <td class=xl61957>【GCF】70361<br>
+    </td>
+  <td class=xl61957>无推荐值，根据机器实际情况选择<br>
+    ---------<br>
+    0: CSG F<span style='display:none'>eature is disabled<br>
+    1: WCDMA CSG is enabled<br>
+    2: LTE &amp; WCDMA CSG is enabled</span></td>
+  <td class=xl61958 width=64 style='width:48pt'><font class="font11">默认值如下，在代码多处有调用<br>
+    </font><font class="font0">#ifdef FEATURE_DISABLE_CSG_BYDEFAULT<br>
+    <span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>mm_nv_csg_support
+  = SYS_CSG_SUPPORT_DISABLED;<br>
+    #else<br>
+    <span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>mm_nv_csg_support
+  = SYS_CSG_SUPPORT_WCDMA;<br>
+    #endif</font></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>1</td>
+  <td class=xl61957>2</td>
+  <td colspan=5 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=11 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=41 style='mso-height-source:userset;height:30.75pt'>
+  <td height=41 class=xl61957 style='height:30.75pt'>disable APN matching</td>
+  <td class=xl61957>/nv/item_fil<span style='display:none'>es/modem/data/3gpp/lteps/disable_apn_matching</span></td>
+  <td class=xl61957>efs_item</td>
+  <td colspan=3 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>0x19</td>
+  <td class=xl61957></td>
+  <td class=xl61957>【GCF】73529</td>
+  <td class=xl61957>协议测试中建议置1，避免测试中出现注册失败情<span style='display:none'>况</span></td>
+  <td class=xl61958 width=64 style='width:48pt'>1<br>
+    -----<br>
+    /modem_proc/datamodem/3gpp/ps/src/ds_3gpp_nv_manager.c#2367<br>
+    <font class="font11">当前此</font><font class="font0">NV</font><font
+  class="font11">只对解码规则做策略控制，和</font><font class="font0">apn</font><font
+  class="font11">名字是否匹配无关</font><font class="font0">(</font><font class="font11">没有合入</font><font
+  class="font0">CR-1068099)</font></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>1</td>
+  <td class=xl61957>1</td>
+  <td colspan=5 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=11 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=57 style='mso-height-source:userset;height:42.75pt'>
+  <td height=57 class=xl61957 style='height:42.75pt'>Remove Unused Pdn</td>
+  <td class=xl61957>/nv/item_fil<span style='display:none'>es/modem/data/3gpp/ps/remove_unused_pdn</span></td>
+  <td class=xl61957>efs_item</td>
+  <td colspan=3 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>0x19</td>
+  <td class=xl61957></td>
+  <td class=xl61957>【GCF】70334</td>
+  <td class=xl61957>协议测试此位置0，部分gcf测试中需要新增PDN用<span style='display:none'>于测试0</span></td>
+  <td class=xl61958 width=64 style='width:48pt'><font class="font11">默认值</font><font
+  class="font0">0<br>
+    /modem_proc/datamodem/3gpp/ps/src/ds_3gpp_nv_manager.c#3433</font></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>1</td>
+  <td class=xl61957>0</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>remove_unused_pdn</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=11 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=37 style='mso-height-source:userset;height:27.75pt'>
+  <td height=37 class=xl61957 style='height:27.75pt'>atcop_cops_auto_mode.txt</td>
+  <td class=xl61957>/ds/atcop/<span style='display:none'>atcop_cops_auto_mode.txt</span></td>
+  <td class=xl61957>efs</td>
+  <td colspan=3 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>0x19</td>
+  <td class=xl61957>modem_proc\mcfg\mcfg_ge<span style='display:none'>n\scripts\data\efs_files\row\atcop_cops_auto_mode.txt</span></td>
+  <td class=xl61957><font class="font11">【</font><font class="font0">GCF</font><font
+  class="font11">】</font></td>
+  <td class=xl61957>协议测试中推荐置1<br>
+    This EFS avoids unexpected <span style='display:none'>detach during manual
+  network selection.1</span></td>
+  <td class=xl61958 width=64 style='width:48pt'>0<br>
+    -----<br>
+    /modem_proc/datamodem/interface/atcop/src/dsatme.c#10056<br>
+    boolean<span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
+  </span>result[DSAT_CONFIG_FILE] = {FALSE,TRUE}; //result[0]<font
+  class="font11">即默认值，为</font><font class="font0">false</font></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=37 style='mso-height-source:userset;height:27.75pt'>
+  <td height=37 colspan=10 class=xl61957 style='height:27.75pt;mso-ignore:colspan'></td>
+  <td class=xl61958></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl61957 style='height:12.75pt'>atcop_cfun_card_action</td>
+  <td class=xl61957>/ds/atcop/<span style='display:none'>atcop_cfun_card_action.txt</span></td>
+  <td class=xl61957>efs</td>
+  <td colspan=3 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>0x19</td>
+  <td class=xl61957>modem_proc\mcfg\mcfg_ge<span style='display:none'>n\scripts\data\efs_files\row\atcop_cfun_card_action.txt</span></td>
+  <td class=xl61957>【GCF】</td>
+  <td class=xl61957>协议测试中置1<br>
+    This EFS controls the card operati<span style='display:none'>on with
+  AT+CFUN command. If enabled, UIM card power up/down will be performed.0</span></td>
+  <td class=xl61957 colspan=7 style='mso-ignore:colspan'>1<br>
+    -----<br>
+    /modem_proc/datamodem/interface/atcop/src/dsatme.c#10050</td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=11 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl61957 style='height:12.75pt'>LTE NAS UE security
+  capability</td>
+  <td class=xl61957>/nv/item_fil<span style='display:none'>es/modem/nas/lte_nas_ue_sec_capability</span></td>
+  <td class=xl61957>efs</td>
+  <td colspan=3 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>0x19</td>
+  <td class=xl61957>modem_proc\mcfg\mcfg_ge<span style='display:none'>n\scripts\data\efs_files\row\lte_nas_ue_sec_capability</span></td>
+  <td class=xl61957>【GCF】</td>
+  <td class=xl61957>LTE的加密策略bitmask，协议测试中EEA3/EIA3 <span style='display:none'>bit需要使能<br>
+    Included to set ZUC as primary security algorithm</span></td>
+  <td class=xl61957 colspan=7 style='mso-ignore:colspan'>bitmask默认值均为true<br>
+    -----<br>
+    /modem_proc/mmcp/nas/mm/src/mmtask.c#1538</td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=11 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl61957 style='height:12.75pt'>ISR</td>
+  <td class=xl61957>/nv/item_fil<span style='display:none'>es/modem/nas/isr</span></td>
+  <td class=xl61957>efs_item</td>
+  <td colspan=3 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>0x19</td>
+  <td class=xl61957></td>
+  <td class=xl61957>【GCF】</td>
+  <td class=xl61957>协议测试中建议置1</td>
+  <td class=xl61957>默认值1</td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>1</td>
+  <td class=xl61957>1</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>feature of Idle mode Signaling Reduction.</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=11 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl61957 style='height:12.75pt'>VAMOS support</td>
+  <td class=xl61957>/nv/item_fil<span style='display:none'>es/modem/geran/vamos_support</span></td>
+  <td class=xl61957>efs_item</td>
+  <td colspan=3 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>0x19</td>
+  <td class=xl61957></td>
+  <td class=xl61957>【GCF】67228</td>
+  <td class=xl61957>协议测试中建议置1</td>
+  <td class=xl61957 colspan=3 style='mso-ignore:colspan'>默认值1或2，均表示support</td>
+  <td colspan=4 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>1</td>
+  <td class=xl61957>1</td>
+  <td colspan=5 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=11 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl61957 style='height:12.75pt'>NAS SRVCC Support</td>
+  <td class=xl61957>/nv/item_fil<span style='display:none'>es/modem/nas/nas_srvcc_support</span></td>
+  <td class=xl61957>efs_item</td>
+  <td colspan=3 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>0x19</td>
+  <td class=xl61957></td>
+  <td class=xl61957>【GCF】67275</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>1</td>
+  <td class=xl61957>1</td>
+  <td colspan=5 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=11 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl61957 style='height:12.75pt'>nas_l2g_srvcc_support</td>
+  <td class=xl61957>/nv/item_fil<span style='display:none'>es/modem/nas/nas_l2g_srvcc_support</span></td>
+  <td class=xl61957>efs_item</td>
+  <td colspan=3 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>0x19</td>
+  <td class=xl61957></td>
+  <td class=xl61957>【GCF】70323</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>1</td>
+  <td class=xl61957>1</td>
+  <td colspan=5 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=11 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 class=xl61957 style='height:12.75pt'>UE based CW</td>
+  <td class=xl61957>/nv/item_fil<span style='display:none'>es/modem/mmode/ue_based_cw</span></td>
+  <td class=xl61957>efs_item</td>
+  <td colspan=3 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>0x19</td>
+  <td class=xl61957></td>
+  <td class=xl61957>【GCF】73538 修改针对 IMS TC_15.27</td>
+  <td class=xl61957>代码默认false</td>
+  <td class=xl61957></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>1</td>
+  <td class=xl61957>1</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>use_ue_based_CW</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=17 style='height:12.75pt'>
+  <td height=17 colspan=3 class=xl61957 style='height:12.75pt;mso-ignore:colspan'></td>
+  <td class=xl61957>int</td>
+  <td class=xl61957>1</td>
+  <td class=xl61957>1</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td class=xl61957>is_enabled</td>
+  <td colspan=2 class=xl61957 style='mso-ignore:colspan'></td>
+  <td colspan=6 style='mso-ignore:colspan'></td>
+ </tr>
+ <![if supportMisalignedColumns]>
+ <tr height=0 style='display:none'>
+  <td width=237 style='width:178pt'></td>
+  <td width=64 style='width:48pt'></td>
+  <td width=64 style='width:48pt'></td>
+  <td width=64 style='width:48pt'></td>
+  <td width=242 style='width:182pt'></td>
+  <td width=64 style='width:48pt'></td>
+  <td width=64 style='width:48pt'></td>
+  <td width=166 style='width:125pt'></td>
+  <td width=413 style='width:310pt'></td>
+  <td width=287 style='width:215pt'></td>
+  <td width=64 style='width:48pt'></td>
+  <td width=64 style='width:48pt'></td>
+  <td width=64 style='width:48pt'></td>
+  <td width=64 style='width:48pt'></td>
+  <td width=64 style='width:48pt'></td>
+  <td width=64 style='width:48pt'></td>
+  <td width=64 style='width:48pt'></td>
+ </tr>
+ <![endif]>
+</table>
+
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+69736
+69737
+NV 70242 (/nv/item_files/pbm/pbm_nv_ecc_config): This will be set to 2 to use ECC list from NV 67221.
+NV 67221 (/nv/item_files/pbm/pbm_ecc_nums): EFS ECC list, please follow below description and set the values as per requirement.
+
+ril.ecclist
+persist.radio.custom_ecc
+
+
+CN national code:
+460	110
+460	112
+460	119
+460	120
+460	122
+460	999
+
+
+1.保持persist.radio.custom_ecc 为1，可以根据MCC读取qcril.db中的ECC
+2.hardcode without sim中紧急号码只包含以下号码: 000, 08, 110, 118, 119, 999
+3.ECC定制根据国家码来做，全部通过修改qcril.db的方法实现
