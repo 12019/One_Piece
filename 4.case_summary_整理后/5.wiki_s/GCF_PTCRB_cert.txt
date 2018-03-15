@@ -1,0 +1,113 @@
+==什么是GCF==
+*GCF: Global Certification Forum (全球型认证论坛)
+<pre>
+GCF是由GSMA（代表GSM运营商协会）等等组织和GSM终端生产厂商相互合作，结成伙伴关系的产物，同时，它又吸收其他涉及GSM终端设计、生产、研发、服务的组织作为其观察员。
+GCF的目标是，在全球范围内确保GSM技术的通用性，从而有利于竞争，促使生产厂商能够满足终端与网络的兼容工作，并在全球范围得到认可和接受，以防止全球GSM终端市场的分割局面。
+GCF标准虽然不是强制性要求，但目前世界大部分的国家和地区都会要求终端生产厂商完成GCF标准的测试，或者参考GCF标准(GSMA/3GPP/3GPP2/OMA etc.)。
+</pre>
+*Goal: Test once, use anywhere
+
+*[[https://en.wikipedia.org/wiki/Global_Certification_Forum GCF_wikipedia]]
+<pre>
+The Global Certification Forum, known as GCF, is an active partnership between mobile network operators, mobile device manufacturers and the test industry. GCF was founded in 1999, and its membership has been responsible for creating an independent certification programme to help ensure global interoperability between mobile devices and networks.
+
+The GCF certification process is based on technical requirements as specified within dedicated test specifications provided by the 3GPP, 3GPP2, OMA, IMTC, the GSM Association and others. The current GCF membership includes mobile network operators, more than 40 leading terminal manufacturers and over 65 test equipment manufacturers, test laboratories and other organizations from mainly a test environment.
+</pre>
+
+==PTCRB==
+*PTCRB: PCS Type Certification Review Board (个人通信服务型号认证委员会)
+<pre>
+PTCRB创立于1997年，主要由北美的运营商(vzw、at&t、tmo etc.)发起，联合一些大的手机厂商组成，还包括一些认可实验室。
+PTCRB的成员分为两个级别，完全会员（Full or Active Members）和观察员（Passive or Observing Members）。
+PTCRB成员的主要责任是：1.制定PTCRB认证的要求；2.制定实验室认可的标准；3.通过每年4次会议对标准进行更新；4.发布决议。
+PTCRB为设备提供G/U/L网络的认证标准，满足标准即可拿到PTCRB认证。
+面向北美市场的终端一般都要求通过PTCRB认证。
+</pre>
+
+*[[https://en.wikipedia.org/wiki/PTCRB PTCRB_wikipedia]]
+<pre>
+The PTCRB was established in 1997 as the certification forum by select North American cellular operators. Now a pseudo-acronym, it no longer stands for its original meaning of the PCS Type Certification Review Board (then named after the GSM1900 MHz band in North America).
+
+The purpose of the PTCRB is to provide the framework within which GERAN , UTRAN , and E-UTRAN device certification can take place for members of the PTCRB. This includes, but is not limited to, determination of the test specifications and methods necessary to support the certification process for GERAN, UTRAN, and E-UTRAN devices. This group will also be responsible to generate input regarding testing of devices to standards development organizations.
+</pre>
+
+==CTA/SRRC==
+*CTA: China radio transmission equipment Type Approval(中国无线电广播设备型号核准)
+*国家入网测试: CTA是面向国内的入网标准，凡是需要在中国国内销售使用的无线终端，都需要入网认证许可，才能正常使用公共电信网络(移动，联通，电信)和在国内销售。
+<pre>
+前身为国家无线电管理委员会 (State Radio Regulation Committee, SRRC) 的中国国家无线电监测中心 (State Radio Monitoring Center, SRMC) 为目前中国大陆唯一获得授权可测试及认证无线电型号核准规定的机构。
+目前，中国已针对不同类别的无线电发射设备订定特殊的频率范围，且并非所有频率皆得以在中国合法使用。换句话说，所有在其境内销售或使用的无线电发射设备会规定不同的频率。此外，申请者必须注意某些无线电发射设备的规定范畴，不但要申请「无线电型号核准认证」，同时也必须申请中国强制认证 (CCC) 及 / 或进网许可证 (MII) 的核准。
+</pre>
+
+==运营商专项测试==
+*国内的中国移动/中国联通/中国电信都有自己的专项入库测试；国外诸如AT&T/T-Mobile等运营商也会要求在专属实验室进行测试。
+*测试用例以GCF用例为基础，新增一些运营商特异项。
+*例如中国移动的入库测试，包括MTBF(稳定性测试)、GSM/TDSCDMA/LTE协议一致性测试、RRM测试、卡兼容性测试、外场测试等等。大部分协议/卡等测试用例都基于GCF测试用例，可能新增一些运营商关心的测试用例，例如兼容性、吞吐量、卡漫游测试。
+
+==前期准备==
+===1.认证资料/PICS表填写===
+*PICS:Protocol Implementation conformance statement
+*PIXIT:Protocol Implementation Extra Information for Testing
+*按照认证实验室要求，填写终端认证表，一般包含终端名、设备基础参数、申请人、射频能力支持、GPS能力等等信息。
+*参考高通PICS和终端需求，填写PICS表格。
+<pre>
+调查终端能力，高通基于各个平台，对终端的支持程度不同，详细可向高通索要或者在高通creatpoint下载最新的PICS(协议一致性)文档。
+高通的PICS文档可能随时增加PICS项，也有先前版本填写错误的情况，因此一般依据产品的最新PICS文档，填写PICS时，除了参考高通最新标准以外，还需要结合自身产品需求，无法确定的项，自行整理后提单向高通确认。
+PICS项会影响测试用例的生成，也涉及终端能力和测试时的仪器配置，有改动一定要及时和负责人/实验室同步，确保PICS表/测试环境更新。
+针对一些大运营商(AT&T、T-Mobile、Verizon etc)，高通会专门发布基于这些运营商的需求支持情况，可以向高通索要或在高通网站上查询，减少前期核对工作量。
+</pre>
+
+===2.确认软件版本===
+*送测版本可以随测试周期进行迭代，因此无需指定特殊的软件版本。
+*在确认用户需求和高通PICS阶段，开发人员需要对支持的功能进行基本的测试检查，对于高通平台来说有很多修改项只针对认证测试/一致性测试环境，因此不需要在正式的商用版本中包含，建议是单独拉认证分支进行提交，认证分支出版本进行测试，认证结束后，再挑选不影响现网功能的提交合入到主分支。
+*这部分的工作需要开发人员核对高通参考配置文档进行修改，高通对RF/Protocol、IMS等等部分用例都有测试参考，我们自己也可以建立自己的用例参考集，利于后续的认证测试。
+
+===3.认证资料提交/样机准备===
+*提交认证资料和PICS表。
+*准备样机，通信功能正常，满足客户需求和认证测试需求(可调试版本/root包，露出射频口，主/副分集、adb驱动，modem端口打开，AT端口打开，log工具等等)。
+*大部分实验室因为保密原则不会提供对比机log，因此需要自行准备对比机
+*如果需要现场支持，自带电脑需要提前准备高通工具(QPST/QXDM/QCAT)，特定logmask，USB线，ADB工具，串口工具等等。
+
+==测试中==
+===测试周期===
+*GCF&PTCRB的测试不同终端用例数量有差异，一般周期在1-2个月左右。
+*国家入网测试一般测试周期1个月。
+*中国移动入库测试一般1个月左右一轮，至少测试两轮。
+
+===测试反馈/开发检查===
+*测试过程一般至少一轮顺测，由于协议测试要求的场景比较苛刻，一般不可能一轮把所有用例测试通过，实验室会自行更换仪器/测试手法对失败用例进行复测。
+*持续2-3轮以上失败的用例，实验室会针对性的提供终端log和仪器log，需要研发进行检查。
+*认证测试通常第一轮可以通过90%以上的用例，剩下的大部分是终端配置不正确或者测试环境、操作手法问题，极少是终端平台BUG。
+
+*对应协议规范用例，我们可以参考现有的协议文档，了解该测试用例依赖PICS项，以及测试目的和详细步骤，以此帮助debug过程。
+*[[http://www.3gpp.org/ftp/Specs/ 3GPP_DOCS]]
+*[[http://www.etsi.org/deliver/etsi_ts/ ETSI_DOCS]]
+<pre>
+GSM RF/Protocol    -- TS_51.010-2
+GSM STK            -- TS_51.010-4
+UMTS RF            -- TS_34.121-2
+UMTS Protocol      -- TS_34.123-2
+UMTS/LTE USIM      -- TS_31.121
+UMTS/LTE USAT      -- TS_31.124
+LTE RF/RRM         -- TS_36.521-1 / TS_36.521-3
+LTE Protocol       -- TS_36.523-1
+LTE AGPS/RF        -- TS_37.571-1 / TS_37.571-2
+IMS                -- TS_34.229-1
+</pre>
+
+*认证测试常见问题点
+<pre>
+数据业务影响；
+现网信号干扰；
+上层业务影响；
+SIM卡/卡参数异常；
+测试手法(AT命令/MMI暗码)；
+未清除存储在卡中的PLMN信息；
+PICS填写错误；
+</pre>
+
+===第三方检查===
+*针对高通终端，除去提case让高通帮忙分析根因以外，可以联系高通实验室帮忙验证认证测试用例，必要情况下可以申请高通工程师到认证实验室现场支持。
+
+==认证完成==
+*所有测试用例解决PASS后，即可等待实验室出据认证报告，认证工作结束。

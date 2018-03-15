@@ -1,0 +1,286 @@
+==IMS和VoLTE是什么==
+*在LTE发展的基础上，为了追求更高的通话质量，以往普通的CSFB方式不仅有较长的回落时延，而且通话质量也渐渐无法满足新的需求，而LTE网络是一个只有PS域的系统，没有以往2/3G网络的电路域，因此人们提出了只依赖、建立于PS域的数据通话方式，即VoLTE。
+
+*IMS，基于IP的多媒体系统，IMS网络是在LTE(EPC+eUTRAN)网络结构基础上，新增加的一个子网络结构，和MME、PCRF、SGW/PGW、HSS等网元都有密切的联系，主要即负责LTE网络上的数据承载建立、管理，以此来承载纯数据的通话方式。
+
+*CSFB作为一种过渡方式，在LTE网络初期建立时，使其可以使用以往2/3G网络的网元，而在IMS网络、LTE网络建设完善之后，即可完全脱离这种过渡的方式，完全进入以纯数据承载的通话方式。
+
+==IMS的核心网络结构==
+*呼叫会话控制功能（Call Session Control Function, CSCF）是IP多媒体子系统(IP Multimedia Subsystem,IMS)内部的功能实体，是整个IMS网络的核心部分，主要负责处理多媒体呼叫会话过程中的信令控制。它管理着IMS网络的用户鉴权，IMS承载面QoS，与其它网络实体配合进行SIP会话的控制，以及业务协商和资源分配等。
+*CSCF根据功能分为三类：代理CSCF(Proxy CSCF)；查询CSCF(Interrogating CSCF)；服务CSCF(Serving CSCF)。
+
+[[File:IMS网络结构.PNG]]
+
+*主要IMS新增网元的核心即CSCF、BGCF部分，由P-CSCF作为IMS-CN和普通CN网络之间的接口，S-CSCF的SIP-AS触发再链接到MRFC、MRFP等多媒体资源控制和处理网元，最后接入MGW。BGCF和S-CSCF互相连接，BGCF还和其他非本地域的BGCF之间允许相互路由，再通过相应的MGCF、MGW媒体网关和其控制网元可以连接到网络或CS域。具体结构和接口见上图。
+
+===关键网元介绍===
+*'''代理CSCF(P-CSCF)'''
+P-CSCF(Proxy-CSCF)是IMS拜访网络的统一入口点，所有IMS终端发起和终止于IMS终端的会话消息都要通过P-CSCF。P-CSCF作为一个SIP-Proxy，负责与接入网络无关的用户鉴权与IPSec管理，网络防攻击与安全保护，为节约无线网络资源进行SIP信令压缩与解压，用户的漫游控制，通过PDF(Policy Decision Function)进行承载面的NAT与QoS等功能等。
+
+*'''查询CSCF(I-CSCF)'''
+I-CSCF(Interrogating-CSCF)是IMS网络的入口点，在SIP注册过程中，I-CSCF通过查询HSS，为用户选择一个S-CSCF。在呼叫过程中，去往IMS网络的呼叫首先路由到I-CSCF，由I-CSCF从HSS获取用户所注册的S-SCSCF地址，将消息路由到S-CSCF。前向的SIP请求/响应-->S-CSCF。
+
+*'''服务CSCF(S-CSCF)'''
+S-CSCF(Servlng-CSCF)在IMS网络会话控制中处于核心地位，它接受通过P-CSCF转发来的注册请求，与HSS配合进行用户鉴权。并从HSS处下载用户签约的业务数据，S-CSCF对于用户主叫及被叫侧进行路由管理，根据用户签约的初始过滤规则(Initial_Filter_Criteria,iFC)，进行SIP-AS触发，实现丰富的IMS业务功能。决定用哪一个AS去接收SIP消息，从而去提供相应的IMS服务。
+
+*'''Home Subscriber Server(HSS)'''
+用户归属地数据存储的数据库，会涉及到用户的身份验证授权等操作，可提供用户的物理位置信息。
+
+*'''Application-server(AS)'''
+应用服务器，用于建立和实现IMS/VoLTE需要的各种服务。
+
+*'''PCRF'''
+译作策略和计费规则功能，是负责UE业务数据流和IP承载资源的策略和计费控制判决单元，简单来说就是根据移动设备所处的服务类型，使用该项网络服务的时间，QoS状态等等信息，做出合理策略选择并计算费用。
+
+*'''Breakout Gateway Control Function(BGCF)'''
+S-CSCF会将BGCF加入到信令通路中去，与此同时它还会向MGCF发出请求。
+
+*'''Media Gateway (MGW)/Media Gateway Control Function(MGCF)'''
+负责向其他的IP domain发出呼叫，向PSTN发出呼叫，负责PSTN和IMS-CN这两侧的解码编码(in case of codec mismatch)。
+
+*'''Media Resource Function Controller(MRFC)'''
+信令面的网元，接收来自AS和S-CSCF的信息，控制MRFP。
+
+*'''Media Resource Function Processor(MRFP)'''
+负责多媒体资源的实际处理的网元，Customized Ringback Tone(CRBT)，Personalized Ringback Tone(PRBT)，网络端通知例如“无法建立呼叫”，“转接到语音邮箱中”。
+
+==信令面和Media面的协议栈==
+
+[[File:signaling_media_plane.PNG]]
+
+*QCI(QoS_class_indication)是EPS中一个判定QoS的参数，一共分为9个等级，qci的值都代表着一个等级，每一种信令和数据EPS承载都会对应一个且不重复的QCI值，qci决定了该承载上的应该受到怎样的处理。这个概念的详细内容参考协议文件TS23.203的Table-6.1.7。
+
+*这里提到的信令面和Media面都是用户面的一部分。
+<pre>
+ [1]信令面
+该信令面一般指UE和P-CSCF之间的部分，主要负责管理SIP中IMS注册/注销，VoLTE的主叫/被叫流程启动标识，IMS的信令默认承载是no-GBR模式，QCI=5。(GBR表示受限定的速率,一般用于保证传输的速率)
+
+ [2]Media面
+Media面一般指的是多个UE通过eUTRAN无线接入网沟通的部分，直接通过S-GW和P-GW接入到互联网，不会经过CN或MME部分，然后在互联网中通过RTP协议实现的音频数据包的交互，media的专用数据承载是GBR模式，QCI=1。
+</pre>
+*实时传送协议(Real-time_Transport_Protocol或简写RTP)是一个网络传输协议，RTP协议详细说明了在互联网上传递音频和视频的标准数据包格式，是IP电话业务的技术基础，RTP协议和RTP控制协议RTCP通常被一起使用，而且都是建立在用户数据报协议(UDP)上的。
+
+==VoLTE需求的设备结构==
+[[File:handset_architecture_for_VoLTE.PNG]]
+
+==VoLTE呼叫流程==
+===标准的VoLTE呼叫流程概况===
+<pre>
+ [1]VoLTE初始化
+UE和EUTRAN/PDN: UE附着到LTE网络-->Domain选择(所有的呼叫流程都从IMS经过)-->IMS-PDN连接(信令承载的QCI=5)-->SIP-QoS流程
+UE和IMS-CN: IMS注册和鉴权。
+ICSI(IMS Communication Services Identifier): 对于IMS服务都会分配一个tag与其对应，作为识别的标志。
+
+ [2]VoLTE事件处理流程
+UE和IMS-CN: IMS会话事务建立。
+UE和EUTRAN/PDN: 建立VoLTE-QoS流程-->ROHC-->VoLTE数据交互(数据由eUTRAN路由，通过分组核心网之间传输呼叫通话需要的数据，语音帧由RTP数据包产生包含在UDP数据包中，再承载在IP协议上。)
+UE和IMS-CN: IMS会话事务终止(释放清理资源)。
+UE和EUTRAN/PDN: 释放VoLTE-QoS流程。
+
+ [3]VoLTE结束
+UE和IMS-CN: 不再需求IMS服务时，在IMS-CN进行IMS服务的注销。
+</pre>
+
+===VoLTE通话的前提条件===
+* 当前RAT是LTE，CM的域选择选择了IMS，没有正在活动的1X呼叫存在，当前没有新的MO-VoLTE呼叫建立，当前没有或只有一个活动的VoLTE呼叫，LTE-RSRP有设置门限值(NV-70213)。
+
+===IMS注册流程===
+
+[[File:IMS_registration.PNG]]
+
+<pre>
+[1] DS提醒IMS服务处于可用状态
+CM--"serving-system-changed-event"-->IMS
+
+[2] IMS根据rat和策略管理器的配置,获得APN列表,APN的各类属性,然后允许服务开始在IMS-PDN上发起
+IMS--"feature-tag-add"-->IMS
+
+[3] UE当前已经驻留在IMS的RAT中了,通过PDP连接去尝试IMS数据呼叫的启动
+[4] DS提醒IMS数据呼叫的基础已经建立
+DS<--"IMS_PDN的建立"和"DS_rat_indication"-->IMS
+
+[5] IMS根据RAT,CM域的选择添加服务的tags，去触发IMS的注册流程
+[6] 获取IMS的配置信息,IMS注册流程开始
+[7] 注册请求通过空口由IMS发出
+IMS--"register"-->SIP_Service
+
+[8] 接收到401 unauthorized的响应,IMS和UIM进行鉴权
+SIP_Service--"401 unauthorized"-->IMS
+IMS<--"ISIM Authenticate"-->UIM
+
+[9] IMS注册请求携带着answer发向网络端,网络端做出响应"200 OK"
+IMS--"Register(携带对于401的回应)"-->SIP_service--"200 OK"-->IMS
+
+[10]IMS提醒CM,VoLTE呼叫已经可以使用,接下来可以进入到SIP会话事务建立流程中了
+IMS--"IMS服务已准备就绪"-->CM
+</pre>
+
+===终端间呼叫建立流程(detail)===
+* UE模块集成了IMS客户机和LTE协议栈部分。
+<pre>
+[1] 发起呼叫,IMS收到呼叫管理的提醒,IMS用户机建立并向网络端发送"invite"消息
+[2] LTE协议栈发起上行接入程序,发出"service-request"消息,开始尝试RRC连接建立
+[3] LTE栈传送"invite"消息
+   (中间会经过eNB,EPC,由P-CSCF进入IMS-cn部分,通过I-CSCF路由到S-CSCF,再由S-CSCF判决该呼叫消息应该被导向哪一个I-CSCF,再到达目标UE对应的I-CSCF,最终通过目标UE的P-CSCF传递到P-GW,最后寻呼到目标UE;UE2接收寻呼并启动上行接入程序作为响应;"invite"消息最终也会路由到目标UE的IMS用户机处)
+[4] P-CSCF1发送"100",从IMS-client2一直路由到IMS-client1的消息,去通知"invite"消息已经传递成功
+[5] 如果IMS-client2支持Client1的推荐编码方式,IMS-client2会向IMS-client1发送一条"180(Ringing)"消息作为响应,和上一条信令的路由路径相同(表明SDP的编码选择)
+</pre>
+
+<pre>
+[6] 当P-CSCF1和2接收到传递的"180(Ringing)"消息时,会触发EPS专用承载在网络部分的建立,P-CSCF1和2会各向PCRF发送一个"AA-Request"
+   (该请求包含IMS-PDN分配给UE的IP地址,还包含了media部件描述,该描述定义了编码和来自于"180(Ringing)消息中的"Traffic_Flow_Template(TFT)部分)
+[7] PCRF使用接收的IP地址去验证当前这个"IP-CAN"事务,在IP-can事务建立阶段使用从HSS/SPR(Subscriber_Profile_Repository)下载的QoS策略信息,media描述信息决定QoS和话音的EPS专用承载中要过滤的信息,具体表现为一个IP-CAN事务的修改操作,发送"RAR_cmd"消息给PGW及网络端.
+   (消息包含QoS信息(QCI,ARP(Address_Resolution_Protocol地址解析协议),GBR/MBR(最低/高速率限制)),GPRS_Tunneling_Protocol(GTP))
+[8] PGW接收命令,发送"create_bearer_request"到SGW
+   (包含信息EPS bearer QoS, S5/S8-Tunnel-ID, TFT, and LBI)
+[9] SGW发送"create_bearer_request"到MME
+   (包含信息EPS bearer QoS, S1-Tunnel-ID, TFT, and LBI)
+[10]MME选择为承载选择一个ID,发送一条NAS层消息"bearer Setup Request(Activate Dedicated EPS Bearer Context Request)"消息到eNB.
+   (包含信息EPS bearer-ID, EPS QoS,S1-Tunnel-ID, NAS-message;激活专用EPS承载报文请求消息定义了EPS-bearer-ID,QoS参数,TFT and LBI)
+[11]eNB向UE端发送"RRC-configuration-reconfiguration",将EPS承载映射和无线承载建立映射关系.(承载ID,QoS等内容)
+[12]UE接收激活承载,向eNB段做出响应"RRCconnection_reconfiguration_complete",eNB再向MME发送"bearer_setup_response"消息.(消息包含了EPS承载的ID,S1-tunnel-ID)
+[13]UE向eNB发送上行直传的NAS层消息"activate_dedicated_EPS_bearer_context_accept"
+[14]eNB继续上行直传给MME消息"activate_dedicated_EPS_bearer_accept"
+[15]MME--"create_bearer_response"-->SGW-->PGW
+[16]PGW--"RAR_response"-->PCRF
+[17]PCRF--"AA-answer"-->P-CSCF,报告专用承载已经建立成功.
+</pre>
+
+<pre>
+[18]IMS-client1发送"PRACK-SIP"消息给IMS-Client2
+[19]IMS-client2响应消息"200(OK)",提示PRACK消息已接收,接收SDP-offer.
+[20]当目标用户接受呼叫后(接听),IMS-client2会再发送一次消息"200(OK)"给IMS-client1端.
+[21]IMS-client1的响应"ACK".
+</pre>
+* 最后进入实际数据语音通话过程中，两个IMS-Client接通，PCRF相关网元开始计费等等。
+
+== 实际的主被叫过程 ==
+
+===MO===
+<pre>
+[1]UI上层发起呼叫"qmi_voice_dial_call_req"经过函数voice_call_dial_req()得到返回消息"dial request"发送或者code error的返回值.
+[2]QMI向CM"voice call is dialed",CM向IMS发送"MO呼叫,IMS服务启动"类似的消息,QMI向UI上层返回消息做出响应.
+[3]IMS启动RTP的初始化,提供经过互联网直接的语音通话数据交互的基本准备,于此同时QMI再次向上层发送"QMI_voice_all_call_status_IND"类似的指示呼叫状态的消息,提示现在是MO呼叫"origination".
+[4]IMS向SIP-server发送"invite"请求(基于UE设置创建SDP offer),发起SIP的服务/VoLTE事务的建立.
+[5]SIP-server响应消息"100"(收到invite消息提示)和"180 Ringing"(相关的编码设置,专用承载的建立消息等等)
+[6]IMS-->CM-->QMI-->上层UI,播放来电铃声,"IMS call is Ringing"-->"QMI_voice_all_call_status_IND"(进入到了alerting状态)
+[7]两端UE确认各种信息OK,SIP-server发送消息"200(OK)"给IMS端,IMS做出响应"ACK",至此正式的呼叫已经接通.
+[8]IMS-->cm-->QMI-->UI:告诉上层通话已接通,"QMI_voice_all_call_status_IND"处于conversation状态.
+</pre>
+{| class="wikitable"
+!NV
+!Functions
+!Usage
+|-
+|65964
+|高质量的语音通话(使能)
+|1 = AMR-WB，0 = AMR-NB
+|-
+|66301
+|AMR-NB的速率标准
+|0 = AMR 4.75 kpbs， 1 = AMR 5.15 kpbs
+2 = AMR 5.90 kpbs， 3 = AMR 6.70 kpbs
+
+4 = AMR 7.40 kpbs， 5 = AMR 7.95 kpbs
+
+6 = AMR 10.20 kpbs，7 = AMR 12.10 kpbs
+|-
+|67239
+|AMR-WB的速率标准
+|0 = AMR-WB 6.60 kbps， 1 = AMR-WB 8.85 kbps， 2 = AMR-WB 12.65 kbps
+3 = AMR-WB 14.25 kbps，4 = AMR-WB 15.85 kbps，5 = AMR-WB 18.25 kbps
+
+6 = AMR-WB 19.85 kbps，7 = AMR-WB 23.05 kbps，8 = AMR-WB 23.85 kbps
+|-
+|67240
+|octet排列方式/bandwidth排列方式选择（AMR-WB）
+|0 = bandwidth efficient， 1 = octet aligned
+|-
+|67241
+|octet排列方式/bandwidth排列方式选择（AMR-NB）
+|0 = bandwidth efficient， 1 = octet aligned
+|-
+|67281
+|设置UE等待时间(单位是毫秒),超过此等待时间则主叫UE会取消这次VoLTE呼叫建立.
+|一般设置为90000ms
+|}
+* AMR-WB且NV-67240=1的octet排列方式情况下，用一个bitmask来存放数值。
+* 读取实例: 149 = 1001 0101 = 23.05 kbps、15.85 kbps、12.65 kbps、6.60 kbps，对应的第7、4、2、0位值为1，所以对应AMR-WB对应的速率标准。
+
+===MT===
+ [1]被叫端接收到"invite"消息,被叫端UE-->IMS-CN-->IMS--(被呼叫提示)-->CM,提示有呼叫出现.
+    (在RTP定时器的时间范围内,打开RTP功能,传送IMS内部的呼叫ID,向上层报告呼叫到来的请求)
+ [2]CM-->IMS-->IMS-CN,发送"180"消息.
+    (IMS等待来自CM的响应"wait_for_invite_rsp",去确定VoLTE呼叫是被允许的)
+ [3]IMS-->CM-->QMI-->上层UI,被呼叫的铃声提示-->CM_call_event_incoming-->QMI_voice_call_status_IND.(处于incoming状态)
+ [4]上层UI做出反应,选择接听-->QMI-->CM-->IMS-->IMS-CN,发送消息"200"作为SDP的应答.
+ [5]IMS-CN-->IMS-->CM-->QMI-->UI, QMI_voice_answer_call_msg-->响应"ACK"消息,进入"conversation"状态.
+{| class="wikitable"
+!NV
+!Functions
+!Usage
+|-
+|70213
+|LTE的RSRP的门限值,单位dBm
+|指定LTE-RSRP的门限值大小即可，一般设置为 -115dBm
+|-
+|69673
+|IMS operation mode
+|0 – Verizon Wireless<br>
+1 – KDDI<br>
+2 – IR.92<br>
+3 – LGU<br>
+4 – MetroPCS<br>
+5 – ATT<br>
+6 – SKT<br>
+7 – KT
+|-
+|67280
+|响铃定时器,单位毫秒,超时则终止通话,如果拒绝则回返"486 buys here"的提示给MO端
+|一般设置为45000ms
+|}
+* is_alert_info_set: 这个标志位值表示当前进程中是否有活动中的呼叫，0表示无，1表示有。
+
+==常见的通话状态变化==
+===Call_termination===
+*如果呼叫终止的请求是从本地端发出，即从上层UI发向QMI、CM的呼叫终止请求，CM请求IMS去结束VoLTE呼叫，IMS内部清除VoLTE呼叫并发送"BYE"请求，得到SIB-server的"200_OK"响应，呼叫终止提示最终会发给QMI和UI上层。
+*如果呼叫终止的请求是从远端发出，则直接该终止请求会直接由远端发向其对应的SIP-server，得到相同的响应后，本地端同样也会接收到呼叫终止的提示信息。<br />(DPL: Data Protection Layer 数据保护层，IMS的内部结构单元)
+
+===Call_Hold===
+ 前提条件：UE间的通话连接已经建立成功
+ [1]UI-->QMI，QMI_voice_manage_IP_calls(hold_active_accept_watting_or_held)
+ [2]QMI-->CM，cm_mm_call_cmd_sups()，CM_call_sups_type_hold_call callid=15...
+ [3]CM-->IMS-->CM，CM_call_event_sups
+ [4]IMS-->SIP-server-->IMS，"invite"消息和对应的响应"200 OK"
+ [5]SIP-stack<-->IMS，消息"QPE_SIP_reinvite_established_EV"和reinvite的"ack"
+ [6]IMS-->CM，CM_ip_call_IND_call_hold指示,cm_ip_call_IND_sups_conf
+ [7]CM-->QMI，CM_call_event_call_on_hold，CM_call_event_MNG_calls_conf
+ [8]QMI-->UI，QMI_voice_manage_IP_calls(qmi_results_success)，给提供呼叫当前的状态，处于hold的状态。
+ 
+ QMI_VOICE_ALL_CALL_STATUS_IND(CALL_STATE_HOLD)
+ QMI_VOICE_CM_IF_CALL_TYPE_VOIP
+ QMI_VOICE_CM_IF_MODE_LTE
+
+*call state=6即QMI_VOICE_CM_IF_CALL_STATE_HOLD状态，call type=2即表示为VOIP call类型。
+
+===Call_resume===
+*流程和call_hold基本一样，指示传递的内容有所区别。
+*只有CM-->QMI的CM_call_event_call_on_hold事件变成了CM_call_event_retrieved，会指示去重启呼叫过程，最终qmi_voice_all_call_status_IND是"conversation"状态。
+
+===Call_add===
+*在已有一个IP通话存在的基础上，添加一个VoIP通话。
+*由上层UI向QMI、CM、IMS发起将当前呼叫置为hold状态的请求，这部分和call_hold流程一样，在这一步完成后，执行建立MO-call的基本流程，再结束该MO-call新建流程后，由QMI向上层UI指示从"hold"变回为"conversation"状态，此时同时存在两个VoIP类型的通话。
+
+===Call_waiting===
+*在UE1和UE2的VoIP通话建立的基础上，UE1再次被UE3寻呼，接收到"invite"消息，UE1在UI中看到有新的呼叫的提示，UE1选择先接通和UE3的通话，则UE1和2之间的呼叫被置为"hold"状态，然后UE1和3之间的连接建立，这一部分即在MT-call中的流程，IMS向CM、QMI、UI逐级传递连接的事件消息。
+
+===Call_conference===
+*多UE互相之间通过一个conference-server(类似于SIP-server)联通，从而能进行多UE同时交流的电话会议。
+
+ 前提条件：UE1和2处于hold,UE1和3处于conversation
+ [1]上层UI/UE1发起电话会议的请求，将UE1和3之间的状态置为"Hold"。
+ [2]UE1通过发送"invite"到"conference-URI"(需要参加会议的所有UE的对应的一个标识)来创建一个会议。
+ [3]UE1发送"REFER"到conference-server，由其将invite消息发给每一个被指定的UE。
+ [4]对应UE(例如这里是UE2)接收到"invite"消息，UE1接收到各种"notify"消息。
+ [5]UE1接收到notify后结束和UE2的呼叫，UE2接受和conference-server的呼叫建立。
+ [6]以此过程一个一个去添加要加入会议的UE到conference-server中去。

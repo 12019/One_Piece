@@ -1,0 +1,137 @@
+受文档中某个问题所困扰,所以自己去扩展了一下一些基础知识,借此篇wiki主要介绍一下层3信令消息的标准格式定义.
+
+== 混乱之治 ==
+<pre>
+问题缘起一个在上行接入信令流程中的一条log的分析,如下所示,这是一条RRC连接建立完成的log,log中包含着小区的物理ID,频段,RB-id等等信息,当然最主要的是下面红框中圈出来的部分"dedicatedInfoNAS"(NAS层的消息),
+这里图中虽然在右上角有图示帮我们理解这一串数字的含义,但具体的看法光凭这一张图,一时也没有完全的理解,所以为了系统的了解一下消息的分类和可能包含的所有信息,需要自己去查找相关规范文档进行深一步的学习和总结.
+</pre>
+[[File:original_quiz.PNG]]
+
+== 参考标准 ==
+=== 起源 ===
+*首先,图中出现了8位二进制数,右边它给出了41,42,43这样的对应值和相应的文字解释,根据对应关系细想一下便可知道,应该是每4位2进制数对应后面的1位16进制数,而后面的文字说明部分应该就是该条消息的中心含义,但在上图的NAS消息中所包含的数字有一连串,我们怎么知道是哪几个数字对应这里的16进制数,即使我们知道了是第几个数字相互对应,那么其他的数字是什么含义,还有没有其他的解释包含其中,这就是我们需要去解决的问题.
+*根据图中"24.301 Table 9.8.1"的指示,我们可以去到3GPP官网下载到相关的协议文档,以TS-24.301打头的文件,依照3GPP对文件的命名规范,这个应该是信令消息相关的规范文档,查找之后也的确是关于层3信令的协议规范文件,当然也在该文件中找到了上述的表格内容,如下所示.
+[[File:EPS MM msg type.PNG]]
+[[File:EPS SM msg type.PNG]]
+*根据文档描述,以上两个表格,其中的数字只是对应着本条NAS层消息中一个消息元素(属性)"message-type"的种类,除此以外,每一条标准的层3信令都还可能包含着其他诸如文件头类型,承载验证信息,协议鉴别,序列号等等信息,因此我们需要的便是完全梳理出一条标准的层3信令的格式以及每一部分所对应的的含义.(因为就层3信令而言,标准的层3消息也有细的种类之分,大多的层3信令的格式标准之间不完全相同,当然对应的数字格式也就有很大的出入,但是它们基本都会有一个格式的框架可以遵循,不过有一个例外,最一开始提到的"service_request"这一条,该信令不属于标准的层3信令)
+*根据文件TS-24.301第9章的内容"General message format and information elements coding"的介绍,NAS层的消息"通常"可以分为以下两类.
+<pre>
+[1]"普通NAS消息",包含以下内容:
+protocol_discriminator(协议鉴别)
+EPS_bearer_identity或者security_header_type
+procedure_transaction_identity
+message_type
+other IEs.</pre>
+<pre>
+[2]"具有安全保护的NAS消息",这一类包含以下内容:
+protocol_discriminator(协议鉴别)
+security_header_type
+message_Authentication_code
+SN
+普通NAS消息
+</pre>
+*由上我们也可以看出,具有安全保护的NAS消息是在普通NAS消息基础上添加了相关的保护和验证性的安全信息,那么接下来我们就需要去详细看一下这些组成部分中的每一部分对应的种类和相关的含义解释,经过在TS-24.301,TS-24.007,TS-24.008等多个文件查找可以得到相关表格,这些表格详细的介绍了在这两类NAS消息中每一个构成部分的详细解释.
+
+=== 组成 ===
+*security header type
+占用octet1的5-8 bits,包含着和NAS消息安全性保护的控制信息,例如普通的NAS消息(无安全性保护)这一部分的4bits设置应该就是为"0000".
+"security header type"是对于EPS-MM消息才会存在的,这4位的2进制数取决于当前NAS消息的具体分类.<br>
+[[File:security header type.PNG]]
+
+*EPS bearer identity
+"EPS bearer identity"也同样占用octet1的5-8 bits的位置,因此对于一个消息来说,"EPS bearer identity"和"security header type"只会有一个存在,EPS bearer identity是仅对于是对于EPS-SM消息而存在的.<br>
+[[File:EPS bearer identity.PNG]]
+
+*protocol discriminator
+组成部分为octet1的1-4 bits,详细种类区别见图,如果接收的NAS消息中protocol_discriminator不符合图中任意一种类型,则网络端会忽略该条消息并执行信道释放的初始化,如果UE接收到此类消息UE会忽略掉.<br>
+[[File:protocol_discriminator.PNG]]
+
+*procedure transaction identity(PTI)
+占用octet1a* 1-8 bits,这个属于只有在正常NAS消息中的EPS-SM消息中才会有的部分,因为一共有8bit,除去00000000(无此程序操作验证的指配)和11111111(保留)两种类型,剩余有254种不同的值可以指定,可以区别254种message-flow,如果在EPS-SM消息中出现这一部分,即这一个IE即占用了octet2的8bits,其他的IEs占用部分依次向后推一个octet.<br>
+[[File:procedure transaction identity.PNG]]
+
+*message type
+即在之前提到的NAS消息"message-type"的IE,对于EPS-MM和EPS-SM有类型的分别,也是我们需要关注的最重要的IE,确定此条消息出现的原因和作用.<br>
+[[File:EPS MM msg type.PNG]]
+[[File:EPS SM msg type.PNG]]
+
+*other IEs
+还有一些不同格式IEs的和IE的格式的介绍,还有太多这里不做详细展开,具体可参考文件TS-24.301中P.309开始的内容.<br>
+下图是IE的格式:
+:*IEI
+:*LI(长度指示)
+:*value-part
+[[File:IE_format.PNG]]
+
+*message Authentication code(MAC)
+只存在于受保护的NAS消息的octet2-octet5 的一共32bits,消息鉴权码包含着对该消息的保护信息.<br>
+MAC由特殊设定的算法得来,算法大致有以下4种:
+<pre>
+"00002"      EIA0      	 Null Integrity Protection algorithm
+"00012"      128-EIA1    SNOW 3G based algorithm
+"00102"      128-EIA2 	 AES based algorithm
+"00112"      128-EIA3 	 ZUC based algorithm
+(这些都是基本128-bit的输入数据进行计算的,RAND?)
+</pre>
+<pre>
+UEA	UMTS Encryption Algorithm
+UIA	UMTS Integrity Algorithm
+EEA	EPS Encryption Algorithm
+EIA	EPS Integrity Algorithm
+</pre>
+
+*sequence number
+有安全性保护NAS消息对应的SN号,位置在octet 6的8bits,这里的SN号部分和上面的MAC也都是属于NAS消息安全性保护的一部分.<br>
+以上两个部分可参考TS24.301的4.4章节-NAS安全性的部分内容.
+
+*NAS message
+普通的NAS消息,作为第一类NAS消息的类型,其本身也是第二种NAS消息的最后一段组成部分.
+
+=== 小结 ===
+*经过由上面的单元介绍我们已经可以知道构成NAS层消息两种类型各个部分大致的作用和区别,整理一下两种类型的NAS消息的结构,如下图所示,根据详细的消息结构和每一部分具体的类型区别,即可判断当前NAS层消息中那一串数字的具体含义,从而便于我们更高效的去阅读抓到的log信息,从而去分析问题.<br>
+[[File:plain_NAS_message.PNG]]
+[[File:Security_protected_NAS_message.PNG]]
+
+== 实际验证 ==
+依照我们上面找到的规范,我随机抓取了一段手机呼叫流程的部分log,我们来重点关注一下包含有NAS层信息的这些信令,看是否和标准有所出入.
+<pre>
+[1]实际通话前,手机由CSFB到GSM网络,手机此时还处于LTE网络的状态,提供的信息为"dedicatedInfoNAS '172487854F04074C2005F4C0044CC257022000'H",前两位为"17",根据protocol discriminator和security header type的
+标准格式,首先可以得知这是一个受完整性保护的EPS-MM消息,因此属于第二类NAS的消息,紧跟的"2487854F"这8位应当属于MAC验证性信息,再后面的"04"属于该消息的序列号,从"07"开始进入到实际的NAS普通消息类型的组成中,
+"0"表明这是一个无安全性保护的普通NAS消息,"7"和第二位的7含义相同表示为EPS-MM消息,最后第15和第16位的"4C",即是我们最关心的IE"message-type"的类型,由表可知4C对应的是"extended service request",这条信令了解
+CSFB过程的一定不会陌生,因为这个是CSFB过程中LTE向GSM进行重定向的标识信令,标志着CSFB过程的开始.查看抓取的log也可以发现,的确有"extended service request"相关的event信息,由此可以证实层3信令格式的准确性.</pre>
+[[File:log_analysis_1.PNG]]<br>
+[[File:log_analysis_7.PNG]]
+<pre>
+[2]这一个例子的dedicatedInfoNAS为"'C7823AF0'H",显然和开头07,17的消息会有很大区别,查询security header type的表格得到如下信息"security header for SERVICE REQUEST message",单凭这一句话我们判定这一定
+是和service_request相关的信令,再联系上下文也可以得知这里处于CSFB流程最后返回LTE网络的部分,重新在LTE选择合适小区驻留,当然会发起上行的RRC连接建立请求,当然也会就有service_request的出现,结合发生的event
+信息更可以进一步的确定,至于除去C7后面的数字部分,因为其实如果确定了为service_request信息后,后面的数字在这里看来深究的意义不大.</pre>
+[[File:log_analysis_2.PNG]]<br>
+[[File:log_analysis_3.PNG]]
+<pre>
+[3]最后一个例子是一对上下行的直传消息,发生在CSFB返回LTE网络RRC连接重配置的流程后,对应的下行和上行的NAS信息分别为'2700A6F8D0025200C95B010630100...'H,'2714F68FDC035200CA'H,如果单从第2位的7就去判断
+该消息是EPS-MM的消息,那么第1位的2决定该消息是受保护性的,那么"message-type"类型的信息应该在该消息的第15,16位,然而这两条消息的15,16位都是00,明显不符合标准中类型要求,反而是它的第17,18位的数值大小在
+EPS-SM消息类型的范围之内,那么多出的这两位到底是什么呢?在看一次NAS消息的构成部分,我们就可以发现有一个IE是可有可无的存在,那就是"procedure transaction identity",这个第15,16位的"00"即对应了这个只会
+出现在EPS-SM普通NAS消息的IE,多出的1个octet即是这一个IE,那么现在还有一个问题就是第二位的7和第14的2,本应该都是指EPS-SM类型,但是为什么第二位是7,这里只能理解为这两个部分的protocol discriminator可以
+不同,分别对应整体的受保护的NAS消息和后面单独的普通的NAS消息,类似于盒子套盒子的关系,IE的含义相同但是针对的对象不同.而第1位的2和第13位的5不同的原因不同,第1位的2表示整条消息是受保护的NAS消息,而
+第13位的5,查询表格可知5并不属于security header type的类型值,联系到这是一条EPS-SM消息,这里的5对应的应该是"EPS bearer identity"中的值为5的类型,由此根据上下行消息的第17,18位分别是"C9","CA",对应
+EPS-SM消息中的"modify EPS bearer context request","modify EPS bearer context accept",联系此条信令的上下文,发现的确有相关的event发生,证实分析的正确性.</pre>
+[[File:log_analysis_4.PNG]]<br>
+[[File:log_analysis_5.PNG]]<br>
+[[File:log_analysis_6.PNG]]
+
+== 扩展部分 ==
+===EMM_cause===
+<pre>
+EMM cause IEI   octet 1
+Cause value     octet 2
+</pre>
+EMM_cause根据之前IE_format可以知道,他是属于"TV"这种格式,EMM_cause_list主要是面对在EMM中可能出现的错误的一个详细列表,便于遇到问题时根据cause的值找到对应的触发原因.<br>
+[[File:EMM_cause_list.PNG]]
+
+== 上古卷轴 ==
+IE = information elements
+
+[http://www.3gpp.org/dynareport/24301.htm TS-24.301] //参考文件的源头,主要是第4章节的完整性保护(4.4 NAS security 全部)和加密的相关内容和第9章各类标准格式介绍(9.1-9.8全部, 9.9部分).<br>
+[http://www.3gpp.org/dynareport/33401.htm TS-33.401] //对24.301一些详细概念的扩展.<br>
+[http://www.3gpp.org/dynareport/24007.htm TS-24.007] //算法的一些定义,对24.301一些详细概念的扩展,TS24.301 9.1-9.8章节中有几部分关键定义在此文件里.<br>
+[http://www.3gpp.org/dynareport/24008.htm TS-24.008] //TS24.301中9.9章节 other IEs中有大量的定义都在这个文件里,需要时查阅.<br>

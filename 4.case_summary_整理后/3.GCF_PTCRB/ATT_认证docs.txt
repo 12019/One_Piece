@@ -1,0 +1,29 @@
+ATT文档说明
+10776_17_2_2017_8_11-124318.xlsx
+10776的所有测试用例，其中包含PtN(Protect the Network)的部分。
+
+13289 17_3_20171116.xlsx
+又称为AT&T Compliance Matrix，送测设备能力支持情况。参考栏位“Compliant”，由于AT&T的文档每个季度都会更新一次，同时在实验室送测过程中，可能会发现之前表格中的一些填写错误，所以此文件会不断的迭代更新，我们始终以最新的后缀日期那份为准。如，当前文件名后缀为<20171116>，代表20171116更新。
+
+13340 17_3.pdf
+<Device Requirements>AT&T对入网设备的所有要求，可通过”Requirement TAG”栏位与10776文档关联，也就是说13340是10776的描述文件。
+
+14782DeviceAcceptanceProcessV8_5_2017_4_17-7455.pdf
+<AT&T Terminal Unit &Accessory TechnicalAcceptance Process>入网认证的完整流程。
+
+1077617_2_2017_8_11-124443.zip
+AT&T 17_2文档包，对各个子测项进行详细描述，非常细节。如，各测项使用的测试设备，测试步骤，以及判定fail or pass的标准，该文档存留，大概看看文档列表即可，当出现fail的时候，也许我们需要检查该项对应的case测试步骤等详情。
+
+=================
+
+1、	送测设备的目标运营商是那个？
+AT&T的MVNO(虚拟运营) Consumer Cellular，简称CC。
+CC有租用AT&T与T-Mobile的网络，因此该项目需要同时支持AT&T 与T-Mobile网络，入网认证也需要分别在AT&T与T-Mobile进行。
+
+2、	PtN涉及哪些test case？
+PtN是10776的子集，包含在10776表格中。
+10776表格中，我们暂时只关注Sheet <Section 1- Radio>、<Section 2- Field Tests>、<Section 5- Applications>，且送测设备类型为MVNO。
+所以我们可以通过Column “Protectthe Network” 与 “MVNO” 过滤出PtN的测项，共计不到400项。由于部分测试不适用于我们的设备，所以实际测项可能会低于300项。
+
+3、	文档为什么有些命名为17_2，有些却是17_3 ?
+AT&T每个季度都会更新他们的文档，多为增量更新，而非一次性更新所有文档。，17_2代表17Q2更新，17_3 则代表17Q3更新。若手上同时拥有17Q2与17Q3的某一只文档，则始终以最新文档为准。

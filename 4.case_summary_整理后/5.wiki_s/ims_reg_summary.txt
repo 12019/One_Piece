@@ -1,0 +1,245 @@
+本文简述自己在调试IMS基本功能遇到的一些问题，以及解决问题的一般方法。
+
+== 一般调试流程 ==
+IMS基本功能调试，modem和AP(telephony)都有涉及，可以大致总结为以下三个步骤：
+
+1.IMS基本参数配置工作；
+2.modem+AP联调，IMS注册流程跑通；
+3.IMS相关基本功能PASS。
+
+第一部分的参数配置可以参考wiki --> [[Qcom IMS NV/EFS config]] , 里面已经对IMS涉及的NV作了比较详细的介绍，也给出了推荐值。
+第三部分的基本功能扩展开之后可涉及VoLTE，VT，电话会议，SRVCC相关等等多个方面，本文不作详细介绍。
+因此本文将主要分析第二部分，默认AP+modem配置都已经正确的情况下，从log来展现出IMS基本功能的一般流程。
+
+<span style="color: red;">
+(以下LOG流程非完全线性流程)
+</span>
+
+== IMS REG test mode ==
+*在上层和modem中都存在一个IMS的test mode设置(UI上一般是对应volte高清语音通话的那个开关，modem对应 NV67264 - ReqConfigTestMode 这个配置项)，在非volte产品中配置1，volte产品中需要关闭。
+<pre>
+//RM注册流程中的关键LOG，正常情况不应该出现以下log
+RegisterManager.cpp 4330 H EventChangeRat: permanently blocked due to test mode 1 or m_bIMSDisabledInRoaming 0 or VoLTEoff
+
+//正常情况
+[0051/0002] MSG 02:09:49.784 IMS/High [ RegisterManager.cpp   2367] update: Card read complete      
+[0051/0002] MSG 02:09:49.787 IMS/High [ RegisterManager.cpp   3768] RegisterManager ===== Start      
+</pre>
+<pre>
+//除此之外还可以从QMI LOG中看到IMS test mode的状态
+//0x1544 QMI_MCS_QCSI_PKT
+Service_IMSS {
+ ServiceIMSSV1 {
+   ims_settings_set_reg_mgr_config {              //The QMI command to set IMS test mode
+     ims_settings_set_reg_mgr_config_reqTlvs[0] {
+       Type = 0x12
+       Length = 1
+       ims_test_mode_enabled {
+         ims_test_mode_enabled = false            //IMS test mode is false means IMS is ON
+ }
+ ...
+</pre>
+
+== 终端开机/插卡后能够成功附着LTE网络 ==
+*以中国移动的实网测试为例，激活volte的商用MBN，默认基本属性配置已经OK，在终端开机/插卡后，log中能够看到终端成功驻留到LTE网络。
+<pre>
+//终端发起attach流程，网络端接受
+[0xB0ED] OTA LOG 02:10:01.125 LTE NAS EMM Plain OTA Outgoing Message Attach request Msg      
+[0xB0ED] OTA LOG 02:10:01.125 LTE NAS EMM Plain OTA Outgoing Message Attach request Msg      
+[0xB0ED] OTA LOG 02:10:01.125 LTE NAS EMM Plain OTA Outgoing Message Attach request Msg      
+[0xB0ED] OTA LOG 02:10:01.125 LTE NAS EMM Plain OTA Outgoing Message Attach request Msg      
+[0xB0EC] OTA LOG 02:10:01.828 LTE NAS EMM Plain OTA Incoming Message Attach accept Msg      
+[0xB0E2] OTA LOG 02:10:01.828 LTE NAS ESM Plain OTA Incoming Message Activate default EPS bearer context request Msg      
+[0xB0ED] OTA LOG 02:10:01.853 LTE NAS EMM Plain OTA Outgoing Message Attach complete Msg      
+[0051/0002] MSG 02:10:01.938 IMS/High [ RegisterManager.cpp   2280] update: RAT changed to 10, RegType[0]      
+[0051/0002] MSG 02:10:01.938 IMS/High [ RegisterManager.cpp   3929] EventChangeRat: NewRat = 10,  RegType[0]      
+[0051/0002] MSG 02:10:01.939 IMS/High [ RegisterManager.cpp   4485] CheckRegistrationNeeded - Active:1, Valid Rat:1     
+</pre>
+
+*部分OEM MBN中已经设置过PDP profile，例如中国移动MBN中预置了5个pdp profile，其中三个写入APN信息，这些可以在源文件中看到，也可以通过AT命令直接从机器中读取到当前的APN配置情况。
+[[File:cmcc-mbn-profile.PNG |1576×101 pixs ]]
+*AT+CGDCONT?  //查询当前终端APN配置
+*AT+CGDCONT=2,"IPV4V6","ABC"  //设置index为2，类型为ipv4v6，名为ABC的APN
+[[File:At+cgdcont.PNG ]]
+
+== DS模块上报当前驻留RAT，提示可以进行IMS注册 ==
+*AP/FW对应IMS的服务正常建立，后续需要下发正确的PDN连接请求。
+*如果支持Vowifi，还需要关注当前wifi连接是否正常，iWLAN的状态同样会被上报。
+<pre>
+//发现RAT=10(LTE)，成功驻留
+IMS/Medium [PDPHandler.cpp    882] CPDPHandler::EventChangeRat - New RAT is valid: 1, PDNType[1], RAT[10]   //RAT=10(LTE), 6(IWLAN)   
+IMS/Medium [PDPHandler.cpp    882] CPDPHandler::EventChangeRat - New RAT is valid: 1, PDNType[0], RAT[10]      
+</pre>
+
+<pre>
+//正常情况
+IMS/High [      PDPManager.cpp    749] EventChangeRat - Current RAT 0 New Rat 10 ProceedIfRatsSame 0      
+IMS/High [      PDPManager.cpp    772] EventChangeRat - ServiceOnRatMask = 0x0080640e, new RAT mask = 0x00000400:       
+IMS/High [      PDPManager.cpp    773] EventChangeRat - New RAT is 10 and is valid: 1
+
+//如果出现以下log，则表示ratmask配置有误，需要修改NV67257中的 "RatMaskValue" 和 "smsRATMaskString" 配置项。
+IMS/High [      PDPManager.cpp    773] EventChangeRat - New RAT is 10 and is valid: 0
+</pre>
+
+*DS/DPL会向上层和modem的RM模块上报RAT已就绪的消息。
+
+== 从PM配置中获取APN注册信息 ==
+*PM关联的APN配置在NV71527中，NV71527配置的APN信息必须和pdp-profile中或者AT写入的APN信息一致(名字，IP类型)，否则会出现APN信息不匹配造成的IMS注册失败。
+*NV71257还可以详细配置APN的鉴权方式，支持的服务功能(volte/vt/sms/rcs)，APN类型(internet/ims/emergency)以及APN名字。
+
+<pre>
+//ims APN配置正确，和pdp-profile匹配
+IMS/High [PDPRATHandlerVoLTE.cpp    726] InitPDP - DCM create Profile Succeeded       
+</pre>
+
+<pre>
+//从PM获取中获取APN信息，获取到LTE RAT (RAT = 0x10) 对应的APN信息(.iRAT / iAPNType)
+IMS/Medium [qpIMSPolicyManager.cpp    292] QPConfigurationHandler::qpGetConfiguration QP_PM_REQUEST_ID 1      
+IMS/Medium [qpIMSPolicyManager.cpp    861] QPConfigurationHandler::GetIMSAPNPriority Entered      
+IMS/Medium [qpIMSPolicyManager.cpp    884] QPConfigurationHandler::GetIMSAPNPriority n_pInputParam = 10 iRAT = 10      
+IMS/Medium [qpIMSPolicyManager.cpp    889] QPConfigurationHandler::GetIMSAPNPriority eAPNType[0] = 1      
+IMS/Medium [qpIMSPolicyManager.cpp    894] QPConfigurationHandler::GetIMSAPNPriority eAPNType[1] = 0      
+IMS/Medium [qpIMSPolicyManager.cpp    899] QPConfigurationHandler::GetIMSAPNPriority eAPNType[2] = 0      
+IMS/Medium [qpIMSPolicyManager.cpp    902] QPConfigurationHandler::GetIMSAPNPriority eAPNType[3] = 0      
+
+//获取APN的支持的功能信息 --> APN & RAT= 7 [bitmask: VoLTE(1) + VT(2) + SMS(3)]
+IMS/Medium [qpIMSPolicyManager.cpp    292] QPConfigurationHandler::qpGetConfiguration QP_PM_REQUEST_ID 5      
+IMS/Medium [qpIMSPolicyManager.cpp   1721] QPConfigurationHandler::GetIMSAllowedServices Entered      
+IMS/Medium [qpIMSPolicyManager.cpp   1592] QPConfigurationHandler::IsVOPSEnabled m_bLteNoVopsConfigured[1]      
+IMS/Medium [qpIMSPolicyManager.cpp   1604] QPConfigurationHandler::IsVOPSEnabled eIMS_Pref[9]      
+IMS/Medium [qpIMSPolicyManager.cpp   1612] QPConfigurationHandler::IsVOPSEnabled isVOPSEnabled 1      
+IMS/Medium [qpIMSPolicyManager.cpp   1767] QPConfigurationHandler::GetIMSAllowedServices RAT = 10 APNType = 1   //APN type: 1 = IMS； 3 = Emergency；
+IMS/Medium [qpIMSPolicyManager.cpp   1768] QPConfigurationHandler::GetIMSAllowedServices ServiceMask for above APN & RAT= 7 and by Device 32775      
+
+//获取APN的IP类型和iAPNindex信息(这一部分log出现在IMS PDN已经建立之后，是否说明APN name等信息是直接从DS profile中获得然后去发起PDN连接建立的？)
+IMS/Medium [qpIMSPolicyManager.cpp    292] QPConfigurationHandler::qpGetConfiguration QP_PM_REQUEST_ID 3      
+IMS/Medium [qpIMSPolicyManager.cpp    942] QPConfigurationHandler::GetIMSAPNParams Entered      
+IMS/Medium [qpIMSPolicyManager.cpp    976] QPConfigurationHandler::GetIMSAPNParams IP Addr Type = 2 iIPType = 2      //1 - IPV4； 2 - IPV6； 3 - IPV4V6
+IMS/High [qpIMSPolicyManager.cpp    997] QPConfigurationHandler::GetIMSAPNParams IP FB = 1 iFBStatus 1      
+IMS/Medium [qpIMSPolicyManager.cpp   1001] QPConfigurationHandler::GetIMSAPNParams iAPNIndex = 1       // 1表示ims
+IMS FW/High [  qpIMSPolicyManager   1009] QPConfigurationHandler::GetIMSAPNParams APN Name = ims      
+</pre>
+
+<pre>
+//如果DS profile(pdp profile)未定义(可以直接在efs目录 /data_profiles/... 下检查，也可以用AT+CGDCONT?命令检查)，会出现以下错误，可以用AT写入后重测
+IMS DPL/High [             qpDcm.c   2616] qpDcmCreateProfile - ApnName=cmnet     //默认承载
+IMS DPL/High [             qpDcm.c   2616] qpDcmCreateProfile - ApnName=ims       //ims 承载
+IMS DPL/High [             qpDcm.c   2616] qpDcmCreateProfile - ApnName=ims      
+IMS/Error MSG qpDcm.c 02139 qpDcmCreateProfile - Valid 3GPP profileNumber not found
+IMS/Error MSG PDPManager.cpp 00889 CPDPManager::HandleRatChange profile creation failed | rat 10 apn 1
+
+//如果DS profile和PM中配置的APN类型为IPv4 only，同样如果网络只支持IPV6类型的ims apn，那么会出现请求被拒
+0xB0E2 LTE NAS ESM Plain OTA Incoming Message -- Activate default EPS bearer context request Msg
+0xB0E3 LTE NAS ESM Plain OTA Outgoing Message -- Activate default EPS bearer context reject Msg
+
+//根据以下两部分log可以判断PM中获取到的APN type具体信息，如果两部分都能看到说明是IPv4v6，否则是IPv4 or IPv6。
+qpDcm.c   7902] IMS_APP#>>#DPL_M#0#qpDcmEstablishPDPConnection      
+qpDcm.c   7980] qpDcmEstablishPDPConnection | pDcmProfile=8b240e70 dsAppID=55      
+qpDcm.c   8003] qpDcmEstablishPDPConnection - APNName --> ims, Resolved APN -->       
+qpDcm.c   8005] qpDcmEstablishPDPConnection - 3GPP ProfileNumber --> 2 | 3GPP2 ProfileNumber --> -1 | IPType --> 2      
+qpDcm.c   8012] DPL_M#$$#0#qpDcmEstablishPDPConnection - DS_EWOULDBLOCK on dsnet_start
+
+qpDcm.c   7902] IMS_APP#>>#DPL_M#0#qpDcmEstablishPDPConnection      
+qpDcm.c   7980] qpDcmEstablishPDPConnection | pDcmProfile=8b23c000 dsAppID=56      
+qpDcm.c   8003] qpDcmEstablishPDPConnection - APNName --> ims, Resolved APN -->       
+qpDcm.c   8005] qpDcmEstablishPDPConnection - 3GPP ProfileNumber --> 2 | 3GPP2 ProfileNumber --> -1 | IPType --> 1      
+qpDcm.c   8012] DPL_M#$$#0#qpDcmEstablishPDPConnection - DS_EWOULDBLOCK on dsnet_start      
+</pre>
+
+*如果遇到IPv4类型向IPv6回落失败的情况，请联系高通申请CR#1008195 (KBA-170601053950)。
+*建议APN类型都配置为IPV4V6，因为某些地方网络只会固定分配IPV4或IPV6的地址，如果请求类型(取决于DS profile和NV71527中的设置)和网络返回的IP地址类型不一致，PDN连接会被拒绝。
+
+== Modem的IMS APN/PDN建立 ==
+IMS APN信息确认无误后，RM会向DPL发起PDN建立请求，用之前获得的APN信息向网络发出建立请求。
+<pre>
+//终端用IMS APN发起PDN连接，到此modem侧的IMS APN连接建立完成。
+[0xB0E3] OTA LOG 02:10:02.307 LTE NAS ESM Plain OTA Outgoing Message PDN connectivity request Msg     
+[0xB0E2] OTA LOG 02:10:02.441 LTE NAS ESM Plain OTA Incoming Message Activate default EPS bearer context request Msg
+msg_type = 193 (0xc1) (Activate default EPS bearer context request)
+lte_esm_msg
+  act_def_eps_bearer_context_req
+    eps_qos
+      qci = 5 (0x5) (QC5)
+    access_point
+      acc_pt_name_val[0] = 3 (0x3) (length)
+      acc_pt_name_val[1] = 73 (0x49) (I)
+      acc_pt_name_val[2] = 77 (0x4d) (M)
+      acc_pt_name_val[3] = 83 (0x53) (S)
+    pdn_addr
+      pdn_addr_len = 9 (0x9)
+      pdn_type = 2 (0x2) (IPv6)
+      ipv6_interface_id = 0x00100019ba2bad3 (1:1:9ba2:bad3)
+    esm_cause
+      esm_cause = 51 (0x33) (PDN type IPv6 only allowed)
+[0xB0E3] OTA LOG 02:10:02.447 LTE NAS ESM Plain OTA Outgoing Message Activate default EPS bearer context accept Msg 
+</pre>
+
+== PDN建立信息上报给IMS daemon ==
+*Modem侧IMS APN建立后，DPL会向上层和RM上报IMS PDN的建立成功的信息"QMI_IMS_DCM_PDP_ACTIVATE_REQ_V01"
+<pre>
+//由Modem/RM上发给IMS daemon，由这个进程后续来bring up上层的IMS APN，如果没有找到此消息，则需要检查NV70287的配置是否为1。(如果需要支持VT和VoWIFI，必须使能此NV)
+Legacy/Error [ims_qmi_dcm_client.c    679] build_req_for_pdp_activate QMI_IMS_DCM_PDP_ACTIVATE_REQ_V01 req_err=0      
+IMS DPL/Error [[IMS_DataD] imsdatad.c   1236] | 737 |QCSI#>>#DATAD#6# QMI_IMS_DCM_PDP_ACTIVATE_REQ_V01--->      
+</pre>
+
+== Data call bring-up / PDN establishment==
+*PDN建立信息上发后，IMS daemon向CNE/telephony发出data call setup的notify，AP接收到PDP的建立请求后，检查一遍AP的配置是否正确(apns-conf.xml)，最后由上层发起建立data call。
+<pre>
+//telephony用同样从modem获取的ims APN信息发起建立data-call，连接telephony到qcril的通路。
+Android QCRIL/High [             qcril.c   5508] RIL[0][main] onRequest: UI --- RIL_REQUEST_SETUP_DATA_CALL (27) ---> RIL [RID 0, token id 2749, data len 56]      
+Android QCRIL/High [qcril_data_netctrl.c   7819] RIL[0][main] qcril_data_request_setup_data_call: RIL provided tech pref [16]      
+Android QCRIL/High [qcril_data_netctrl.c   7839] RIL[0][main] qcril_data_request_setup_data_call: RIL - Common tech [1]      
+Android QCRIL/High [qcril_data_netctrl.c   7858] RIL[0][main] qcril_data_request_setup_data_call: RIL APN [ims]      
+Android QCRIL/High [qcril_data_netctrl.c   8236] RIL[0][main] qcril_data_request_setup_data_call: qcril_data_request_setup_data_call: EXIT with suc      
+Android QCRIL/High [             qcril.c   3629] RIL[0][event] qcril_send_request_response: UI <--- RIL_REQUEST_SETUP_DATA_CALL (27) Complete --- RIL [RID 0, Token id 2749, Success, Len 72 ]
+
+//adb的radiolog也可以看到datacall发起建立
+D/RILJ ( 3195): [4361]> SETUP_DATA_CALL 16 2 0 IPV4V6 [SUB0]
+D/RILJ ( 3195): [4361]< SETUP_DATA_CALL DataCallResponse
+
+</pre>
+*如果没有找到上层发起data call，或者是data call发起建立的类型不是ims apn关联的：
+**1.请检查AP的APN配置文件是否正确。 --> 有一个apn.xml的配置表，如果没有预置，可以手动在"设置 --> 移动网络 --> Access Point Names -->"中手动添加，需要注意填写正确 APN名字，APN类型和IP-type 这几项参数。(IMS APN填写后在UI上默认隐藏)
+**2.adb shell，检查 "/system/etc/cne/wqeclient/" 目录下是否有配置正确的pdp profiles。(和代码中的源文件对比)
+
+== AP向modem发出PDN establish Indication==
+*上层发出通过"QMI_IMS_DCM_PDP_ACTIVATE_IND_V01"告知modem，PDN建立已经完成，后续终端就可以开始和网络端的IMS注册信令交互了。
+<pre>
+06:45:40.613 IMS/Medium [ qpdpl_qmi_handler.c   1601] qpDplProcessQcciEvent | Received QMI Event= 20, pQmiData=d12784e8      
+06:45:40.613 IMS/Medium [ qpdpl_qmi_handler.c   1675] qpDplProcessQcciEvent | QMI_IMS_DCM_PDP_ACTIVATE_IND_V01 | ims_qmi_dcm_client_ind_cb | error.result=0
+06:45:40.614 IMS/High [             qpDcm.c  10580] qpDcmProcessQCCIPdpActIndEvent - HYBRID PrevPdpID=21 NewPDPId=21, IPAddress Len=38      
+06:45:40.614 IMS DPL/High [             qpDcm.c  10585] qpDcmProcessQCCIPdpActIndEvent - HYBRID IP Address=2409:880b:92c2:50fc:7ab1:593d:8c8:2974      
+06:45:40.614 IMS/High [             qpDcm.c  10639] qpDcmProcessQCCIPdpActIndEvent - HYBRID iAppConnectionStatus=1 iConnectionStatus=2      
+06:45:40.614 IMS/High [             qpDcm.c  10641] DPL_M#>>#IMS_APP#1#qpDcmProcessQCCIPdpActIndEvent-DS_ENETISCONN HYBRID event for AppId (55), IsHybrid = 1      
+06:45:40.615 IMS/High [PDPRATHandlerVoLTE.cpp   1193] PDPactivated state (1): RegType[0]      
+06:45:40.615 IMS/Medium [PDPRATHandlerVoLTE.cpp   1196] Setting Keep alive to True      
+06:45:40.617 IMS/High [PDPRATHandlerVoLTE.cpp   1220] EventPdpActivated raise QPE_RM_PDP_ACTIVATED_EV  RegType[0]      
+06:45:40.618 IMS/Medium [             qpDcm.c  10661] qpDcmProcessQCCIPdpActIndEvent - Breaking out after finding matching SeqNo.=100
+    
+//QMI消息接收到Indication，提示正在进行IMS注册
+06:45:40.684 MCS QCSI Payload Packet Length: 0039
+   MsgType = Indication
+            imsa_registration_status_indTlvs[0] {
+               Type = 0x01
+               Length = 1
+               ims_registered {
+                  ims_registered = false
+               }
+            }
+            imsa_registration_status_indTlvs[1] {
+               Type = 0x11
+               Length = 4
+               ims_reg_status {
+                  ims_reg_status = IMSA_STATUS_REGISTERING
+
+//"QMI_IMS_DCM_PDP_ACTIVATE_IND_V01"消息
+06:45:40.068 IMS DPL/Error [[IMS_DataD] imsdatad.c   1925] | 723 |DATAD#>>#QCSI#2#QMI_IMS_DCM_PDP_ACTIVATE_IND_V01:eCS_ENETISCONN      
+06:45:40.069 IMS DPL/Error [[IMS_DataD] imsdatad.c   1934] | 723 |ProcessCSIndication| Sending QMI_IMS_DCM_PDP_ACTIVATE_IND_V01
+</pre>
+*部分log流程可以因为项目codebase不同有所区别，总体关注是否接收到"QMI_IMS_DCM_PDP_ACTIVATE_IND_V01"这一条indication信息即可，如果收不到PDP激活指示，则需要去检查DS(modem)和CNE(AP)模块功能是否正常。
+
+== 终端向网络端发出"IMS REGISTER"==
+*这一部分的流程即空口LOG部分，主要是终端和网络端之间的信令交互，还有部分终端的debug信息。
+<pre>
+(to be continue)
+</pre>

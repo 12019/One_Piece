@@ -1,0 +1,58 @@
+【NV settings
+70315 - 2 - IWLAN_s2b_support
+69679 - 0x01 - 没设置的情况默认是enable APN switching feature
+
+【NV-item	Description	Value
+70315	wifi功能基本配置参数，使能IWLAN_S2B和本地中断	wlan offload config = 2 (Recommended)
+67259	IMS-SMS配置	smsRATMaskString = 0x644E；RatMaskValue = 25678
+67264	IMS注册模块配置	regManagerPdpProfileName = <ims_apn>
+67332	IMS-media配置	Version – 3；audio_offload = 0 (MSM8974&MSM8994) / 3 (MSM8939)
+69744	IMS-SIP扩展配置	Version – 13
+69750	IMS状态/优先级参数配置	Version – 3；WFC_Status - 1/0(Enable/Disable)；Call_mode_preference – 0/1/2/3/4 (WFC_PREF_NONE/WFC_WIFI_PREFERRED/WFC_WIFI_ONLY/WIFI_CELLULAR_PREFERRED/WIFI_CELLULAR_ONLY)
+73545	用于紧急呼叫的Vowifi配置	cmph_wifi_config_s_type.is_wifi_only_mode_for_voice – 1；cmph_wifi_config_s_type.is_e911_over_wifi – 1；cmph_wifi_config_s_type.wifi_cs_scan_timer – 5
+71527	IMS请求配置-存储请求信息的数据库	version - 0；ims_rat_apn_info[0].iRAT - 272；ims_rat_apn_info[0].iAPNType_APNindex - 17
+71581	IMS-QP_WIFI_config	RSSI的门限值设定，当前Panda该值都为0
+
+【Android属性值
+persist.data.iwlan.config --> TRUE
+persist.data.iwlan.rekey  --> 2^32-1
+persist.data.iwlan.enable --> TRUE
+
+【EFS配置
+PDN数据库配置：通过一个efs text文件来进行PDN-DB的配置，在能够接入MAPCON的情况下，使其能够正常连接到WLAN和WWAN上。
+
+PDN-DB文件可以为多个APN做不同的参数设定，每一类别需要包含以下的属性值信息：--> /data/pdn_policy_db.txt
+//Mandatory token
+PDN_APN_string:internet/NULL/apn-name*;
+Supported_RAT_Priority_List:WWAN,IWLAN,WLAN_LB;
+//Optional token
+Default:TRUE/FALSE; (指示是否是特有APN,默认优先使用的APN)
+Override_Type:NONE/API/OPTION; (选择不同APN时的IWLAN_s2b和WWAN_LTE/eHRPD之间转换的一些设置)
+
+IWLAN s2b的EFS文件配置：vowifi对应的s2b接口需要的配置，IPSec IKEv2连接参数，当此文件存在时，会从中选择相应的配置参数。
+范例(只有epdg_fqdn这个参数是必须有的) --> /data/iwlan_s2b_config.txt
+epdg_fqdn:wireless.epdg.com;
+ke_payload_enabled:FALSE;
+以下Panda手机对应reliance的iwlan_s2b_config设置属性值
+epdg_fqdn:vowifi.jio.com; 
+static_fqdn_enabled:FALSE; 
+ke_payload_enabled:FALSE; 
+pcscfv4_attr_type_val:16384; 
+ikev2_sa_rekey_timer_soft_sec:86400; 
+ikev2_sa_rekey_timer_hard_sec:86500; 
+esp_rekey_timer_soft_sec:86400; 
+esp_rekey_timer_hard_sec:86500; 
+natt_keep_alive_timer_sec:20; 
+epdg_fqdn_impi_based:TRUE; 
+ikev2_self_id_type:ID_RFC822_ADDR_MAC_IMPI_BASED; 
+#esp_auth_algo_list:1,2; 
+#configured_ike_port:4500; 
+
+关于s2b接口的所有配置参数信息，可参考文件"80-NP263-1"中的Table 2-3
+
+【KAMGR
+KAMGR：keep alive manager file，当有指示要求通过PDN从LTE向IWLAN切换时，该文件用于维持LTE连接，以免造成长时间掉网。
+
+/data/ds_eps_kamgr_pdn.txt
+profile_id:NA; (Mandatory，取值可从0到2^16-1)
+timer_val:500:500:10000:2; (重试的时间间隔从500ms向10000ms递增，每次增加500ms，重试次数2次)

@@ -1,0 +1,78 @@
+--- a/LINUX/android/vendor/qcom/proprietary/qcril/qcril_qmi/qcril_qmi_mbn_ota_daemon.c
++++ b/LINUX/android/vendor/qcom/proprietary/qcril/qcril_qmi/qcril_qmi_mbn_ota_daemon.c
+@@ -106,6 +106,20 @@
+ 
+ }
+ 
++/* OEM version format
++ * 0x AA BB CC DD
++ * 0xAA = 0x02 .. Modem family  (0x01=Nikel, 0x02=Dime, 0x03=Triton, 0x04=Bolt, 0x05=Jolokia(8909), 0x06=Thor)
++ * 0xBB = 0x01 .. OEM can modify this field for differing from base version
++ * 0xCC = 0x20 .. Major version = Carrier index = 32
++ * 0xDD = minor version
++ */
++static inline int is_same_type_AACC_mbn(const char* version_local, const char* version_remote)
++{
++    /* AA == AA, CC == CC */
++    return ((version_local[1] == version_remote[1])
++               && (version_local[3] == version_remote[3]));
++}
++
+ static inline int is_config_activated(struct pdc_config_pdc_info *config_id,
+                     struct pdc_config_pdc_info *config_ids_per_sub, uint32_t *p_sub_mask)
+ {
+@@ -308,22 +322,44 @@
+             ret_val = pdc_enable_auto_selection(0, 1);
+         }
+ 
++		/* Upload local MBNs to EFS that are not matched */
++		for (i = 0; i < n_local_file; i++) {
++			if (!p_local_list[i].is_matched){
++				ret_val = load_new_mbn(p_local_list[i].file_name,p_local_list[i].config_id);
++				if(ret_val != PDC_SUCCESS) {
++					RLOGE("Failed to load new MBN: %s, error code: %d", p_local_list[i].file_name, ret_val);
++				}
++				else {RLOGE("load new MBN: %s", p_local_list[i].file_name);}
++
++				for (j = 0; j < n_modem_list; j++){
++					if ((!p_modem_list[j].is_matched) && (is_same_type_AACC_mbn((char*)(&p_local_list[i].version),(char*)(&p_modem_list[j].config_info.config_version))) && (p_modem_list[j].is_current)){
++						/* deactivate the corresponding SUBs */
++						int sub_idx = 0;
++						ret_val = 0;
++						for (sub_idx = 0; sub_idx < 3; sub_idx++)
++						{
++						 if(p_modem_list[j].sub & (1 << sub_idx))
++						  {
++							RLOGE("the MBN in EFS is current config: %s, p_modem_list[j].sub:%d, sub_idx:%d ", p_modem_list[j].config_id.config_id, p_modem_list[j].sub, sub_idx);
++							ret_val |= (pdc_deactivate_config(sub_idx, PDC_CONFIG_TYPE_MODEM_SW_V01) != PDC_SUCCESS);
++
++						  }
++						}
++						/* Any deactivation failed, just print message and continue */
++						if(ret_val)
++						  RLOGE("deactivation failed");
++
++					}
++				}
++			}
++		}
++
+         /* Delete the MBNs in EFS that are not matched */
+         for (idx = 0; idx < n_modem_list; idx++) {
+             if (!p_modem_list[idx].is_matched) {
+                 ret_val = pdc_delete_config(&p_modem_list[idx].config_id, PDC_CONFIG_TYPE_MODEM_SW_V01);
+                 if (ret_val != PDC_SUCCESS) {
+                     RLOGE("Failed to delete the MBN with config_id: %s", p_modem_list[idx].config_id.config_id);
+-                }
+-            }
+-        }
+-
+-        /* Upload local MBNs to EFS that are not matched */
+-        for (idx = 0; idx < n_local_file; idx++) {
+-            if (!p_local_list[idx].is_matched) {
+-                ret_val = load_new_mbn(p_local_list[idx].file_name, p_local_list[idx].config_id);
+-                if (ret_val != PDC_SUCCESS) {
+-                    RLOGE("Failed to load new MBN: %s, error code: %d", p_local_list[idx].file_name, ret_val);
+                 }
+             }
+         }

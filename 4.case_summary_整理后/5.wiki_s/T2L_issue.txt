@@ -1,0 +1,233 @@
+==写在一开始==
+本文起因是一个CSFB发生异常回落到TDS时，TDS无法返回LTE网络的"选择"问题，在低优先级到高优先级网络的"重选"上没有完善的策略，例如CSFB异常场景中，终端回落到非目标网络，造成终端会长时间无法返回LTE。
+
+==问题场景==
+当前机器如果是支持"全网通"的，通常会支持CDMA/GSM/TDSCDMA/WCDMA/TDD-LTE/FDD-LTE等等多种制式网络，其中在使用CSFB语音方案的机器中，因为不支持VoLTE通话，在向2/3g回落时，如果目标网络不是网络指定的(各种异常场景)，可能会造成机器无法自动返回LTE网络。
+
+===Example_1===
+<pre>
+【Precondition】
+1.移动网络 4G/3G/2G 覆盖下
+【Steps】
+1.机器正常驻网移动4G，用户发起主叫，网络下发RRC connection release，携带重定向频段信息(GSM arfcn A)。
+2.网络下发重定向信息后，GSM网络信号丢失，终端回落到移动3G网络，进行后续的CSFB语音业务。
+3.通话结束后，终端长时间驻留在3G(没有邻区关系，终端无法得知当前能否驻留LTE)，不会自动自动返回LTE网络。
+</pre>
+
+===Example_2===
+<pre>
+【Precondition】
+1.联通网络 4G/3G 覆盖下
+【Steps】
+1.机器正常驻网移动4G，用户发起主叫，网络下发RRC connection release，携带重定向频段信息(WCDMA uarfcn B)。
+2.通话结束后，网络没有下发SIB-19(网络端不支持)，正常情况终端会从SIB19中获取重定向信息/优先级信息，如果没有接收到则会一直驻留在WCDMA网络，除非终端发生RLF或者OOS，但UMTS的覆盖范围都比LTE大，所以一般也不会出现LTE有网络而UMTS出现掉网的区域，这种情况即使重启UE，也会因为RPLMN(掉网前的就是3G)优先级更高，所以开机还是会驻留到3G网络而不是LTE。
+</pre>
+
+==Solution==
+===高通解决方案===
+*解决方法即让UE根据rat优先级配置信息去判断一次当前最高优先级的RAT，如果最高优先级的网络(LTE)小区信号"合适"，则会选择驻留。这样即使没有接收到sib19的情况下，UE也会周期性的发起特殊的搜网流程。
+
+==T2L搜网案例==
+===关联NV/EFS===
+<pre>
+NV69734 /nv/item_files/modem/nas/forced_irat	-- irat功能控制宏
+EFS     /nv/item_files/modem/nas/irat_search_timer	-- hplmn irat搜网定时器，hardcode为5分钟
+
+NV72509 /nv/item_files/modem/nas/reg_nv_items
+	reg_nv_is_hplmn_to_be_selected	        -- 注网优先选择rplmn或者hplmn
+	reg_nv_is_roaming_on_in_eplmn	        -- 能否允许在eplmn时，漫游标志位为1
+	reg_nv_is_sim_invalid_recovery_enabled	-- 决定是否允许使用不符合TDS oem规范的sim卡，关闭时会启动一个验证定时器去检查USIM卡
+	reg_nv_is_pseudo_reselection_allowed	-- 用于判断short_lte_scan取值的参数之一
+	reg_nv_use_rplmnact_mode_change	        -- 判断reg_state_ignore_rplmnact参数是0还是1，注网时是否应该忽略rplmnact值(ignore_rplmn_act)，对代码中rplmn_rat_search_order值判断有影响(搜网优先级相关)
+	reg_nv_w_bplmn_pseudo_enabled	        -- 判断short_lte_scan取值参数之一，伪背景plmn搜网使能(调用很多)
+	*reg_nv_is_camp_on_2g_if_reg_failure	-- 出现无任何网络覆盖情况，默认当前active rat为GSM，但是网络状态为限制服务状态
+
+NV72598 /nv/item_files/modem/nas/lte_available_timer_values
+	reg_nv_lte_search_config.short_lte_scan                    -- irat重选定时器参数
+	reg_nv_lte_search_config.long_lte_scan	                   -- irat重选定时器参数
+	reg_nv_lte_search_config.max_lte_failures                  -- 允许重搜网的次数
+	reg_nv_lte_search_config.max_lte_failures_on_neutral_cell  -- 在邻区允许重搜网的最大次数
+</pre>
+
+===T2L场景===
+*在网络端没有下发SIB19导致网络卡在TDS无法回LTE网络时，如果已经包含FR-16393修改和如下的NV设置，可以让UE定时的进行一次TD-LTE的搜网，可以通过这种方式返回LTE网络。
+<pre>
+【1】NV69734 - /nv/item_files/modem/nas/forced_irat
+	1 - enabled
+	0 - disabled(默认值)
+
+//判断函数
+#if defined FEATURE_TDSCDMA || defined FEATURE_SGLTE
+boolean reg_nv_is_forced_irat_enabled(void)
+{
+    return reg_nv_forced_irat_enabled;
+}
+
+【2】EFS - /nv/item_files/modem/nas/irat_search_timer
+= e.g. 15 min = 15*60*1000=900000 ms=0x00 0D BB A0 ; i.e. A0 BB 0D 00.
+= 可以直接修改代码宏定义，也可以通过添加EFS文件去修改。
+
+【3】定时器宏定义，现在代码默认是5分钟
+/modem_proc/mmcp/nas/reg/src/reg_nv.c
+#define    REG_HPLMN_IRAT_SEARCH_TIMER     5*60*1000  /*default to 5 minutes*/
+</pre>
+
+*T2L的BPLMN一般流程如下
+<pre>
+关键词: =reg= | T2L | irat search timer | PLMN_LIST_CNF | tdsrrccsp
+
+//UE will do T2L BPLMN with USIM card
+reg_sim.c 1281 H =REG= SIM card mode (USIM)
+
+//IRAT priority list included LTE(9) and TDS(11)
+reg_state.c 01012 =REG= Rat priority list num_items = 2
+reg_state.c 01018 =REG= sys_mode = 9 bst_rat_acq_required = 1 bst_band_cap = 0x44 //LTE
+reg_state.c 01018 =REG= sys_mode = 11 bst_rat_acq_required = 1 bst_band_cap = 0x21 //TDS
+
+//Started BPLMN search timer(15 minutes).
+reg_timers.c 00614 =REG= Started HPLMN IRAT Search Timer (15 minutes)
+
+//Timer expired and then started to do BPLMN
+reg_state.c 05181 =REG= HPLMN IRAT Search Timer expired
+tdsrrccsp.c 02122 FR2164: do LTE BPLMN search
+tdsrrccsputil.c 19702 Do TD2L search first
+
+//Found LTE PLMN(满足S-criteria)
+tdsrrccsp.c 24821 TD2X: HPLMN found on IRAT. Send PLMN_LIST_CNF to NAS
+tdsrrccsputil.c 09137 Adding LTE PLMN 460-0
+</pre>
+
+*TDS在有DRX功能时会反复出现suspend和resume的情况，因为有更高优先级的命令从NAS发出，如果在TDS RRC guard timer超时前可以执行完则可以自行恢复之前的状态，否则会直接abort TDS之前发给LTE RRC的BPLMN搜网，属于正常现象。
+<pre>
+1.NAS/REG <--> NV/EFS: 获取NV和efs关于移动网络下LTE BPLMN的扫网设定
+2.NAS/REG --> TDS RRC: 根据获取的目标LTE网络的PLMN，RF band，RAT type进行PLMN搜网启动TDS RRC guard timer(150s)
+3.TDS RRC <--> TDS L1: 挂起TDS L1
+4.TDS RRC --> LTE RRC: LTE PLMN search
+5.LTE/ML1_LL1 <--> LTE RRC: LTE PLMN search
+6.LTE RRC --> TDS RRC: PLMN搜网结果，TDS重启L1关闭TDS RRC guard timer
+7.TDS RRC <--> NAS/REG: 反馈结果(PLMN-ID，RSRP，RSRQ)，如果搜到LTE，后续关掉TDS栈
+8.NAS/REG --> LTE RRC: 激活LTE栈并在网络上注册
+</pre>
+
+*出现以下的情况会中断TDS的BPLMN扫网过程，但是在TDS RRC guard timer时间以内，搜网还可以重新发起。
+<pre>
+= CS/PS连接建立(CS/PS通话，数据服务)
+= oos
+= inter-rat 重选/重定向 (收到SIB-19)
+= TDS RRC guard timer超时
+</pre>
+
+==T2L_forced_irat_codeflow==
+*简单的画了关于T2L配置检查涉及的代码流程。
+[[File:T2L_codeflow.png]]
+
+*下面只提一些我比较关心的点。
+
+*重要NV/EFS的读取和修改
+<pre>
+//irat timer设定调用接口
+static reg_state_p_type process_cm_set_hplmn_irat_timer(const cm_set_hplmn_irat_search_timer_req_s_type *msg_p)
+
+//irat_search_timer的读取和设定
+void reg_nv_hplmn_irat_search_timer_set(uint32 timer)
+{
+  reg_nv_hplmn_irat_search_timer = timer;
+  MSG_HIGH_DS_1(REG_SUB, "=REG= Set HPLMN IRAT NV Search Timer to %d", timer);
+}
+
+uint32 reg_nv_hplmn_irat_search_timer_get()
+{
+  return reg_nv_hplmn_irat_search_timer;
+}
+
+//T2G重选 关键NV的读取
+void reg_nv_read_carrier_specific_efs(void)
+{...
+#ifdef FEATURE_TDSCDMA
+  /* FORCED IRAT */
+  reg_timers_pet_watchdog();
+  status = mcfg_fs_read("/nv/item_files/modem/nas/forced_irat", &reg_nv_forced_irat_enabled, sizeof(boolean), MCFG_FS_TYPE_EFS, (mcfg_fs_sub_id_e_type)reg_sub_id);
+
+
+  if(status !=  MCFG_FS_STATUS_OK)
+  {
+    reg_nv_forced_irat_enabled = FALSE;
+  }
+
+  MSG_HIGH_DS_2(REG_SUB,"=REG=NV reg_nv_forced_irat_enabled from EFS  with status %d and value is %d",
+                          status,reg_nv_forced_irat_enabled);
+#endif
+
+  /* IRAT SEARCH TIMER */
+  reg_timers_pet_watchdog();
+  status = mcfg_fs_read("/nv/item_files/modem/nas/irat_search_timer", &reg_nv_hplmn_irat_search_timer, sizeof(uint32), MCFG_FS_TYPE_EFS, (mcfg_fs_sub_id_e_type)reg_sub_id);
+
+
+  MSG_HIGH_DS_2(REG_SUB,"=REG=NV reg_nv_hplmn_irat_search_timer from EFS with status %d and value is %d",
+                  status,reg_nv_hplmn_irat_search_timer);
+  if(status !=  MCFG_FS_STATUS_OK)
+  {
+    reg_nv_hplmn_irat_search_timer = REG_HPLMN_IRAT_SEARCH_TIMER;   /*default value is 5 minutes*/
+  }
+  ...
+  
+...}
+</pre>
+
+*T2L config 流程
+<pre>
+【1】reg模块主函数
+/.../reg_task.c
+reg_main()
+
+【2】接收到MM模块的注册消息后，调用process_mmr_reg_cnf() --> reg_state_process_mmr_reg_cnf()
+/.../reg_state.c
+void reg_state_main(reg_cmd_type* reg_cmd_p)
+static reg_state_p_type process_mmr_reg_cnf(...)
+
+【3】调用 reg_state_process_mmr_reg_cnf()
+/modem_proc/mmcp/nas/reg/src/reg_state_automatic_search.c
+static reg_state_p_type process_mmr_reg_cnf (mmr_reg_cnf_s_type* msg_p)
+
+【4】不同流程都会调用到同一个搜网处理接口 --> call reg_mode_rat_search_start()
+
+//这里的finish(...) 是对上一次PLMN搜网的处理函数
+/modem_proc/mmcp/nas/reg/src/reg_mode_plmn_selection.c
+finished()调用第一个 reg_mode_rat_search_start()
+
+/.../reg_state.c
+reg_state_process_mmr_reg_cnf()调用第二个 reg_mode_rat_search_start()
+
+【5】T2L irat的搜网开始,调用reg_mode_start_appropriate_irat_timers()
+/modem_proc/mmcp/nas/reg/src/reg_mode.c
+boolean reg_mode_rat_search_start ()
+{...
+#ifdef FEATURE_TDSCDMA
+    MSG_HIGH_DS_5(REG_SUB, "=REG= In reg_mode_rat_search_start Forced IRAT = %d, USIM compliance = %d,reg_nv_w_bplmn_pseudo_enabled = %d reg_nv_pseudo_reselection_allowed = %d, Cell Id = %d", ......);
+#endif
+...
+e.g.
+	MSG_HIGH_DS_1(REG_SUB, "=REG= Starting RAT search 1 %d", condition_met);
+	if (condition_met)
+	{reg_mode_start_appropriate_irat_timers(void)}
+
+}
+
+【6】根据实际情况可能调用不同的处理函数
+/.../reg_mode.c
+[1] void reg_mode_start_appropriate_irat_timers(void) --> LTE irat和HPLMN irat两个接口都可以调用
+
+/.../reg_state_manual_search.c
+[2] static reg_state_p_type process_cm_set_hplmn_irat_timer(const cm_set_hplmn_irat_search_timer_req_s_type *msg_p) --> 只会调用HPLMN irat处理函数
+
+【7】两个irat timer，HPLMN irat timer和lte irat timer
+/.../reg_timers.c
+
+void reg_timers_start_hplmn_irat_search_period_timer()
+void reg_timers_start_lte_irat_search_period_timer()
+
+【8】irat timer获取对应所需数据，设定搜网周期等等
+reg_nv_hplmn_irat_search_timer_get()
+...
+
+</pre>
