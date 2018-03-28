@@ -10,46 +10,44 @@
 1.不同频段的TX/RX的RFNV配置xml
 2.一个masterfile xml文件包含所有支持的频段，可添加或删减
 
-接着使用QRCT的NV Tool工具加载MASTERFILE文件即可生成对应的QCN文件。
+关键点1：在master file中修改需要的频段对应文件，具体的频段xml中修改具体射频NV.
+关键点2：找到NvDefinition文件，QRCT工具使用时选择Generate QCN/xQCN from source.
 
+接着使用QRCT的NV Tool工具加载MASTERFILE文件即可生成对应的QCN文件，源文件中你可以直接把需要的静态NV全部加到master file中来，不用再额外引用其他文件。
 
+<NvSource>
+	<NvItem id="10" subscriptionid="0" name="NV_PREF_MODE_I" mapping="direct" encoding="dec" index="0">0,31</NvItem>
+	...
+	<NvEfsItem fullpathname="/nv/item_files/mcfg/mcfg_autoselect_by_uim" name="/nv/item_files/mcfg/mcfg_autoselect_by_uim" mapping="direct" encoding="dec" index="0" useProvisioningStore ="true">7</NvEfsItem>
+	...
+</NvSource>
 
+至此我们已经拿到了包含所有静态NV的QCN文件了。
 
-*'''提取tar文件'''
-
+【2】提取tar文件
 如之前所说，FSG分区实际存储的是一个以EFS文件目录结构打包而成的一个tar包。而高通提供了一个专门的命令用于从手机中提取tar包，但是出于安全考虑，此命令Modem默认不支持，需要单独编译一个打开此后门的Modem镜像。
 
-在modem_proc/build/ms/cust8909.xxx.prodq.h文件添加如下宏定义(xxx代表编译时输入的build variation，比如gen、genns、lwg等)，编译一个NON-HLOS.bin镜像。
+添加宏定义，编译modem镜像
+modem_proc/build/ms/cust8909.xxx.prodq.h文件添加如下宏定义(xxx代表编译时输入的build variation，比如gen、genns、lwg等)，编译一个NON-HLOS.bin镜像。
 
-  #define FEATURE_EFS_ENABLE_FACTORY_IMAGE_SECURITY_HOLE
+#define FEATURE_EFS_ENABLE_FACTORY_IMAGE_SECURITY_HOLE
 
-然后输入如下flashboot命令将编译后的NON-HLOS.bin文件刷入到手机中：
-
-  flashboot flash modem NON-HLOS.bin
-
-同时将modemst1、modemst2、fsg这三个分区全部擦除，这样是为了确保提取的tar包尽量干净，只包含必要的NV项。
-
+通过adb/fastboot将添加宏后的modem镜像刷入机器，同时将modemst1、modemst2、fsg这三个分区全部擦除，这样是为了确保提取的tar包尽量干净，只包含必要的NV项。
   flashboot flash modemst1 zero.bin
   flashboot flash modemst2 zero.bin
   flashboot flash fsg zero.bin
 
-接着把之前制作的静态QCN文件通过QPST刷入到手机里面。
+接着把之前制作的静态QCN文件通过QPST/QFIL工具还原到机器里。
+刷入QCN后，我们还可以根据实际需求通过EFS Explorer手动导入或者删除一些EFS文件。(policyman的)
 
-[[File: FSG_QPST_Restore_QCN.JPG]]
-
-刷入QCN后，我们还可以根据实际需求通过EFS Explorer手动导入或者删除一些EFS文件。
-
-[[File: FSG_EFS_Explorer.JPG]]
-
-最后在windows命令行输入下面的命令开始从手机中导出一个tar包，文件名为fs_image.tar.gz。
-
+找到\modem_proc\core\storage\tools或\common\tools\sectools_fsg 目录下的perl脚本文件，利用此脚本生成tar包。
+最后在windows命令行输入下面的命令开始从手机中导出一个tar包，文件名为fs_image.tar.gz。(需要宏控制已打开，QCN已还原)
   perl efsreadimage.pl -z
 
-*'''签名tar文件并生成FSG'''
+【3】签名tar文件并生成FSG
 
 目前高通提供了两种工具用于签名及生成FSG镜像：QDST及sectools。这里可以根据实际情况进行选择，比如如果平台不需要打开secureboot功能，即用QDST；需要则使用sectools。
-
-这两种工具都运行一些脚本及命令来生成FSG，我已经将相关的脚本和命令打包在放在如下共享目录下，大家解压后可以直接使用。
+这两种工具都运行一些脚本及命令来签名生成最终的FSG。
 
   \\10.120.10.100\ckt_cd_share\SmartPhone\team\BSP\01_Groups\08_Modem\03_Material\MakeFSG
 
@@ -59,22 +57,16 @@
 
 最终生成的FSG镜像的文件名是fs_image.tar.gz.mbn.img。
 
-== '''注意事项''' ==
 
-*制作的FSG尽量只包含必需的NV项
+【注意事项】
+【制作的FSG尽量只包含必需的NV项】
+并且在提取tar包时最好将手机设置为offline模式，因为默认在online模式会触发手机搜网生成一些临时NV。
+可以使用一个没有集成RF驱动且打开后门的Modem镜像，这样机手开机后RF驱动加载失败就会自动进入offline，不需要我们再手动去设置一下。
+另外由于工厂生产的需要，软件会在开机后软件版本号等信息写入到NV里面，所以尽量使用没有集成这些功能的软件版本来制作FSG，否则会包含很多工厂信息的NV。
 
-在制作FSG时务必先将modemst1/st2、fsg这三个分区全部擦除干净，同时通过使用EFS Explorer将EFS目录下的policyman文件夹删除(如果存在的话)以及其它一些不必要的文件。
-
-并且在提取tar包时最好将手机设置为offline模式，因为默认在online模式会触发手机搜网生成一些临时NV。这里我们可以使用一个没有集成RF驱动且打开后门的Modem镜像，这样机手开机后RF驱动加载失败就会自动进入offline，不需要我们再手动去设置一下。
-
-另外由于工厂生产的需要，软件会在开机后软件版本号等信息写入到NV里面，所以我们尽量也使用没有集成这些功能的软件版本来制作FSG。
-
-*FSG签名务必使用我们自己的签名
-
+【FSG签名务必使用我们自己的签名】
 使用高通默认的签名会存在很多问题，比如制作的FSG无法被正确解析，需要额外定义一些宏，这可能会导致PDC工具无法正常使用。
-
-同时出于安全的考虑，也不应该使用高通默认或者高通文档中提供的签名key。所以建议大家通过工具生成自己的签名key，或者沿用以前项目中使用的key。
-
+同时出于安全的考虑，也不应该使用高通默认或者高通文档中提供的签名key。所以通过工具生成自己的签名key，或者沿用以前项目中使用的key。
 并且对于签名的key，工具和代码也需要保持一致，这样才能被验证通过，签名key修改的文件在modem_proc/core/storage/fs_tar/src/fs_signed_img_param.c。
 
   #ifndef FS_SIGNED_IMG_ROOT_HASH
@@ -93,13 +85,12 @@
     #define FS_SIGNED_IMG_SOFTWARE_ID  0x0000000000000000
   #endif
 
-*制作完成的FSG需要完整刷机验证
-
+【制作完成的FSG需要完整刷机验证】
 制作FSG的应该放入软件包中格式化刷机，验证所有更改的NV项是否都以及生效并且正确无误。
-
 同时用于此次制作FSG的xml文件、QCN文件、提取的tar包以及最终生成的FSG镜像，都应该进行备份便于后续进行查找和回溯。
 
-*EFS是加密存储在eMMC中的，并且secureboot熔丝和非熔丝的机器高通使用不同的加密key，如果将非熔丝的机器刷入熔丝的软件，由于熔丝后的key无法解密出eMMC中EFS，会导致所有的NV项丢失。所以需要提前备份好QCN再进行软件升级。
+【升级问题】
+EFS是加密存储在eMMC中的，并且secureboot熔丝和非熔丝的机器高通使用不同的加密key，如果将非熔丝的机器刷入熔丝的软件，由于熔丝后的key无法解密出eMMC中EFS，会导致所有的NV项丢失。
+所以对于每一台机器，都需要提前备份好QCN再进行软件升级。
 
 
-[[BSP_Modem_Team#QCOM Platform |返回上级]]

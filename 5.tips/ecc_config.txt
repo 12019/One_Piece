@@ -1,11 +1,9 @@
-69736
-69737
-NV 70242 (/nv/item_files/pbm/pbm_nv_ecc_config): This will be set to 2 to use ECC list from NV 67221.
-NV 67221 (/nv/item_files/pbm/pbm_ecc_nums): EFS ECC list, please follow below description and set the values as per requirement.
+
+
 
 ril.ecclist
 persist.radio.custom_ecc
-
+persist.radio.custom_nw_ecc  //当前未使用，会读取qcril.db中另一个表
 
 CN national code:
 460	110
@@ -15,7 +13,44 @@ CN national code:
 460	122
 460	999
 
-
 1.保持persist.radio.custom_ecc 为1，可以根据MCC读取qcril.db中的ECC
 2.hardcode without sim中紧急号码只包含以下号码: 000, 08, 110, 118, 119, 999
 3.ECC定制根据国家码来做，全部通过修改qcril.db的方法实现
+
+=========
+【SIM中的ECC】
+TS_31.102  EF(ecc)
+存储在SIM卡EF_ECC中的ECC号码，目前GSM/RUIM/CSIM卡中最多存放5个号码，其中每个号码最多可以是6位数字占用3个字节。
+USIM的EF ECC中最多可以存放255个号码。
+
+【网络/OTA ECC】
+一般指在空口attach accept或TAU accept消息中接收到下发的紧急号码。
+[0xB0EC] OTA LOG 02:52:59.017 LTE NAS EMM Plain OTA Incoming Message    Attach accept Msg
+  02:52:59.017 [0xB0EC] LTE NAS EMM Plain OTA Incoming Message
+  ...
+  prot_disc = 7 (0x7) (EPS mobility management messages)
+  msg_type = 66 (0x42) (Attach accept)
+  lte_emm_msg
+    emm_attach_accept
+      attach_result = 2 (0x2) (comb EPS/IMSI attach)
+  	...
+      emergnecy_num_list_incl = 0 (0x0)
+
+【Hardcode ECC】
+/.../pbm.c
+省略
+
+//69736作为控制宏，69737负责存放需要的ecc号码(最多10个)
+69736 & 69737
+
+【NV config ECC】
+NV 67221 (/nv/item_files/pbm/pbm_ecc_nums): EFS ECC list, please follow below description and set the values as per requirement.
+可以用来配置跟卡无关的 ECC 号码，不管卡在位还是不在位都会被作为紧急号码，最多可以设置10个。
+
+NV 70242 (/nv/item_files/pbm/pbm_nv_ecc_config): This will be set to 2 to use ECC list from NV 67221.
+文档介绍说 NV70242(/nv/item_files/pbm/pbm_nv_ecc_config) 是控制NV67211的开关，但目前我们的项目平台中这个NV并没有在使用。
+
+还有一个 NV71535 跟 NV67221 相关，NV71535->pbm_ecc_hardcode_sim_absent_list_till_pin_lock 的配置情况会影响 NV67221 在启用了 PIN1 码验证的卡上的行为。
+如果启用了PIN1 lock，当 NV71535->pbm_ecc_hardcode_sim_absent_list_till_pin_lock enable的时候，卡在位但PIN1未解锁，对于NV67221来说也会被认为是无卡。
+
+

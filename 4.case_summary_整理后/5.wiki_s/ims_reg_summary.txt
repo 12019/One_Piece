@@ -77,7 +77,7 @@ IMS/High [      PDPManager.cpp    749] EventChangeRat - Current RAT 0 New Rat 10
 IMS/High [      PDPManager.cpp    772] EventChangeRat - ServiceOnRatMask = 0x0080640e, new RAT mask = 0x00000400:       
 IMS/High [      PDPManager.cpp    773] EventChangeRat - New RAT is 10 and is valid: 1
 
-//如果出现以下log，则表示ratmask配置有误，需要修改NV67257中的 "RatMaskValue" 和 "smsRATMaskString" 配置项。
+//如果出现以下log，则表示ratmask配置有误，需要修改NV67259中的 "RatMaskValue" 和 "smsRATMaskString" 配置项。
 IMS/High [      PDPManager.cpp    773] EventChangeRat - New RAT is 10 and is valid: 0
 </pre>
 

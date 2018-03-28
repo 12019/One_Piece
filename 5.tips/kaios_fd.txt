@@ -1,0 +1,7 @@
+kaios FD prop£º
+
+persist.fd.scroff.timer
+persist.fd.scron.timer
+
+persist.env.fastdorm.enabled
+adb shell setprop persist.log.tag.ril VERBOSE

@@ -1,0 +1,43 @@
+/.../mmcp/mmode/qmi/src/qmi_nas.c
+
+//处理从上层下发的qmi，用于设置mode_pref值
+static dsm_item_type * qmi_nasi_set_sys_sel_pref
+
+//有时UI缺少某些特定网络模式，但是我们想用临时版本测试，可以将下发的qmi消息的值写死
+nas_set_system_selection_preference_req_msg_v01  * req_msg
+
+//下发的消息
+QMI Link 2 RX PDU
+IFType = 1
+QmiLength = 17
+QmiCtlFlags = 0
+QmiType = NAS
+Service_Nas {
+   ClientId = 1
+   SduCtlFlags = REQ
+   TxId = 37
+   MsgType = QMI_NAS_SET_SYSTEM_SELECTION_PREFERENCE
+   MsgLength = 5
+   Service_Nas_V1 {
+      QmiNasSetSystemSelectionPreference {
+         QmiNasSetSystemSelectionPreferenceReqTlvs[0] {
+            Type = 17
+            Length = 2
+            Mode Preference tlv {
+               mode_pref = cdma2000 1X | cdma2000 HRPD (1xEV-DO) | GSM | UMTS | LTE
+            }
+         }
+      }
+   }
+}
+
+//按照你自己需要把mode_pref写死即可。
+    if ( req_msg->mode_pref_valid )
+    {
+      sys_pref_info.mode_pref = qmi_nas_map_mode_pref_qmi_to_cm( req_msg->mode_pref );
+
+      if (sys_pref_info.mode_pref == CM_MODE_PREF_NONE)
+      {
+        errval = QMI_ERR_OP_DEVICE_UNSUPPORTED_V01;
+      }
+    }
