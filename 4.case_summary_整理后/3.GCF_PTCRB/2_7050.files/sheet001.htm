@@ -1,0 +1,1468 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=gb2312">
+<meta name=ProgId content=Excel.Sheet>
+<meta name=Generator content="Microsoft Excel 12">
+<link id=Main-File rel=Main-File href="../2_7050.htm">
+<link rel=File-List href=filelist.xml>
+<link rel=Stylesheet href=stylesheet.css>
+<style>
+<!--table
+	{mso-displayed-decimal-separator:"\.";
+	mso-displayed-thousand-separator:"\,";}
+@page
+	{margin:.75in .7in .75in .7in;
+	mso-header-margin:.3in;
+	mso-footer-margin:.3in;}
+ruby
+	{ruby-align:left;}
+rt
+	{color:windowtext;
+	font-size:9.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:宋体;
+	mso-generic-font-family:auto;
+	mso-font-charset:134;
+	mso-char-type:none;
+	display:none;}
+-->
+</style>
+<![if !supportTabStrip]><script language="JavaScript">
+<!--
+function fnUpdateTabs()
+ {
+  if (parent.window.g_iIEVer>=4) {
+   if (parent.document.readyState=="complete"
+    && parent.frames['frTabs'].document.readyState=="complete")
+   parent.fnSetActiveSheet(0);
+  else
+   window.setTimeout("fnUpdateTabs();",150);
+ }
+}
+
+if (window.name!="frSheet")
+ window.location.replace("../2_7050.htm");
+else
+ fnUpdateTabs();
+//-->
+</script>
+<![endif]>
+</head>
+
+<body link=blue vlink=purple>
+
+<table border=0 cellpadding=0 cellspacing=0 width=800 style='border-collapse:
+ collapse;table-layout:fixed;width:601pt'>
+ <col class=xl107 width=472 style='mso-width-source:userset;mso-width-alt:15104;
+ width:354pt'>
+ <col width=121 style='mso-width-source:userset;mso-width-alt:3872;width:91pt'>
+ <col width=69 style='mso-width-source:userset;mso-width-alt:2208;width:52pt'>
+ <col width=138 style='mso-width-source:userset;mso-width-alt:4416;width:104pt'>
+ <tr class=xl81 height=20 style='height:15.0pt'>
+  <td height=20 class=xl105 width=472 style='height:15.0pt;width:354pt'>整改建议</td>
+  <td class=xl76 width=121 style='border-left:none;width:91pt'>TcId</td>
+  <td class=xl76 width=69 style='border-left:none;width:52pt'>Spec</td>
+  <td class=xl76 width=138 style='border-left:none;width:104pt'>TestType</td>
+ </tr>
+ <tr height=45 style='mso-height-source:userset;height:33.75pt'>
+  <td height=45 class=xl98 width=472 style='height:33.75pt;border-top:none;
+  width:354pt'>20180206：复测PASS<br>
+    20180205：请修改NV5280=2后复测<br>
+    //disable_call_type_mask应该为2<br>
+    [0005/0002]<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>MSG<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>06:23:51.805<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>Call Manager/High<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>[<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>cmregprx.c<span style='mso-spacerun:yes'>&nbsp;&nbsp; </span>2476]
+  =CMREGPRX= cmregprx_fill_srv_req_parms(): Updating from SD ACT |
+  network_selection_mode = 3 scan_scope = 0, final_srv_domain 3,
+  disable_call_type_mask 0<span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+  <td class=xl69 style='border-top:none;border-left:none'>11.1.1</td>
+  <td class=xl69 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl69 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=108 style='mso-height-source:userset;height:81.0pt'>
+  <td height=108 class=xl83 width=472 style='height:81.0pt;border-top:none;
+  width:354pt'>20180301：提交CR处理即可，问题关闭。<br>
+    20180226：实验室内部确认中<br>
+    20180222：jitter on
+  fail的TC_14.18.6章节用例均申请waiver，参考8035之前是有对应CR的(CR201501-0625)<br>
+    ===<br>
+    GSM 14.18.6章节JITTER On fail的问题，高通回复not real issue，no need to fix</td>
+  <td class=xl70 style='border-top:none;border-left:none'>14.18.6</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G RF</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>20.20.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=69 style='mso-height-source:userset;height:51.75pt'>
+  <td height=69 class=xl95 width=472 style='height:51.75pt;border-top:none;
+  width:354pt'>20180226：Doro7050不支持GSM900，请将此用例NA掉，请同步更新PICS
+  51.010-2，参考附件。<br>
+    <br>
+    20180222：Doro7050不支持GSM900，请将此用例NA掉，请帮忙确认依赖是否需要修改PICS或是直接豁免？<br>
+    20180211：Doro7050不支持GSM900，请确认此项用例是否必须使用GSM 900和1800进行测试<br>
+    20180208：等待复测结果和新log<br>
+    20180206：请尝试更换仪器复测。<br>
+    //UE log中终端是已经驻网成功的(001-011)，但是仪器侧错误提示是无法接收到终端的上行接入请求。<br>
+    <span style='mso-spacerun:yes'>&nbsp; </span>06:28:09.006
+  rr_cell_selection.c 3123 H gs1:Camped on 147 <br>
+    <span style='mso-spacerun:yes'>&nbsp; </span>06:28:09.492 mmconn.c 1256 H
+  DS: SUB 1 =MM= MM sent LOCATION UPDATE REQUEST <br>
+    <span style='mso-spacerun:yes'>&nbsp; </span>06:28:09.493
+  rr_conn_establish.c 1571 H gs1:StartRA(0x1C) for LAU (reason=7) <br>
+    <span style='mso-spacerun:yes'>&nbsp; </span>06:28:11.939 mmmain.c 282 H
+  DS: SUB 1 =MM= MM Received LOCATION_UPDATING_ACCEPT <br>
+    <span style='mso-spacerun:yes'>&nbsp; </span>06:28:13.144 reg_state.c 10508
+  H DS: SUB 1 =REG= CS_SERVICE on HPLMN(1-11)<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl70 style='border-top:none;border-left:none'>20.20.2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180208：1900频段的此用例复测PASS，1800频段的上一条会重新<span
+  style='display:none'>安排复测。</span></td>
+  <td class=xl71 style='border-top:none'>20.20.2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>20.22.9-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>20.22.9-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>20.22.29 [1900-<span style='display:
+  none'>FDDII]</span></td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>25.2.1.1.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>26.6.3.4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>26.6.8.4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180207：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>26.6.11.3 [1900-<span
+  style='display:none'>FDDII]</span></td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180207：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>26.6.11.4 [1900-<span
+  style='display:none'>FDDII]</span></td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>26.7.4.5.4.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>26.7.4.5.4.3</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>26.7.4.5.4.4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>26.7.4.5.4.5</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>26.7.4.5.4.6</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>26.7.4.5.5.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>26.7.4.5.5.2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>26.7.4.5.5.3</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>26.7.4.5.5.4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=44 style='mso-height-source:userset;height:33.0pt'>
+  <td height=44 class=xl83 width=472 style='height:33.0pt;border-top:none;
+  width:354pt'>20180130：复测PASS<br>
+    20180124：确保NV5280=2，在新版本上复测应该可以PASS</td>
+  <td class=xl71 style='border-top:none'>26.8.1.3.1.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>26.11.2.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>26.11.2.2.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>26.11.2.2.2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>26.11.2.3</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>26.11.2.3</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>26.11.3.1.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>26.11.3.1.2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>26.11.5.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=66 style='height:49.5pt'>
+  <td height=66 class=xl84 width=472 style='height:49.5pt;border-top:none;
+  width:354pt'>20180205：无反馈复测PASS<br>
+    <br>
+    确保NV1302值为1, NV6850值为15，然后重测</td>
+  <td class=xl71 style='border-top:none'>26.19.3a<ruby><font class="font8"><rt
+  class=font8></rt></font></ruby></td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>同26.19.3a</td>
+  <td class=xl71 style='border-top:none'>26.19.5-21<ruby><font class="font8"><rt
+  class=font8></rt></font></ruby></td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>同26.19.3a</td>
+  <td class=xl71 style='border-top:none'>26.19.9.1<ruby><font class="font8"><rt
+  class=font8></rt></font></ruby></td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>同26.19.3a</td>
+  <td class=xl71 style='border-top:none'>26.19.9.2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>同26.19.3a</td>
+  <td class=xl71 style='border-top:none'>26.19.9.3</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>同26.19.3a</td>
+  <td class=xl71 style='border-top:none'>26.19.9.5</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>同26.19.3a</td>
+  <td class=xl71 style='border-top:none'>26.19.9.10</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>同26.19.3a</td>
+  <td class=xl71 style='border-top:none'>26.19.9.11</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>同26.19.3a</td>
+  <td class=xl71 style='border-top:none'>26.19.10.1<ruby><font class="font8"><rt
+  class=font8></rt></font></ruby></td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=44 style='mso-height-source:userset;height:33.0pt'>
+  <td height=44 class=xl84 width=472 style='height:33.0pt;border-top:none;
+  width:354pt'>20180126：用例状态变更为No need to test<br>
+    20180124：建议在屏蔽环境下，在Anite9000A仪器上测试。</td>
+  <td class=xl71 style='border-top:none'>26.21.1 (V2)</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>VAMOS Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>同26.21.1</td>
+  <td class=xl71 style='border-top:none'>26.21.2 (V2)</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>VAMOS Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>同26.21.1</td>
+  <td class=xl71 style='border-top:none'>26.21.4 (V2)</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>VAMOS Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>同26.21.1</td>
+  <td class=xl71 style='border-top:none'>26.21.6 (V2)</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>VAMOS Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>同26.21.1</td>
+  <td class=xl71 style='border-top:none'>26.21.7 (V2)</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>VAMOS Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>同26.21.1</td>
+  <td class=xl71 style='border-top:none'>26.21.8 (V2)</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>VAMOS Protocol</td>
+ </tr>
+ <tr height=89 style='mso-height-source:userset;height:66.75pt'>
+  <td height=89 class=xl95 width=472 style='height:66.75pt;border-top:none;
+  width:354pt'>20180227：临时版本复测PASS。<br>
+    20180226：明天会重新修改出软件复测。<br>
+    20180222：请使用如下软件进行复测：<br>
+    链接: https://pan.baidu.com/s/1pM6SiLX 密码: jipi<br>
+    20180208：请修改PICS项A.1/99为no，A.1/11修改为Yes，再重测此用例。(完整PICS表格请参考附件)<br>
+    //软件和PICS填写的能力支持不匹配，需要修改PICS和软件当前能力匹配。<br>
+    <br>
+    </td>
+  <td class=xl71 style='border-top:none'>27.22.2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180222：依赖C139，参考27.22.4.8.x.x状态更新</td>
+  <td class=xl71 style='border-top:none'>27.22.4.2.3/1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180222：依赖C139，参考27.22.4.8.x.x状态更新</td>
+  <td class=xl71 style='border-top:none'>27.22.4.2.3/2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180222：依赖C139，参考27.22.4.8.x.x状态更新</td>
+  <td class=xl71 style='border-top:none'>27.22.4.2.6/1A<ruby><font class="font8"><rt
+  class=font8></rt></font></ruby></td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180222：依赖C139，参考27.22.4.8.x.x状态更新</td>
+  <td class=xl71 style='border-top:none'>27.22.4.2.6/1B</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180222：依赖C139，参考27.22.4.8.x.x状态更新</td>
+  <td class=xl71 style='border-top:none'>27.22.4.2.6/2A</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180222：依赖C139，参考27.22.4.8.x.x状态更新</td>
+  <td class=xl71 style='border-top:none'>27.22.4.2.6/2B</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180222：依赖C139，参考27.22.4.8.x.x状态更新</td>
+  <td class=xl71 style='border-top:none'>27.22.4.2.6/3A</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180222：依赖C139，参考27.22.4.8.x.x状态更新</td>
+  <td class=xl71 style='border-top:none'>27.22.4.2.6/3B</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180222：依赖C139，参考27.22.4.8.x.x状态更新</td>
+  <td class=xl71 style='border-top:none'>27.22.4.2.6/4A</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180222：依赖C139，参考27.22.4.8.x.x状态更新</td>
+  <td class=xl71 style='border-top:none'>27.22.4.2.6/4B</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180222：依赖C139，参考27.22.4.8.x.x状态更新</td>
+  <td class=xl71 style='border-top:none'>27.22.4.3.6/1A<ruby><font class="font8"><rt
+  class=font8></rt></font></ruby></td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180222：依赖C139，参考27.22.4.8.x.x状态更新</td>
+  <td class=xl71 style='border-top:none'>27.22.4.3.6/1B</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180222：依赖C139，参考27.22.4.8.x.x状态更新</td>
+  <td class=xl71 style='border-top:none'>27.22.4.3.6/2A</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180222：依赖C139，参考27.22.4.8.x.x状态更新</td>
+  <td class=xl71 style='border-top:none'>27.22.4.3.6/2B</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180222：依赖C139，参考27.22.4.8.x.x状态更新</td>
+  <td class=xl71 style='border-top:none'>27.22.4.3.6/3A</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180222：依赖C139，参考27.22.4.8.x.x状态更新</td>
+  <td class=xl71 style='border-top:none'>27.22.4.3.6/3B</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180222：依赖C139，参考27.22.4.8.x.x状态更新</td>
+  <td class=xl71 style='border-top:none'>27.22.4.3.6/4A</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180222：依赖C139，参考27.22.4.8.x.x状态更新</td>
+  <td class=xl71 style='border-top:none'>27.22.4.3.6/4B</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180222：依赖C139，参考27.22.4.8.x.x状态更新</td>
+  <td class=xl71 style='border-top:none'>27.22.4.3.7/1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=88 style='height:66.0pt'>
+  <td height=88 class=xl84 width=472 style='height:66.0pt;border-top:none;
+  width:354pt'>20180228：re-test PASS<br>
+    20180227：在此前提供的117版本上同步验证此问题<br>
+    链接：https://pan.baidu.com/s/1dGl8saH 密码：5m13<br>
+    20180222：卡接口测试重启，合入patch后验证</td>
+  <td class=xl71 style='border-top:none'>27.22.4.7.1/1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=44 style='height:33.0pt'>
+  <td height=44 class=xl84 width=472 style='height:33.0pt;border-top:none;
+  width:354pt'>20180228：re-test PASS<br>
+    20180227：同27.22.4.7.1/1</td>
+  <td class=xl71 style='border-top:none'>27.22.4.7.1/2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=44 style='height:33.0pt'>
+  <td height=44 class=xl84 width=472 style='height:33.0pt;border-top:none;
+  width:354pt'>20180228：re-test PASS<br>
+    20180227：同27.22.4.7.1/1</td>
+  <td class=xl71 style='border-top:none'>27.22.4.7.1/4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=44 style='height:33.0pt'>
+  <td height=44 class=xl84 width=472 style='height:33.0pt;border-top:none;
+  width:354pt'>20180228：re-test PASS<br>
+    20180227：同27.22.4.7.1/1</td>
+  <td class=xl71 style='border-top:none'>27.22.4.7.1/6</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=198 style='height:148.5pt'>
+  <td height=198 class=xl84 width=472 style='height:148.5pt;border-top:none;
+  width:354pt'>20180228：不支持，已修改PICS关闭。<br>
+    20180227：请参考邮件PICS更新<br>
+    20180207：确认PICS中…<br>
+    (这一项的修改等27.22.2复测通过后再更新)<br>
+    和3G卡接口TC_27.22.4.8.1/1类似，因为客户需求已经移除了STK菜单，所以需要NA相关用例。<br>
+    <br>
+    C135 AND C139 AND C140<br>
+    E.1/30 AND E.1/110 AND E.1/111</td>
+  <td class=xl71 style='border-top:none'>27.22.4.8.4/1A</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>状态同27.22.4.8.4/1A</td>
+  <td class=xl71 style='border-top:none'>27.22.4.8.4/1B</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>状态同27.22.4.8.4/1A</td>
+  <td class=xl71 style='border-top:none'>27.22.4.8.4/2A</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>状态同27.22.4.8.4/1A</td>
+  <td class=xl71 style='border-top:none'>27.22.4.8.4/2B</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180222：依赖C139，参考27.22.4.8.4/1A状态更新</td>
+  <td class=xl71 style='border-top:none'>27.22.4.9.4/1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>27.22.4.11.1/1A</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>27.22.4.11.3/1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180209：NV65674改为0x1C6后复测pass</td>
+  <td class=xl71 style='border-top:none'>27.22.4.27.2/1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180209：NV65674改为0x1C6后复测pass</td>
+  <td class=xl71 style='border-top:none'>27.22.4.27.2/2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=44 style='height:33.0pt'>
+  <td height=44 class=xl84 width=472 style='height:33.0pt;border-top:none;
+  width:354pt'>20180313：复测fail，重新分析中<br>
+    20180222：无法正常弹出消息，合入qcom patch后再试</td>
+  <td class=xl71 style='border-top:none'>27.22.4.27.2/3</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180209：NV65674改为0x1C6后复测pass</td>
+  <td class=xl71 style='border-top:none'>27.22.4.27.2/4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180209：NV65674改为0x1C6后复测pass</td>
+  <td class=xl71 style='border-top:none'>27.22.4.27.2/5</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=44 style='height:33.0pt'>
+  <td height=44 class=xl84 width=472 style='height:33.0pt;border-top:none;
+  width:354pt'>20180313：复测fail，重新分析中<br>
+    20180222：无法正常弹出消息，合入qcom patch后再试</td>
+  <td class=xl71 style='border-top:none'>27.22.4.27.2/7A</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180209：NV65674改为0x1C6后复测pass</td>
+  <td class=xl71 style='border-top:none'>27.22.4.27.2/8</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180209：NV65674改为0x1C6后复测pass</td>
+  <td class=xl71 style='border-top:none'>27.22.4.28.1/1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180209：NV65674改为0x1C6后复测pass</td>
+  <td class=xl71 style='border-top:none'>27.22.4.29.1/1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180209：NV65674改为0x1C6后复测pass</td>
+  <td class=xl71 style='border-top:none'>27.22.4.30.1/1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180209：NV65674改为0x1C6后复测pass</td>
+  <td class=xl71 style='border-top:none'>27.22.4.31.1/2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180208：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>27.22.6.2/1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180208：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>27.22.6.2/2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180208：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>27.22.6.2/3</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180208：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>27.22.6.2/4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=65 style='mso-height-source:userset;height:48.75pt'>
+  <td height=65 class=xl95 width=472 style='height:48.75pt;border-top:none;
+  width:354pt'>20180208：复测PASS<br>
+    20180207：请保证测试机和对比机的测试网络环境一致 (MCC/MNC一致)，然后复测抓取log。<br>
+    <br>
+    //It is find MW send RR Signaling Message with MCC MNC is 001 011 in DUT
+  log, And NW send RR Signaling Message with MCC MNC is 001 001 in REF log, it
+  is different NW behavior in DUT log and REF log.</td>
+  <td class=xl70 style='border-top:none;border-left:none'>27.22.7.4.1/1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G STK<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=56 style='mso-height-source:userset;height:42.0pt'>
+  <td height=56 class=xl95 width=472 style='height:42.0pt;border-top:none;
+  width:354pt'>20180205：复测PASS<br>
+    <br>
+    20180124：<br>
+    1.确保手机NV值设置正确：NV1016=1 ,NV1017=2<br>
+    2.在测试前，通过以下AT命令打开小区广播信道：<br>
+    <span style='mso-spacerun:yes'>&nbsp;
+  </span>AT+CSCB=0,&quot;0-1&quot;<br>
+    <span style='mso-spacerun:yes'>&nbsp; </span>AT+CSCB=0,&quot;1-999&quot;,&quot;&quot;<br>
+    3.当UI显示有问题时，通过以下AT命令把短消息设置显示在超级终端上<br>
+    <span style='mso-spacerun:yes'>&nbsp; </span>at+cnmi=2,,2,,0 <br>
+    <span style='mso-spacerun:yes'>&nbsp; </span>at+cmgf=1<br>
+    ---<br>
+    msgid是否包含，可以手动配置添加msgid:<br>
+    at+cscb=0,&quot;0-1&quot;,&quot;单独加上需要的&quot;</td>
+  <td class=xl71 style='border-top:none'>34.3</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=96 style='mso-height-source:userset;height:72.0pt'>
+  <td height=96 class=xl83 width=472 style='height:72.0pt;border-top:none;
+  width:354pt'>20180205：复测PASS<br>
+    <br>
+   
+  20180201：log可以看到是有使用AT+CGQREQ和AT+CGQMIN的，如之前所说，请测试人员确认AT命令中的峰值等级参数设置正确。(如果还是有问题请直接电话联系：13408682023)<br>
+    e.g.<br>
+    AT+CGQREQ=1,2,4,3,6,16<br>
+    AT+CGQMIN=1,2,4,3,6,16<br>
+    <br>
+    //arg[4] 这个参数应该为6<br>
+    01:38:39.670<span style='mso-spacerun:yes'>&nbsp; </span>DS AT Command
+  Parser/High[dsatcmdp.c<span style='mso-spacerun:yes'>&nbsp;&nbsp;
+  </span>1136] ATCoP Operating mode = 0, Present mode = 0, Qcsimapp = 0,
+  Subs_id = 0<br>
+    01:38:39.670<span style='mso-spacerun:yes'>&nbsp; </span>DS AT Command
+  Parser/High[dsatcmdp.c<span style='mso-spacerun:yes'>&nbsp;&nbsp;
+  </span>1225] Command Name +CGQMIN Op = 0xb<br>
+    01:38:39.670<span style='mso-spacerun:yes'>&nbsp; </span>DS AT Command
+  Parser/High[dsatcmdp.c<span style='mso-spacerun:yes'>&nbsp;&nbsp;
+  </span>1229] arg[0] = 2<br>
+    01:38:39.670<span style='mso-spacerun:yes'>&nbsp; </span>DS AT Command
+  Parser/High[dsatcmdp.c<span style='mso-spacerun:yes'>&nbsp;&nbsp;
+  </span>1229] arg[1] = 2<br>
+    01:38:39.670<span style='mso-spacerun:yes'>&nbsp; </span>DS AT Command
+  Parser/High[dsatcmdp.c<span style='mso-spacerun:yes'>&nbsp;&nbsp;
+  </span>1229] arg[2] = 4<br>
+    01:38:39.670<span style='mso-spacerun:yes'>&nbsp; </span>DS AT Command
+  Parser/High[dsatcmdp.c<span style='mso-spacerun:yes'>&nbsp;&nbsp;
+  </span>1229] arg[3] = 3<br>
+    01:38:39.670<span style='mso-spacerun:yes'>&nbsp; </span>DS AT Command
+  Parser/High[dsatcmdp.c<span style='mso-spacerun:yes'>&nbsp;&nbsp;
+  </span>1229] arg[4] = 5<br>
+    01:38:39.670<span style='mso-spacerun:yes'>&nbsp; </span>DS AT Command
+  Parser/High[dsatcmdp.c<span style='mso-spacerun:yes'>&nbsp;&nbsp;
+  </span>1229] arg[5] = 16<br>
+    <br>
+    <br>
+    20180131：请仔细检查测试过程中使用的所有AT命令，只要有携带PEAK_THROUGHPUT_CLASS参数的都需要将其置为6。<br>
+    AT+CGQREQ=1,2,4,3,6,16<br>
+    AT+CGQMIN=1,2,4,3,6,16<br>
+    <br>
+    <br>
+    20180129：测试时，AT+CGQREQ中的PEAK_THROUGHPUT_CLASS参数请设置为6。<br>
+    e.g. AT+CGQREQ=1,2,4,3,6,16<br>
+    <br>
+    //第五个参数指定峰值速率等级修改为6<br>
+    06:54:52.691 dsatcmdp.c 1136 H ATCoP Operating mode = 0, Present mode = 0,
+  Qcsimapp = 0, Subs_id = 0 <br>
+    06:54:52.691 dsatcmdp.c 1225 H Command Name +CGQREQ Op = 0xb <br>
+    06:54:52.691 dsatcmdp.c 1229 H arg[0] = 2 <br>
+    06:54:52.691 dsatcmdp.c 1229 H arg[1] = 2 <br>
+    06:54:52.691 dsatcmdp.c 1229 H arg[2] = 4 <br>
+    06:54:52.691 dsatcmdp.c 1229 H arg[3] = 3 <br>
+    06:54:52.691 dsatcmdp.c 1229 H arg[4] = 5 \\Peak Throughput Class修改为6
+  <br>
+    06:54:52.691 dsatcmdp.c 1229 H arg[5] = 16<span
+  style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td class=xl71 style='border-top:none'>42.3.3.1.2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>42.4.2.3.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>42.4.2.3.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>42.4.2.3.6</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>42.4.8.3.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>42.4.8.3.2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>42.4.8.3.3</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>42.4.8.3.4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>42.4.8.3.5</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>42.4.8.3.6</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>42.4.8.4.5</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.1.1.2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.1.1.4-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.1.1.5-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.1.1.5-3</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.1.1.5-4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.1.1.6-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.1.1.7</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.1.1.10</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.1.2.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.1.2.2-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.1.2.2-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.1.2.4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.1.2.5</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.1.2.6</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.1.2.7</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.1.2.8</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.1.2.9</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.2.1.5</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.2.1.8</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.2.2.3</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.2.2.5</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.2.2.6</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.1.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.1.2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.1.3</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.1.4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.1.6</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.1.7</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.1.8</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.2.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.2.2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.2.3-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.2.3-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.2.4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=115 style='mso-height-source:userset;height:86.25pt'>
+  <td height=115 class=xl83 width=472 style='height:86.25pt;border-top:none;
+  width:354pt'>20180205：复测PASS<br>
+    20180131：请提供相同测试环境下的对比机PASSlog，或尝试更换仪器测试。<br>
+    <br>
+    20180129：请提供相同测试环境下的对比机PASSlog，或尝试更换仪器测试。<br>
+    <br>
+    //从log来看，当前服务小区的门限设置的很高(12dB)，导致网络环境不满足重选条件(C2差值大于重选门限)，step(8)
+  RAU未发起导致用例fail</td>
+  <td class=xl71 style='border-top:none'>44.2.3.2.5-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.2.5-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.2.6-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.2.6-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.2.7</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.2.8</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.2.9</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.2.10-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.2.10-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.3.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.3.3.3</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.5.2.1-3</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.5.2.2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.5.2.3</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.9.1.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>44.2.9.1.3</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=88 style='mso-height-source:userset;height:66.0pt'>
+  <td height=88 class=xl83 width=472 style='height:66.0pt;border-top:none;
+  width:354pt'>20180205：复测PASS<br>
+    20180201：从log里看还是class不对，测试人员把GPRS
+  class改成18了，请确认NV911=12，NV911在QXDM里修改后NV值显示是0xC不是0x12 (这里是16进制表示的)<br>
+    <br>
+    02:45:34.833<span style='mso-spacerun:yes'>&nbsp;&nbsp; </span>GSM GPRS
+  GMAC/High<span style='mso-spacerun:yes'>&nbsp; </span>[gmactask.c 670]
+  gs1:GPRS multislot class 18<br>
+    02:45:34.833<span style='mso-spacerun:yes'>&nbsp;&nbsp; </span>GSM GPRS
+  GMAC/Error [gmactask.c 875] gs1:Multislot class NOT VALID 18<br>
+    <br>
+    20180131：请修改NV911=12，NV2509=12后重测。<br>
+    <br>
+    20180129：请在TE侧修改 TSPC_Feat_GEA4 为FALSE后复测。<br>
+    &lt;Param Name=&quot;TSPC_Feat_GEA4&quot; Value=&quot;TRUE&quot; /&gt;</td>
+  <td class=xl71 style='border-top:none'>44.2.10</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=66 style='height:49.5pt'>
+  <td height=66 class=xl84 width=472 style='height:49.5pt;border-top:none;
+  width:354pt'>20180206：已NA<br>
+   
+  20180205：高通平台不支持TSPC_AddInfo_N_req_PDP_CA，请检查PICS_51.010-2表中该项已经更新为No，此条用例需要NA。</td>
+  <td class=xl70 style='border-top:none;border-left:none'>45.2.2-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=44 style='mso-height-source:userset;height:33.0pt'>
+  <td height=44 class=xl83 width=472 style='height:33.0pt;border-top:none;
+  width:354pt'>20180130：复测PASS<br>
+    20180124：QoS不匹配导致，请在测试前输入如下AT命令再进行测试。<br>
+    at+cgeqmin=1,4,32,32,,,0,320,&quot;1e3&quot;,&quot;4e3&quot;,1,,3</td>
+  <td class=xl71 style='border-top:none'>46.1.2.7.3-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180130：复测PASS，同46.1.2.7.3-2</td>
+  <td class=xl71 style='border-top:none'>46.1.2.7.3-3</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>60.1 [1900-FDDII<span
+  style='display:none'>]</span></td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>60.4 [850-FDDII]</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>60.4 [850-FDDIV<span style='display:
+  none'>]</span></td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>60.4 [850-FDDV]</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>60.4 [1900-FDDII<span
+  style='display:none'>]</span></td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180205：无反馈复测PASS</td>
+  <td class=xl71 style='border-top:none'>60.4 [1900-FDDI<span style='display:
+  none'>V]</span></td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>60.4 [1900-FDD<span style='display:
+  none'>V]</span></td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>60.5 [1900-FDDII<span
+  style='display:none'>]</span></td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>60.6 [1900-FDDII<span
+  style='display:none'>]</span></td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：第二轮复测PASS</td>
+  <td class=xl71 style='border-top:none'>60.10 [1900-FD<span style='display:
+  none'>DII]</span></td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>2G Protocol</td>
+ </tr>
+ <tr height=67 style='mso-height-source:userset;height:50.25pt'>
+  <td height=67 class=xl98 width=472 style='height:50.25pt;border-top:none;
+  width:354pt'>20180301：re-test PASS<br>
+    20180228：20180228:<br>
+    【current】<br>
+    reference follow NV configuration, 70.8.1 retest pass<br>
+    NV#1920 = 0x1FEFF7F<br>
+    NV#4707 = 0<br>
+    NV#1929 = 3<br>
+    NV#70192=0x506<br>
+    NV#71564 = 1<br>
+    NV#6760 =1 // enable GLO<br>
+    NV#67225 = 3<br>
+    NV#67217 = (0, 0xFFFF)<br>
+    gps.conf:<br>
+    LPP_PROFILE=0x3<br>
+    A_GLONASS_POS_PROTOCOL_SELECT=0xF<br>
+    【next】<br>
+    make an oppointment with lab to test case 70.8.2 - 70.8.4. and use same
+  configuration with 70.8.1<br>
+    20180208：CTTL will arrange to capture all AGPS fail logs tomorrow, also
+  Need qualcomm help to analysis.<ruby><font class="font8"><rt class=font8></rt></font></ruby></td>
+  <td class=xl70 style='border-top:none;border-left:none'>70.8.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>AGPS protocol<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180301：re-test
+  PASS<ruby><font class="font8"><rt class=font8></rt></font></ruby></td>
+  <td class=xl70 style='border-top:none;border-left:none'>70.8.2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>AGPS protocol<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180301：re-test
+  PASS<ruby><font class="font8"><rt class=font8></rt></font></ruby></td>
+  <td class=xl70 style='border-top:none;border-left:none'>70.8.4.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>AGPS protocol<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180301：re-test
+  PASS<ruby><font class="font8"><rt class=font8></rt></font></ruby></td>
+  <td class=xl70 style='border-top:none;border-left:none'>70.8.4.2.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>AGPS protocol<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180301：re-test
+  PASS<ruby><font class="font8"><rt class=font8></rt></font></ruby></td>
+  <td class=xl70 style='border-top:none;border-left:none'>70.8.4.2.2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>AGPS protocol<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180301：re-test
+  PASS<ruby><font class="font8"><rt class=font8></rt></font></ruby></td>
+  <td class=xl70 style='border-top:none;border-left:none'>70.8.4.3</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>AGPS protocol<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180301：re-test
+  PASS<ruby><font class="font8"><rt class=font8></rt></font></ruby></td>
+  <td class=xl70 style='border-top:none;border-left:none'>70.8.4.4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>AGPS protocol<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180301：re-test
+  PASS<ruby><font class="font8"><rt class=font8></rt></font></ruby></td>
+  <td class=xl70 style='border-top:none;border-left:none'>70.8.4.5</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>AGPS protocol<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=68 style='mso-height-source:userset;height:51.0pt'>
+  <td height=68 class=xl95 width=472 style='height:51.0pt;border-top:none;
+  width:354pt'>20180301：re-test PASS<br>
+    20180228:<br>
+    【next】<br>
+    reference follow NV configuration to retest,<br>
+    make an oppointment with lab to test case 70.8.5.<br>
+    NV#1920 = 0x1FEFF7F<br>
+    NV#4707 = 0<br>
+    NV#1929 = 7<br>
+    NV#70192=0x506<br>
+    NV#71564 = 1<br>
+    NV#6760 =1 // enable GLO<br>
+    NV#67225 = 3<br>
+    NV#67217 = (0, 0xFFFF)<br>
+    gps.conf:<br>
+    LPP_PROFILE=0x3<br>
+    A_GLONASS_POS_PROTOCOL_SELECT=0xF<ruby><font class="font8"><rt class=font8></rt></font></ruby></td>
+  <td class=xl70 style='border-top:none;border-left:none'>70.8.5.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>AGPS protocol<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180301：re-test
+  PASS</td>
+  <td class=xl70 style='border-top:none;border-left:none'>70.8.5.2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>51.010-2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>AGPS protocol<ruby><font
+  class="font8"><rt class=font8></rt></font></ruby></td>
+ </tr>
+ <tr height=18 style='height:13.5pt'>
+  <td height=18 class=xl107 style='height:13.5pt'></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=20 style='mso-height-source:userset;height:15.0pt'>
+  <td height=20 class=xl107 style='height:15.0pt'></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <![if supportMisalignedColumns]>
+ <tr height=0 style='display:none'>
+  <td width=472 style='width:354pt'></td>
+  <td width=121 style='width:91pt'></td>
+  <td width=69 style='width:52pt'></td>
+  <td width=138 style='width:104pt'></td>
+ </tr>
+ <![endif]>
+</table>
+
+</body>
+
+</html>

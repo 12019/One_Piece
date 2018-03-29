@@ -1,6 +1,3 @@
-
-
-
 ril.ecclist
 persist.radio.custom_ecc
 persist.radio.custom_nw_ecc  //当前未使用，会读取qcril.db中另一个表
@@ -12,10 +9,6 @@ CN national code:
 460	120
 460	122
 460	999
-
-1.保持persist.radio.custom_ecc 为1，可以根据MCC读取qcril.db中的ECC
-2.hardcode without sim中紧急号码只包含以下号码: 000, 08, 110, 118, 119, 999
-3.ECC定制根据国家码来做，全部通过修改qcril.db的方法实现
 
 =========
 【SIM中的ECC】
@@ -50,7 +43,84 @@ NV 67221 (/nv/item_files/pbm/pbm_ecc_nums): EFS ECC list, please follow below de
 NV 70242 (/nv/item_files/pbm/pbm_nv_ecc_config): This will be set to 2 to use ECC list from NV 67221.
 文档介绍说 NV70242(/nv/item_files/pbm/pbm_nv_ecc_config) 是控制NV67211的开关，但目前我们的项目平台中这个NV并没有在使用。
 
-还有一个 NV71535 跟 NV67221 相关，NV71535->pbm_ecc_hardcode_sim_absent_list_till_pin_lock 的配置情况会影响 NV67221 在启用了 PIN1 码验证的卡上的行为。
-如果启用了PIN1 lock，当 NV71535->pbm_ecc_hardcode_sim_absent_list_till_pin_lock enable的时候，卡在位但PIN1未解锁，对于NV67221来说也会被认为是无卡。
+(PIN码影响)还有一个 NV71535 跟 69737 相关，NV71535->pbm_ecc_hardcode_sim_absent_list_till_pin_lock 的配置情况会影响 69737 在启用了 PIN1 码验证的卡上的行为。
+如果启用了PIN1 lock(e.g. 1234)，当 NV71535->pbm_ecc_hardcode_sim_absent_list_till_pin_lock enable的时候，卡在位但PIN1未解锁，对于NV67221来说也会被认为是无卡状态。
 
+NV73755(/nv/item_files/pbm/pbm_nv_ecc_list_per_sub)
+(多卡设备)高通使用该NV的初衷是针对不同运营商MBN需求定制，该NV中的ECC号码只有卡在位的时候生效，最多可以配置50个号码。
+
+【qcril.db / qcril.sql】
+/data/misc/radio/qcril.db
+/.../proprietary/qcril/qcril_database/qcril.sql
+有一个专门存放紧急号码的数据库文件，根据不同属性值和终端插卡/驻网状态，会从不同的表格获取紧急号码。
+
+[1]、qcril_emergency_source_mcc_table (常用)
+----该表用于卡在位时为指定的 mcc 和服务状态下配置紧急号码。
+
+[2]、qcril_emergency_source_voice_table
+----该表用于卡在位时为指定的 mcc 和服务状态下配置紧急号码，但仅用于显示目的。
+----也就是说，该表中的号码仅在UI上显示为紧急号码类型，在modem侧仍然被认为是普通的语音类型。
+
+[3]、qcril_emergency_source_hard_mcc_table (常用)
+----该表用于卡不在位时为指定的 mcc（处于限制服务状态下的网络对应的 MCC）配置紧急号码。
+
+[4]、qcril_emergency_source_nw_table 
+----该表用于卡不在位时根据指定网络的 mcc 来配置紧急号码。
+
+[5]、qcril_emergency_source_escv_iin_table (iccid, number, ESCV, roam/home) 
+----该表用于iccid有效（有卡情况下）时配置ESCV（警察或救护等）的紧急号码。
+
+[6]、qcril_emergency_source_escv_nw_table (mcc, mnc, number, ESCV) 
+----该表格用于iccid无效（无卡情况下）时，根据网络MCC和MNC配置ESCV（警察或救护等）的紧急电话号码。
+
+[7]、qcril_emergency_source_mcc_mnc_table 
+----该表用于卡在位时为指定的 mcc、mnc 和服务状态下配置紧急号码。跟表[1]类似。
+
+[8]、qcril_emergency_source_voice_mcc_mnc_table
+----该表用于卡在位时为指定的 mcc、mnc 和服务状态下配置紧急号码，但仅用于显示目的，跟表[2]类似。
+
+说明：
+1. 要使用qcril.db中的ECC列表需要先将属性 setprop persist.radio.custom_ecc 置为 1。 
+2. 如果要使用表[4],还需要设置属性 persist.radio.custom_nw_ecc 为 1。之后表[1][2][7][8]将不可用。 
+3. 如果想在限制服务和服务状态下都让配置的ECC号码视为紧急号码，就需要将表[1][2][7][8]中的 "service state" 属性配置为 “null”。 
+4. 如果在表[1][2]中指定的 mcc 相同，那生效的为表[2](即，表[2]的优先级要高)，对于表[7][8]来说也是一样，若表[2]中没有配置，则会使用表[1]的配置。
+
+PBM 遵循以下规则来确定/获取查询ECC号码所使用的MCC ：
+如果有卡且PIN码未上锁，那么就从IMSI中获取MCC。
+如果有卡且PIN码上锁&未解锁，那么就从ICCID中获取MCC。
+对于无SIM卡的情况，设备驻留在限制服务的网络上，MCC就从该网络中得到。
+对于无服务的情况下，就用保存的上一次使用的 MCC 来在数据库中查询对应的ECC号码表。
+
+对于 qcril.db 中的ECC号码，QMI RIL的处理场景和方式如下：
+”无服务“或”限制服务“场景：UI上应该显示为紧急号码，modem侧也以紧急号码对待。
+"FULL SERVICE"场景：UI上应该显示为紧急号码，modem侧以正常号码进行呼叫。
+
+【DB操作举例】
+对于 mcc 为 460 的情况，如果：
+1. 想在无卡和限制服务两种情况下让 110 作为紧急号码。
+2. 只希望在服务状态下UI上显示为紧急号码。
+3. 无卡时当网络 MCC MNC为46000 将 110 作为匪警号码。
+
+可以进行如下操作：
+ adb root
+ adb shell setprop persist.radio.custom_ecc 1
+ cd /data/misc/radio
+ sqlite3 qcril.db
+ sqlite> insert into qcril_emergency_source_mcc_table values('460','110','','limited'); //有卡但限制服务的情况
+ sqlite> insert into qcril_emergency_source_hard_mcc_table values('460','110','',''); //无卡的情况
+ sqlite> insert into qcril_emergency_source_voice_table values('460','110','','full'); //条件2
+ sqlite> insert into qcril_emergency_source_escv_nw_table values('460','00','110','1'); //条件3 
+
+如果想在无卡、限制服务、服务三种情况下让 110 作为紧急号码:
+ sqlite> insert into qcril_emergency_source_mcc_table values('460','110','','limited'); //有卡但限制服务
+ sqlite> insert into qcril_emergency_source_mcc_table values('460','110','','full'); //有卡正常服务状态
+ sqlite> insert into qcril_emergency_source_hard_mcc_table values(‘460’,‘110’,‘’,‘’); //无卡 
+
+或者
+ adb root
+ adb shell setprop persist.radio.custom_ecc 1
+ cd /data/misc/radio
+ sqlite3 qcril.db
+ sqlite> insert into qcril_emergency_source_mcc_table values('460','110','',''); //有卡（包含限制服务和正常服务的情况）
+ sqlite> insert into qcril_emergency_source_hard_mcc_table values(‘460’,‘110’,‘’,‘’); //无卡
 

@@ -1,0 +1,660 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=gb2312">
+<meta name=ProgId content=Excel.Sheet>
+<meta name=Generator content="Microsoft Excel 12">
+<link id=Main-File rel=Main-File href="../3_60.htm">
+<link rel=File-List href=filelist.xml>
+<link rel=Stylesheet href=stylesheet.css>
+<style>
+<!--table
+	{mso-displayed-decimal-separator:"\.";
+	mso-displayed-thousand-separator:"\,";}
+@page
+	{margin:.75in .7in .75in .7in;
+	mso-header-margin:.3in;
+	mso-footer-margin:.3in;}
+ruby
+	{ruby-align:left;}
+rt
+	{color:windowtext;
+	font-size:9.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:宋体;
+	mso-generic-font-family:auto;
+	mso-font-charset:134;
+	mso-char-type:none;
+	display:none;}
+-->
+</style>
+<![if !supportTabStrip]><script language="JavaScript">
+<!--
+function fnUpdateTabs()
+ {
+  if (parent.window.g_iIEVer>=4) {
+   if (parent.document.readyState=="complete"
+    && parent.frames['frTabs'].document.readyState=="complete")
+   parent.fnSetActiveSheet(3);
+  else
+   window.setTimeout("fnUpdateTabs();",150);
+ }
+}
+
+if (window.name!="frSheet")
+ window.location.replace("../3_60.htm");
+else
+ fnUpdateTabs();
+//-->
+</script>
+<![endif]>
+</head>
+
+<body link=blue vlink=purple>
+
+<table border=0 cellpadding=0 cellspacing=0 width=739 style='border-collapse:
+ collapse;table-layout:fixed;width:555pt'>
+ <col width=443 style='mso-width-source:userset;mso-width-alt:14176;width:332pt'>
+ <col width=122 style='mso-width-source:userset;mso-width-alt:3904;width:92pt'>
+ <col width=72 style='width:54pt'>
+ <col width=102 style='mso-width-source:userset;mso-width-alt:3264;width:77pt'>
+ <tr height=40 style='height:30.0pt'>
+  <td height=40 class=xl83 width=443 style='height:30.0pt;width:332pt'>整改建议</td>
+  <td class=xl86 width=122 style='border-left:none;width:92pt'>TcId</td>
+  <td class=xl86 width=72 style='border-left:none;width:54pt'>Spec</td>
+  <td class=xl86 width=102 style='border-left:none;width:77pt'>TestType</td>
+ </tr>
+ <tr height=88 style='mso-height-source:userset;height:66.0pt'>
+  <td height=88 class=xl94 width=443 style='height:66.0pt;border-top:none;
+  width:332pt'>20180309：复测PASS<br>
+    20180307：请在新版本上直接复测，相关修改已经合入，测试方法和7050上一致。<br>
+    链接：https://pan.baidu.com/s/1kWfqObP 密码：3ko4</td>
+  <td class=xl79 style='border-top:none;border-left:none'>6.2.3</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.121</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USIM</td>
+ </tr>
+ <tr height=66 style='mso-height-source:userset;height:49.5pt'>
+  <td height=66 class=xl90 width=443 style='height:49.5pt;border-top:none;
+  width:332pt'>20180309：不支持已关闭。<br>
+    20180307：之前的PICS更新应该已经将PICS31.121中的A.1/10修改为No，NA了此项，请检查更新。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>8.2.2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.121</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USIM</td>
+ </tr>
+ <tr height=47 style='mso-height-source:userset;height:35.25pt'>
+  <td height=47 class=xl89 width=443 style='height:35.25pt;border-top:none;
+  width:332pt'>20180312：复测PASS<br>
+    20180309：<br>
+    1.请在UT3A+8475测试系统上复测，请在屏蔽室内复测<br>
+    2.在UI界面删除所有的apn<br>
+    3.at命令删除所有apn<br>
+    <span style='mso-spacerun:yes'>&nbsp;&nbsp; </span>at+cgdcont=X
+  (x=1,2,3...)<br>
+    <span style='mso-spacerun:yes'>&nbsp;&nbsp; </span>at+cgdcont?<span
+  style='mso-spacerun:yes'>&nbsp; </span>//确认APN配置是否为空<br>
+    <br>
+    4.尝试进行如下APN配置后重测<br>
+    at+cgdcont=1,&quot;IP&quot;,&quot;1gpp.test&quot;<br>
+    at+cgdcont=2,&quot;IP&quot;,&quot;3gpp.test&quot;<br>
+    at+cgdcont=3,&quot;IP&quot;,&quot;2gpp.test&quot;<br>
+    at+cgdcont? (检查当前APN配置)<br>
+    <br>
+    5.激活和去激活PDN连接时，可参考如下AT命令。<br>
+    //the PDN connectivity to profile 1 <br>
+    at+cgact=1,1 <br>
+    //the PDN connectivity to profile 2 <br>
+    at+cgact=1,2 <br>
+    //deactivate the PDN connectivity to profile2 <br>
+    at+cgact=0,2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>9.1.4</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.121</td>
+  <td class=xl79 style='border-top:none;border-left:none'>LTE USIM</td>
+ </tr>
+ <tr height=154 style='height:115.5pt'>
+  <td height=154 class=xl96 width=443 style='height:115.5pt;border-top:none;
+  width:332pt'>20180312：复测PASS<br>
+    20180309：请将31.124中的A.1/81和A.1/137置no后重测，关于这两项PICS，之前已经同步过最新的31.124
+  PICS表格给到实验室，请检查。<br>
+    <br>
+    20180307：请在新版本上复测。<br>
+    链接：https://pan.baidu.com/s/1kWfqObP 密码：3ko4</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=67 style='mso-height-source:userset;height:50.25pt'>
+  <td height=67 class=xl94 width=443 style='height:50.25pt;border-top:none;
+  width:332pt'>20180321：点击OK后无反应，下面多条用例均是此问题<br>
+    20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.2.1/1</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.2.1/2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.2.1/3</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.2.1/4</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.2.1/5</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.2.1/6</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.3.1/1</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.3.1/2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.3.1/3</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.3.1/4</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.3.1/6</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.3.1/7</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.3.1/8</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.3.1/9</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.3.1/10</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.3.5/2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=66 style='mso-height-source:userset;height:49.5pt'>
+  <td height=66 class=xl93 width=443 style='height:49.5pt;border-top:none;
+  width:332pt'>20180309：复测PASS<br>
+    20180307：请在新版本上直接复测，重启问题已经解决。<br>
+    链接：https://pan.baidu.com/s/1kWfqObP 密码：3ko4</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.7.1/2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180309：复测PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.7.1/4</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180309：复测PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.7.1/6</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180309：复测PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.7.3/1</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180309：复测PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.7.3/2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=90 style='mso-height-source:userset;height:67.5pt'>
+  <td height=90 class=xl94 width=443 style='height:67.5pt;border-top:none;
+  width:332pt'>20180319：因7060支持stk菜单，用例reopen<br>
+    20180314：已NA此用例。<br>
+    20180313：因客户需求移除了STK菜单，请修改31.124<span style='mso-spacerun:yes'>&nbsp;
+  </span>A.1/84为FALSE，参考7050的处理，NA相关用例，修改后的31.124表格请参考邮件。<br>
+    <br>
+    20180307：等到TP测过之后，会参考7050的PICS修改，将关联项NA。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.8.1/2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=72 style='mso-height-source:userset;height:54.0pt'>
+  <td height=72 class=xl94 width=443 style='height:54.0pt;border-top:none;
+  width:332pt'>20180327：kaios不支持修改pics关闭<br>
+    20180321：缺少对应的&quot;帮助&quot;按键<br>
+    20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.8.2/1</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=66 style='mso-height-source:userset;height:49.5pt'>
+  <td height=66 class=xl94 width=443 style='height:49.5pt;border-top:none;
+  width:332pt'>20180321：点击OK后无反应<br>
+    20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.8.3/1</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=68 style='mso-height-source:userset;height:51.0pt'>
+  <td height=68 class=xl94 width=443 style='height:51.0pt;border-top:none;
+  width:332pt'>20180321：点击end后无反应<br>
+    20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.9.1/4</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=134 style='mso-height-source:userset;height:100.5pt'>
+  <td height=134 class=xl94 width=443 style='height:100.5pt;border-top:none;
+  width:332pt'>20180312：复测PASS<br>
+    20180309：请按照之前的复测建议重测，如果fail请提供一份终端的开机log和NV4722 / NV65882的截图信息。<br>
+    <br>
+    20180307：请按照如下步骤复测<br>
+    1.样机升级到最新版本<br>
+    链接：https://pan.baidu.com/s/1kWfqObP 密码：3ko4<br>
+    2.确认NV 4722=3<br>
+    3.用QPST中的efs_explorer工具将邮件中提供的&quot;nas_config_feature&quot;文件导入到/nv/item_files/modem/nas/
+  目录下，重启设备再重测。(EFS导入方法 参考邮件附件文档)</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.11.1/1a</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180312：复测PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.11.1/2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180312：复测PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.11.1/3</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180312：复测PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.11.1/4a</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180312：复测PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.11.1/5</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180312：复测PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.11.1/6a</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=86 style='mso-height-source:userset;height:64.5pt'>
+  <td height=86 class=xl94 width=443 style='height:64.5pt;border-top:none;
+  width:332pt'>20180321：复测PASS<br>
+    20180319：请用以下版本复测，同样请参考之前的复测建议，将efs文件push到指定位置。<br>
+    链接：https://pan.baidu.com/s/163VrK0odRCa0uao-vNsiyw 密码：ot8p<br>
+    <br>
+    20180314：修改long_FTN后依旧fail，需要继续分析。<br>
+    20180313：请按照如下步骤复测，如果fail请提供一份终端的开机log和NV4722 / NV65882的截图信息。<br>
+    1.样机升级到当前提供的最新版本<br>
+    2.确认NV 4722=3<br>
+   
+  3.用QPST中的efs_explorer工具将邮件中提供的&quot;nas_config_feature&quot;文件导入到/nv/item_files/modem/nas/
+  目录下，重启设备再重测。(EFS导入方法 参考邮件附件文档)<br>
+    <br>
+    20180312：未显示图标/新问题(3-9 log已提供)</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.11.2/1a</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180321：复测PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.11.2/1b</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180321：复测PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.11.2/2a</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180321：复测PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.11.2/2b</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180321：复测PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.11.2/3a</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180321：复测PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.11.2/3b</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180321：复测PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.11.2/4</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180320：因不支持测试条件关闭。<br>
+    20180319：KaiOS不支持修改浏览器默认主页，launch browser用例无法测试，已修改PICS请NA相关用例</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.26.1/1</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180320：因不支持测试条件关闭。<br>
+    20180319：KaiOS不支持修改浏览器默认主页，launch browser用例无法测试，已修改PICS请NA相关用例</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.26.1/2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180320：因不支持测试条件关闭。<br>
+    20180319：KaiOS不支持修改浏览器默认主页，launch browser用例无法测试，已修改PICS请NA相关用例</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.26.1/3</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180320：因不支持测试条件关闭。<br>
+    20180319：KaiOS不支持修改浏览器默认主页，launch browser用例无法测试，已修改PICS请NA相关用例</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.26.1/4</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180320：因不支持测试条件关闭。<br>
+    20180319：KaiOS不支持修改浏览器默认主页，launch browser用例无法测试，已修改PICS请NA相关用例</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.26.2/1</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180320：因不支持测试条件关闭。<br>
+    20180319：KaiOS不支持修改浏览器默认主页，launch browser用例无法测试，已修改PICS请NA相关用例</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.26.2/2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl97 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>20180320：因不支持测试条件关闭。<br>
+    20180319：KaiOS不支持修改浏览器默认主页，launch browser用例无法测试，已修改PICS请NA相关用例</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.26.2/3</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180309：无反馈PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.27.2/2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>和当前7050卡接口问题一致</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.27.2/3</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180309：无反馈PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.27.2/4</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180309：无反馈PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.27.2/5</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=44 style='mso-height-source:userset;height:33.0pt'>
+  <td height=44 class=xl94 width=443 style='height:33.0pt;border-top:none;
+  width:332pt'>20180321：这条新版本软件可以测过<br>
+    20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.27.2/7a</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180312：无反馈PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.27.6/1</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>LTE USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180312：无反馈PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.27.6/2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>LTE USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl88 width=443 style='height:16.5pt;border-top:none;
+  width:332pt'>和当前7050卡接口问题一致</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.27.6/3</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>LTE USAT</td>
+ </tr>
+ <tr height=44 style='mso-height-source:userset;height:33.0pt'>
+  <td height=44 class=xl94 width=443 style='height:33.0pt;border-top:none;
+  width:332pt'>20180321：这条新版本软件可以测过<br>
+    20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.27.6/4</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>LTE USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180309：无反馈PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.28.1/1</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180309：无反馈PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.28.1/2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180309：无反馈PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.28.1/3</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180309：无反馈PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.30.1/1</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180309：无反馈PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.30.1/2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180309：无反馈PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.30.1/3</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180309：无反馈PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.30.1/4</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180309：无反馈PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.30.1/5</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180309：无反馈PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.31/1</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=25 style='mso-height-source:userset;height:18.75pt'>
+  <td height=25 class=xl84 style='height:18.75pt;border-top:none'>和当前7050卡接口问题一致</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.31.1/4</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>LTE USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>和当前7050卡接口问题一致</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.31.1/5</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>LTE USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180309：无反馈PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.31/2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180309：无反馈PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.4.31/3</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=42 style='mso-height-source:userset;height:31.5pt'>
+  <td height=42 class=xl97 width=443 style='height:31.5pt;border-top:none;
+  width:332pt'>20180321：关联 language browser依赖项，NA此用例。<br>
+    20180319：因7060支持stk菜单，用例reopen<br>
+    20180313：参考27.22.4.8.1/1状态，已修改PICS，NA此条用例。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.7.9.1/1</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=22 style='mso-height-source:userset;height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180309：无反馈PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>27.22.7.11/1</td>
+  <td class=xl79 style='border-top:none;border-left:none'>31.124</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G USAT</td>
+ </tr>
+ <tr height=72 style='height:54.0pt;mso-xlrowspan:4'>
+  <td height=72 colspan=4 style='height:54.0pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=18 style='height:13.5pt'>
+  <td height=18 class=xl91 style='height:13.5pt'></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <![if supportMisalignedColumns]>
+ <tr height=0 style='display:none'>
+  <td width=443 style='width:332pt'></td>
+  <td width=122 style='width:92pt'></td>
+  <td width=72 style='width:54pt'></td>
+  <td width=102 style='width:77pt'></td>
+ </tr>
+ <![endif]>
+</table>
+
+</body>
+
+</html>

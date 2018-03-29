@@ -46,15 +46,12 @@ modem_proc/build/ms/cust8909.xxx.prodq.h文件添加如下宏定义(xxx代表编译时输入的bu
 
 【3】签名tar文件并生成FSG
 
-目前高通提供了两种工具用于签名及生成FSG镜像：QDST及sectools。这里可以根据实际情况进行选择，比如如果平台不需要打开secureboot功能，即用QDST；需要则使用sectools。
+目前平台提供了两种工具用于签名及生成FSG镜像：QDST及sectools。这里可以根据实际情况进行选择，比如如果平台不需要打开secureboot功能，即用QDST；需要则使用sectools。
 这两种工具都运行一些脚本及命令来签名生成最终的FSG。
 
   \\10.120.10.100\ckt_cd_share\SmartPhone\team\BSP\01_Groups\08_Modem\03_Material\MakeFSG
 
-[[File: FSG_sign_tools.JPG]]
-
-这里需要注意的是，在制作FSG过程中需要一个efs_image_meta.bin文件，这个文件请直接使用当前项目编译出来的，文件路径在modem_proc/build/ms/bin/8909.gen.prod/efs_image_meta.bin。
-
+这里需要注意的是，在制作FSG过程中需要一个efs_image_meta.bin文件，这个文件请直接使用当前项目编译出来的，文件路径在modem_proc/build/ms/bin/8909.gen.prod/efs_image_meta.bin
 最终生成的FSG镜像的文件名是fs_image.tar.gz.mbn.img。
 
 

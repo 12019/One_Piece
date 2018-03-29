@@ -1,0 +1,402 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=gb2312">
+<meta name=ProgId content=Excel.Sheet>
+<meta name=Generator content="Microsoft Excel 12">
+<link id=Main-File rel=Main-File href="../2_7050.htm">
+<link rel=File-List href=filelist.xml>
+<link rel=Stylesheet href=stylesheet.css>
+<style>
+<!--table
+	{mso-displayed-decimal-separator:"\.";
+	mso-displayed-thousand-separator:"\,";}
+@page
+	{margin:.75in .7in .75in .7in;
+	mso-header-margin:.3in;
+	mso-footer-margin:.3in;}
+ruby
+	{ruby-align:left;}
+rt
+	{color:windowtext;
+	font-size:9.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:宋体;
+	mso-generic-font-family:auto;
+	mso-font-charset:134;
+	mso-char-type:none;
+	display:none;}
+-->
+</style>
+<![if !supportTabStrip]><script language="JavaScript">
+<!--
+function fnUpdateTabs()
+ {
+  if (parent.window.g_iIEVer>=4) {
+   if (parent.document.readyState=="complete"
+    && parent.frames['frTabs'].document.readyState=="complete")
+   parent.fnSetActiveSheet(7);
+  else
+   window.setTimeout("fnUpdateTabs();",150);
+ }
+}
+
+if (window.name!="frSheet")
+ window.location.replace("../2_7050.htm");
+else
+ fnUpdateTabs();
+//-->
+</script>
+<![endif]>
+</head>
+
+<body link=blue vlink=purple>
+
+<table border=0 cellpadding=0 cellspacing=0 width=595 style='border-collapse:
+ collapse;table-layout:fixed;width:446pt'>
+ <col class=xl107 width=379 style='mso-width-source:userset;mso-width-alt:12128;
+ width:284pt'>
+ <col width=72 span=3 style='width:54pt'>
+ <tr class=xl80 height=51 style='mso-height-source:userset;height:38.25pt'>
+  <td height=51 class=xl105 width=379 style='height:38.25pt;width:284pt'>整改建议</td>
+  <td class=xl77 width=72 style='border-left:none;width:54pt'>TcId</td>
+  <td class=xl77 width=72 style='border-left:none;width:54pt'>Spec</td>
+  <td class=xl77 width=72 style='border-left:none;width:54pt'>TestType</td>
+ </tr>
+ <tr height=115 style='mso-height-source:userset;height:86.25pt'>
+  <td height=115 class=xl83 width=379 style='height:86.25pt;border-top:none;
+  width:284pt'>20180309：复测PASS<br>
+    20180227：In Progress<br>
+   
+  20180222：测试前请用样机跑一次WCDMA协议的TC_8.1.5.7来确保W的能力匹配；ANITE也有自动化工具可以自动匹配UE能力，请任选一种方法在复测前确认W能力匹配。(复测的步骤和方法依旧可以参考1月24号的方法)<br>
+    <br>
+    20180211：需要实验室提供fail log，用于分析fail的原因<br>
+    20180205：属于E类项，测试结果允许fail。<br>
+    20180201：请提供对应log<br>
+    <br>
+    20180124：<br>
+    按照如下步骤设置后重启机器复测：<br>
+    1.AT$QCPDPIMSCFGE=2,1,0,1<br>
+   
+  2.at+cgeqreq=2,2,128,128,0,0,0,1500,&quot;1e3&quot;,&quot;4e3&quot;,1,0,0<br>
+    3.修改NV如下:<br>
+    <span style='mso-spacerun:yes'>&nbsp; </span>修改NV67259：
+  smsRATMaskString值为0x44E，ratMaskValue值为1102<br>
+    <span style='mso-spacerun:yes'>&nbsp; </span>修改NV71527：
+  [0].iRAT修改值为276，[3].iRATAPNFallback修改值为12800<br>
+    ===<br>
+    KBA-170425060419：<br>
+    1. IMS PCSCF bit and CN signaling flag need to be set in profile used for
+  IMS. --for example, if profile 3 is defined for IMS reg, need to use at as
+  below: AT$QCPDPIMSCFGE=3,1,0,1<br>
+    2. Use below AT command to change PDP QOS (from subscribe to interactive):
+  3 is profile ID which is defined for IMS reg. <br>
+    <span style='mso-spacerun:yes'>&nbsp;&nbsp;
+  </span>at+cgeqreq=3,2,128,128,0,0,0,1500,&quot;1e3&quot;,&quot;4e3&quot;,1,0,0<br>
+    3. For build older than AT2.0<br>
+    a)NV67259 smsRATMaskString(HEX, bit 3 for W, e.g. 1xxx) and RatMaskValue(DEC)
+  need to include W. -- for example, set smsRATMaskString to 644E, and
+  RatMaskValue to 25678.<br>
+    b)NV71527 ims_rat_apn_info[0].iRAT (bit 2 for W, e.g. 1xx) need to include
+  W. -- e.g., set it to 276<br>
+    c)Add one NV71527 rat_apn_fb_info[i].iRATAPNFallback = 12800( 0≤ i &lt;9)
+  if there is not in your current configuration</td>
+  <td class=xl70 style='border-top:none;border-left:none'>6.3</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=119 style='mso-height-source:userset;height:89.25pt'>
+  <td height=119 class=xl83 width=379 style='height:89.25pt;border-top:none;
+  width:284pt'>20180309：复测PASS<br>
+    20180227：In Progress<br>
+   
+  20180222：测试前请用样机跑一次WCDMA协议的TC_8.1.5.7来确保W的能力匹配；ANITE也有自动化工具可以自动匹配UE能力，请任选一种方法在复测前确认W能力匹配。(复测的步骤和方法依旧可以参考1月24号的方法)<br>
+    <br>
+    201802011：需要实验室提供fail log，用于分析fail的原因<br>
+    20180205：属于E类项，测试结果允许fail。20180201：请提供对应log<br>
+    <br>
+    状态同6.3</td>
+  <td class=xl70 style='border-top:none;border-left:none'>7.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：状态置为no
+  need to test</td>
+  <td class=xl70 style='border-top:none;border-left:none'>8.16</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=71 style='mso-height-source:userset;height:53.25pt'>
+  <td height=71 class=xl83 width=379 style='height:53.25pt;border-top:none;
+  width:284pt'>20180201：复测PASS<br>
+    20180124：请设置如下NV项进行复测<br>
+    NV69750--&gt;ims_operation_submode = 0<br>
+    NV67257--&gt;VoipSilentRedialEnabled = 0</td>
+  <td class=xl70 style='border-top:none;border-left:none'>12.2a</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=66 style='height:49.5pt'>
+  <td height=66 class=xl83 width=379 style='height:49.5pt;border-top:none;
+  width:284pt'>20180126：状态置为no need to test<br>
+    20180124：测试时注意仪器侧的配置：pc_MTSI_Text_RTP set to false</td>
+  <td class=xl70 style='border-top:none;border-left:none'>12.26</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=88 style='mso-height-source:userset;height:66.0pt'>
+  <td height=88 class=xl83 width=379 style='height:66.0pt;border-top:none;
+  width:284pt'>20180205：复测PASS<br>
+    <br>
+   
+  20180202：参考提供的TS_34229-01_TC15.x_Checklist.docx文档复测，针对TC_15.1，对应步骤请直接使用AT+CLIP命令进行测试。(不要使用MMI码)<br>
+    <br>
+    20180126：MMI code问题，UI显示异常不影响QMI下发，已告知实验室，等复测结果<br>
+    20180124：参考提供的TS_34229-01_TC15.x_Checklist.docx文档复测，注意NV70263的配置格式：NV70263-&gt;utApplicationUID
+  = XCAP.3gpp.org/simservs.ngn.etsi.org</td>
+  <td class=xl70 style='border-top:none;border-left:none'>15.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=44 style='height:33.0pt'>
+  <td height=44 class=xl83 width=379 style='height:33.0pt;border-top:none;
+  width:284pt'>20180126：状态置为no need to test<br>
+    高通平台不支持此项，修改PICS NA掉</td>
+  <td class=xl70 style='border-top:none;border-left:none'>15.2</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：状态置为no
+  need to test</td>
+  <td class=xl70 style='border-top:none;border-left:none'>15.3</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：状态置为no
+  need to test</td>
+  <td class=xl70 style='border-top:none;border-left:none'>15.4</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=44 style='height:33.0pt'>
+  <td height=44 class=xl83 width=379 style='height:33.0pt;border-top:none;
+  width:284pt'>20180201：复测PASS<br>
+    同15.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>15.5</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=44 style='height:33.0pt'>
+  <td height=44 class=xl83 width=379 style='height:33.0pt;border-top:none;
+  width:284pt'>20180201：复测PASS<br>
+    同15.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>15.7</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=44 style='height:33.0pt'>
+  <td height=44 class=xl83 width=379 style='height:33.0pt;border-top:none;
+  width:284pt'>20180201：复测PASS<br>
+    同15.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>15.9</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=44 style='height:33.0pt'>
+  <td height=44 class=xl83 width=379 style='height:33.0pt;border-top:none;
+  width:284pt'>20180201：复测PASS<br>
+    同15.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>15.10</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=44 style='height:33.0pt'>
+  <td height=44 class=xl83 width=379 style='height:33.0pt;border-top:none;
+  width:284pt'>20180201：复测PASS<br>
+    同15.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>15.10a</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl108 style='height:16.5pt;border-top:none'>20180124：请设置NV70213
+  = 1 进行复测</td>
+  <td class=xl70 style='border-top:none;border-left:none'>15.11</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl83 width=379 style='height:16.5pt;border-top:none;
+  width:284pt'>20180124：请设置NV70213 = 1 进行复测</td>
+  <td class=xl70 style='border-top:none;border-left:none'>15.12</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=44 style='height:33.0pt'>
+  <td height=44 class=xl83 width=379 style='height:33.0pt;border-top:none;
+  width:284pt'>20180201：复测PASS<br>
+    同15.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>15.14a</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=59 style='mso-height-source:userset;height:44.25pt'>
+  <td height=59 class=xl83 width=379 style='height:44.25pt;border-top:none;
+  width:284pt'>20180205：复测PASS<br>
+    <br>
+    20180126：当前本地验证7050连接QMItestpro没有问题，需要实验室反馈具体情况<br>
+    20180124：<br>
+    修改以下NV后重测。<br>
+    1.Anite仪器有个已知问题IR13978，需要终端侧修改NV70202 = 0。<br>
+    2.修改NV67257-&gt;voipConfigConfURI = mmtel@conf-factory.test.3gpp.com。</td>
+  <td class=xl70 style='border-top:none;border-left:none'>15.17</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=44 style='height:33.0pt'>
+  <td height=44 class=xl83 width=379 style='height:33.0pt;border-top:none;
+  width:284pt'>20180205：复测PASS<br>
+    同15.17</td>
+  <td class=xl70 style='border-top:none;border-left:none'>15.19</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl83 width=379 style='height:16.5pt;border-top:none;
+  width:284pt'>20180201：复测PASS</td>
+  <td class=xl70 style='border-top:none;border-left:none'>15.21a</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=47 style='mso-height-source:userset;height:35.25pt'>
+  <td height=47 class=xl83 width=379 style='height:35.25pt;border-top:none;
+  width:284pt'>20180205：复测PASS<br>
+    20180202：请重新提供log，之前的log里只有配置信息。<br>
+    20180124：新版本已包含以下NV修改，请在新版本上重测<br>
+    NV73538 -&gt; use_ue_base_cw = 1;<br>
+    NV73538 -&gt; is_enabled = 1.</td>
+  <td class=xl70 style='border-top:none;border-left:none'>15.27</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=46 style='mso-height-source:userset;height:34.5pt'>
+  <td height=46 class=xl83 width=379 style='height:34.5pt;border-top:none;
+  width:284pt'>20180201：复测PASS<br>
+    20180124：<br>
+    1.Doro7050的SMSC可以在Messages--&gt;Options--&gt;Settings--&gt;SMS Center
+  里修改。<br>
+    2.确保 UE/TE 的SMSC相匹配，比如px_SMS_SMSC_InternationalNumber ='2222222222'，则 UE
+  侧应该设置为&quot;+862222222222&quot;。</td>
+  <td class=xl70 style='border-top:none;border-left:none'>18.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl106 style='height:16.5pt;border-top:none'>20180126：状态置为no
+  need to test</td>
+  <td class=xl70 style='border-top:none;border-left:none'>19.3.2b</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=30 style='mso-height-source:userset;height:22.5pt'>
+  <td height=30 class=xl83 width=379 style='height:22.5pt;border-top:none;
+  width:284pt'>20180126：状态置为no need to test<br>
+    20180124：KBA-161222191334，置pc_IMS_Geolocation = FALSE</td>
+  <td class=xl70 style='border-top:none;border-left:none'>19.3.2c</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl108 style='height:16.5pt;border-top:none'>20180126：状态置为no
+  need to test</td>
+  <td class=xl70 style='border-top:none;border-left:none'>19.4.6</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=46 style='mso-height-source:userset;height:34.5pt'>
+  <td height=46 class=xl83 width=379 style='height:34.5pt;border-top:none;
+  width:284pt'>20180126：状态置为no need to test<br>
+    20180124：<br>
+    1. KBA-161222191334，置pc_IMS_Geolocation = FALSE。<br>
+    2. 确保仪表侧 px_IMEI_Def 及 px_IMEISV_Def 与测试终端的 IMEI 相匹配。<br>
+    3. 终端设置 NV67348 如下：<br>
+    EnableRTCPforActiveVoIPCall = 1<br>
+    SRVCC.mid-call = 1<br>
+    SRVCC.aSRVCC = 1<br>
+    SRVCC.bSRVCC = 1<br>
+    4. 终端设置 NV71554 如下：<br>
+    version = 1<br>
+    ims_cache_expiry_duration = 5000<br>
+    mid_call_support = 1<br>
+    5. 终端设置 NV73717 = 1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>19.4.7</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl108 style='height:16.5pt;border-top:none'>20180126：状态置为no
+  need to test</td>
+  <td class=xl70 style='border-top:none;border-left:none'>20.1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>34.229-1</td>
+  <td class=xl70 style='border-top:none;border-left:none'>IMS</td>
+ </tr>
+ <tr height=18 style='mso-height-source:userset;height:13.5pt'>
+  <td height=18 class=xl107 style='height:13.5pt'></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=18 style='mso-height-source:userset;height:13.5pt'>
+  <td height=18 class=xl107 style='height:13.5pt'></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=18 style='mso-height-source:userset;height:13.5pt'>
+  <td height=18 class=xl110 style='height:13.5pt'></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=18 style='mso-height-source:userset;height:13.5pt'>
+  <td height=18 class=xl110 style='height:13.5pt'></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=18 style='mso-height-source:userset;height:13.5pt'>
+  <td height=18 class=xl110 style='height:13.5pt'></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=18 style='mso-height-source:userset;height:13.5pt'>
+  <td height=18 class=xl107 style='height:13.5pt'></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=18 style='mso-height-source:userset;height:13.5pt'>
+  <td height=18 class=xl107 style='height:13.5pt'></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=18 style='mso-height-source:userset;height:13.5pt'>
+  <td height=18 class=xl107 style='height:13.5pt'></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=18 style='mso-height-source:userset;height:13.5pt'>
+  <td height=18 class=xl107 style='height:13.5pt'></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <tr height=18 style='mso-height-source:userset;height:13.5pt'>
+  <td height=18 class=xl107 style='height:13.5pt'></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <![if supportMisalignedColumns]>
+ <tr height=0 style='display:none'>
+  <td width=379 style='width:284pt'></td>
+  <td width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt'></td>
+ </tr>
+ <![endif]>
+</table>
+
+</body>
+
+</html>

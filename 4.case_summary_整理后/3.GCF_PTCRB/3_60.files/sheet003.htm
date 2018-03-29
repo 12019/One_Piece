@@ -1,0 +1,187 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=gb2312">
+<meta name=ProgId content=Excel.Sheet>
+<meta name=Generator content="Microsoft Excel 12">
+<link id=Main-File rel=Main-File href="../3_60.htm">
+<link rel=File-List href=filelist.xml>
+<link rel=Stylesheet href=stylesheet.css>
+<style>
+<!--table
+	{mso-displayed-decimal-separator:"\.";
+	mso-displayed-thousand-separator:"\,";}
+@page
+	{margin:.75in .7in .75in .7in;
+	mso-header-margin:.3in;
+	mso-footer-margin:.3in;}
+ruby
+	{ruby-align:left;}
+rt
+	{color:windowtext;
+	font-size:9.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:宋体;
+	mso-generic-font-family:auto;
+	mso-font-charset:134;
+	mso-char-type:none;
+	display:none;}
+-->
+</style>
+<![if !supportTabStrip]><script language="JavaScript">
+<!--
+function fnUpdateTabs()
+ {
+  if (parent.window.g_iIEVer>=4) {
+   if (parent.document.readyState=="complete"
+    && parent.frames['frTabs'].document.readyState=="complete")
+   parent.fnSetActiveSheet(2);
+  else
+   window.setTimeout("fnUpdateTabs();",150);
+ }
+}
+
+if (window.name!="frSheet")
+ window.location.replace("../3_60.htm");
+else
+ fnUpdateTabs();
+//-->
+</script>
+<![endif]>
+</head>
+
+<body link=blue vlink=purple>
+
+<table border=0 cellpadding=0 cellspacing=0 width=771 style='border-collapse:
+ collapse;table-layout:fixed;width:578pt'>
+ <col width=479 style='mso-width-source:userset;mso-width-alt:15328;width:359pt'>
+ <col width=72 span=2 style='width:54pt'>
+ <col width=148 style='mso-width-source:userset;mso-width-alt:4736;width:111pt'>
+ <tr height=40 style='height:30.0pt'>
+  <td height=40 class=xl83 width=479 style='height:30.0pt;width:359pt'>整改建议</td>
+  <td class=xl86 width=72 style='border-left:none;width:54pt'>TcId</td>
+  <td class=xl86 width=72 style='border-left:none;width:54pt'>Spec</td>
+  <td class=xl86 width=148 style='border-left:none;width:111pt'>TestType</td>
+ </tr>
+ <tr height=65 style='mso-height-source:userset;height:48.75pt'>
+  <td height=65 class=xl94 width=479 style='height:48.75pt;border-top:none;
+  width:359pt'>20180309：复测PASS<br>
+    20180307：请在新版本上复测，如果测试有连接分集请确保NV3851=2，如果没有连接分集，请将NV3851置为0。<br>
+   
+  测试用例中只有2/3G的信号，但是log中实际出现了4g信号源和其他现网信号干扰，请确保测试环境满足用例定义，建议在屏蔽室内复测。并且测试所用SIM卡的HPLMN应为002-11；如果仍然fail，请尝试更换仪器复测。<br>
+    链接：https://pan.baidu.com/s/1kWfqObP 密码：3ko4</td>
+  <td class=xl79 style='border-top:none;border-left:none'>6.2.1.8</td>
+  <td class=xl79 style='border-top:none;border-left:none'>34.123-2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G Protocol</td>
+ </tr>
+ <tr height=116 style='mso-height-source:userset;height:87.0pt'>
+  <td height=116 class=xl94 width=479 style='height:87.0pt;border-top:none;
+  width:359pt'>20180315：cmw500b复测PASS<br>
+    <br>
+    20180313：<br>
+    1、请确保 TE 的配置跟 PICS 表一致：pc_FDPCH = True<br>
+    2、在 R&amp;S 上复测<br>
+    20180307：请再在R&amp;S 上按照如下操作进行复测。<br>
+    1. Set NV67333 to 0 <br>
+    2. If pc_csg=False, set NV70361 to 0. <br>
+    <span style='mso-spacerun:yes'>&nbsp;&nbsp; </span>If pc_csg=True, set
+  NV70361 to 1. <br>
+    3. Run the TC again<br>
+    20180302：未收到TE发送的RRC connection setup message 导致测试失败，麻烦在R&amp;S 上进行复测。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>7.1.7.4<ruby><font
+  class="font6"><rt class=font6></rt></font></ruby></td>
+  <td class=xl79 style='border-top:none;border-left:none'>34.123-2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G Protocol R8</td>
+ </tr>
+ <tr height=111 style='mso-height-source:userset;height:83.25pt'>
+  <td height=111 class=xl94 width=479 style='height:83.25pt;border-top:none;
+  width:359pt'>20180312：复测PASS<br>
+    20180309：仪器IMSI配置跟测试卡不匹配，请确认测试卡跟仪器配置正确进行复测：<br>
+    -----------<br>
+    仪器当前：&lt;Param Name=&quot;px_IMSI_Def&quot;
+  Value=&quot;001010123456789&quot; /&gt; <br>
+    实际机器IMSI: 001010123456063 <br>
+    </td>
+  <td class=xl79 style='border-top:none;border-left:none'>8.3.4.16a</td>
+  <td class=xl79 style='border-top:none;border-left:none'>34.123-2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G Protocol R8</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl95 style='height:16.5pt;border-top:none'>20180307：请在R&amp;S仪器上复测。</td>
+  <td class=xl79 style='border-top:none;border-left:none'>9.4.2.4 Pr<span
+  style='display:none'>oc 4</span></td>
+  <td class=xl79 style='border-top:none;border-left:none'>34.123-2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G Protocol</td>
+ </tr>
+ <tr height=90 style='mso-height-source:userset;height:67.5pt'>
+  <td height=90 class=xl94 width=479 style='height:67.5pt;border-top:none;
+  width:359pt'>20180312：复测PASS<br>
+    20180309：仪器IMEI设置不匹配，需要配置正确IMEI复测：<br>
+    ------------<br>
+    RRC_DataInd : msg : mobId : otherDigits Expected value = '25940909001404',
+  Received value = '25940909001409' <br>
+    </td>
+  <td class=xl79 style='border-top:none;border-left:none'>12.7.1</td>
+  <td class=xl79 style='border-top:none;border-left:none'>34.123-2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180315：顺测PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>17.2.3.2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>34.123-2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G AGPS Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180315：顺测PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>17.2.3.9</td>
+  <td class=xl79 style='border-top:none;border-left:none'>34.123-2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G AGPS Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180315：顺测PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>17.2.4.1</td>
+  <td class=xl79 style='border-top:none;border-left:none'>34.123-2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G AGPS Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180315：顺测PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>17.2.4.2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>34.123-2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G AGPS Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180315：顺测PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>17.2.4.3</td>
+  <td class=xl79 style='border-top:none;border-left:none'>34.123-2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G AGPS Protocol</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl84 style='height:16.5pt;border-top:none'>20180315：顺测PASS</td>
+  <td class=xl79 style='border-top:none;border-left:none'>17.2.4.7</td>
+  <td class=xl79 style='border-top:none;border-left:none'>34.123-2</td>
+  <td class=xl79 style='border-top:none;border-left:none'>3G AGPS Protocol</td>
+ </tr>
+ <tr height=36 style='height:27.0pt;mso-xlrowspan:2'>
+  <td height=36 colspan=4 style='height:27.0pt;mso-ignore:colspan'></td>
+ </tr>
+ <tr height=18 style='height:13.5pt'>
+  <td height=18 class=xl91 style='height:13.5pt'></td>
+  <td colspan=3 style='mso-ignore:colspan'></td>
+ </tr>
+ <![if supportMisalignedColumns]>
+ <tr height=0 style='display:none'>
+  <td width=479 style='width:359pt'></td>
+  <td width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt'></td>
+  <td width=148 style='width:111pt'></td>
+ </tr>
+ <![endif]>
+</table>
+
+</body>
+
+</html>
